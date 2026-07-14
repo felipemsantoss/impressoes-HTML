@@ -171,7 +171,7 @@
                 {$p_unidade_fone1}
             </td>
             <td class="lbl">Cadastro / Status:</td>
-            <td class="val">{$cadastro} &bull; <span class="bold">{$global_status_descricao}</span></td>
+            <td class="val">{$cadastro} &bull; <span>{$global_status_descricao}</span></td>
         </tr>
         <tr>
             <td class="lbl">Cliente:</td>
@@ -179,7 +179,7 @@
                 <span class="bold">{$pessoa_id} - {$pessoa_descricao}</span>
             </td>
             <td class="lbl">Aprovação / Previsão:</td>
-            <td class="val">{$aprovado} &bull; <span>{$previsao}</span></td>
+            <td class="val">{$aprovado} &bull; <span>Prev: {$previsao}</span></td>
         </tr>
         <tr>
             <td class="lbl">Cnpj/Cpf:</td>
@@ -218,14 +218,13 @@
         </tr>
     </table>
 
-    <!-- BLOCO 3: ITENS DA PROPOSTA (PRODUTOS) - 8 COLUNAS SINCRO -->
+    <!-- BLOCO 3: ITENS DA PROPOSTA (PRODUTOS) - 7 COLUNAS ALINHADAS -->
     <table class="items-table" style="margin-bottom: 6px;">
         <thead>
             <tr>
                 <th class="text-center" style="width: 8%;">Código</th>
-                <th style="text-align: left; width: 37%;">Produto</th>
+                <th style="text-align: left; width: 43%;">Produto</th>
                 <th class="text-center" style="width: 12%;">Ncm</th>
-                <th class="text-center" style="width: 6%;">Icms</th> <!-- Coluna de ICMS adicionada -->
                 <th class="text-center" style="width: 6%;">Qtd</th>
                 <th class="text-center" style="width: 6%;">Und</th>
                 <th class="text-right nowrap" style="width: 12%;">Unitário</th>
@@ -238,7 +237,6 @@
                 <td class="text-center">{$produto_id}</td>
                 <td><span class="bold">{$produto_descricao}</span> <span style="color: #7f8c8d; font-size: 8px;">{$produto_complemento}</span></td>
                 <td class="text-center">{$tributo_tab_classfiscal_ncm}</td>
-                <td class="text-center"></td>
                 <td class="text-center">{$qtde}</td>
                 <td class="text-center">{$sigla}</td>
                 <td class="text-right nowrap">{$preco}</td>
@@ -248,7 +246,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="4" class="text-right">TOTAL DE ITENS:</td>
+                <td colspan="3" class="text-right">TOTAL DE ITENS:</td>
                 <td class="text-center">{$qtde_sum}</td>
                 <td colspan="2" class="text-right nowrap">SUBTOTAL PRODUTOS:</td>
                 <td class="text-right bold nowrap">{$subtotal_produto}</td>
@@ -260,9 +258,9 @@
     <table class="items-table" style="margin-bottom: 8px;">
         <thead>
             <tr>
-                <!-- Alinhado exatamente no mesmo eixo vertical da tabela de cima (8% - 55% - 12% - 12% - 13%) -->
+                <!-- Alinhado exatamente no mesmo eixo vertical da tabela de cima -->
                 <th class="text-center" style="width: 8%;">Código</th>
-                <th style="text-align: left; width: 55%;">Serviço</th> <!-- Alinha com Produto + Ncm + Icms (37+12+6) -->
+                <th style="text-align: left; width: 55%;">Serviço</th> <!-- Alinha com Produto + Ncm (43+12) -->
                 <th class="text-center" style="width: 12%;">Qtd</th> <!-- Alinha com Qtd + Und (6+6) -->
                 <th class="text-right nowrap" style="width: 12%;">Unitário</th> <!-- Alinha com Unitário -->
                 <th class="text-right nowrap" style="width: 13%;">Total Bruto</th> <!-- Alinha com Total Bruto -->
@@ -337,7 +335,7 @@
             <td class="lbl">Forma Pagamento:</td>
             <td class="val">{$financ_forma_pgto_descricao}</td>
             <td class="lbl">Frete:</td>
-            <td class="val text-left bold text-primary">{$total_frete}</td>
+            <td class="val text-left  text-primary">{$frete} &ndash; {$total_frete}</td>
         </tr>
         <tr>
             <td class="lbl">Prazo Pagamento:</td>

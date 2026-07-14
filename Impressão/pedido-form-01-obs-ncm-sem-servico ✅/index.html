@@ -3,17 +3,17 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Pedido Comercial</title>
+    <title>Orçamento de Venda</title>
     <style>
         /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL NO DOMPDF */
         * {
             font-family: Arial, Helvetica, sans-serif !important;
         }
 
-        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 PAISAGEM (LANDSCAPE) */
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
         @page {
-            size: A4 landscape; /* Define a folha deitada de forma nativa */
-            margin: 1.00cm; /* Margens de 1,0cm em todas as direções conforme o print */
+            size: A4 portrait;
+            margin: 35px 25px 45px 25px; /* Margem inferior de 45px para o rodapé respirar */
         }
 
         /* RESET E FONTES PADRONIZADAS EM 9PX */
@@ -40,7 +40,6 @@
 
         /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
         .linha-prod- { display: none !important; }
-        .linha-serv- { display: none !important; }
         .linha-parc- { display: none !important; }
 
         /* ESTRUTURA GERAL DAS TABELAS */
@@ -94,7 +93,7 @@
             color: #111111;
         }
 
-        /* TABELAS DE ITENS (PRODUTOS / SERVIÇOS / PARCELAS) */
+        /* TABELAS DE ITENS (PRODUTOS / PARCELAS) */
         .items-table th {
             background-color: #2c3e50;
             color: #ffffff;
@@ -152,7 +151,7 @@
                 <img src="{$unidade_image}" style="max-width: 120px; max-height: 45px;" alt="Logo da Empresa">
             </td>
             <td style="width: 50%; text-align: right; vertical-align: middle;">
-                <div style="font-size: 10px; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">Orçamento de Vendas</div>
+                <div style="font-size: 10px; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">Orçamento de Venda</div>
                 <div style="font-size: 18px; font-weight: bold; color: #2c3e50;">Nº {$id}</div>
             </td>
         </tr>
@@ -171,7 +170,7 @@
                 {$p_unidade_fone1}
             </td>
             <td class="lbl">Data Cadastro / Status:</td>
-            <td class="val">{$cadastro} &bull; {$global_status_descricao}</td>
+            <td class="val">{$cadastro} &bull; <span>{$global_status_descricao}</span></td>
         </tr>
         <tr>
             <td class="lbl">Cliente:</td>
@@ -218,21 +217,18 @@
         </tr>
     </table>
 
-    <!-- BLOCO 3: ITENS DA PROPOSTA (PRODUTOS) - 11 COLUNAS LANDSCAPE ALINHADAS -->
+    <!-- BLOCO 3: ITENS DA PROPOSTA (PRODUTOS) - 8 COLUNAS ALINHADAS -->
     <table class="items-table" style="margin-bottom: 6px;">
         <thead>
             <tr>
-                <th class="text-center" style="width: 5%;">Código</th>
-                <th style="text-align: left; width: 28%;">Produto</th>
+                <th class="text-center" style="width: 7%;">Código</th>
+                <th style="text-align: left; width: 43%;">Produto</th>
                 <th class="text-center" style="width: 8%;">Ncm</th>
-                <th class="text-center" style="width: 5%;">Icms</th>
                 <th class="text-center" style="width: 5%;">Qtd</th>
-                <th class="text-center" style="width: 4%;">Und</th>
-                <th class="text-right" style="width: 9%;">Unitário</th>
-                <th class="text-right" style="width: 9%;">Total Bruto</th>
-                <th class="text-right" style="width: 8%;">Desc %</th>
-                <th class="text-right" style="width: 9%;">Valor Desc.</th>
-                <th class="text-right" style="width: 10%;">Total C/ Desc.</th>
+                <th class="text-center" style="width: 5%;">Und</th>
+                <th class="text-right nowrap" style="width: 11%;">Unitário</th>
+                <th class="text-right nowrap" style="width: 11%;">Desconto</th>
+                <th class="text-right nowrap" style="width: 10%;">Total</th>
             </tr>
         </thead>
         <tbody>
@@ -241,82 +237,39 @@
                 <td class="text-center">{$produto_id}</td>
                 <td><span class="bold">{$produto_descricao}</span> <span style="color: #7f8c8d; font-size: 8px;">{$produto_referencia_descricao} {$complemento}</span></td>
                 <td class="text-center">{$tributo_tab_classfiscal_ncm}</td>
-                <td class="text-center">{$icms_base}</td>
                 <td class="text-center">{$qtde}</td>
                 <td class="text-center">{$sigla}</td>
-                <td class="text-right">{$preco}</td>
-                <td class="text-right">{$total_bruto}</td>
-                <td class="text-right">{$desc_perc}</td>
-                <td class="text-right">{$desconto}</td>
-                <td class="text-right bold text-primary">{$total}</td>
+                <td class="text-right nowrap">{$preco}</td>
+                <td class="text-right nowrap">{$desconto}</td>
+                <td class="text-right bold nowrap">{$total}</td>
             </tr>
             <!--[/produtos]-->
         </tbody>
         <tfoot>
             <tr>
                 <td colspan="2" class="text-right">TOTAL DE ITENS:</td>
-                <td colspan="2"></td>
                 <td class="text-center">{$qtde_sum}</td>
-                <td colspan="2"></td>
-                <td class="text-right bold">{$subtotal_produto}</td>
-                <td colspan="2" class="text-right bold">TOTAL:</td>
-                <td class="text-right bold">{$total_produto}</td>
+                <td colspan="3" class="text-right"></td>
+                <td class="text-right bold nowrap">VALOR TOTAL:</td>
+                <td class="text-right bold nowrap">{$subtotal_produto}</td>
             </tr>
         </tfoot>
     </table>
 
-    <!-- BLOCO 4: ITENS DA PROPOSTA (SERVIÇOS) - 7 COLUNAS CONTÍNUAS E ALINHADAS -->
-    <table class="items-table" style="margin-bottom: 8px;">
-        <thead>
-            <tr>
-                <!-- Alinhamento milimétrico de divisórias verticais com a tabela de produtos de cima -->
-                <th class="text-center" style="width: 5%;">Código</th>
-                <th style="text-align: left; width: 41%;">Serviço</th> <!-- Sincronizado: 28% + 8% + 5% -->
-                <th class="text-center" style="width: 5%;">Qtd</th> <!-- Sincronizado: Qtd (5%) -->
-                <th class="text-right" style="width: 13%;">Unitário</th> <!-- Sincronizado: Und + Unitário (4% + 9%) -->
-                <th class="text-right" style="width: 9%;">Total Bruto</th> <!-- Sincronizado: Total Bruto (9%) -->
-                <th class="text-right" style="width: 17%;">Valor Desc</th> <!-- Sincronizado: Desc% + Valor Desc (8% + 9%) -->
-                <th class="text-right" style="width: 10%;">Total C/ Desc</th> <!-- Sincronizado: Total C/ Desc (10%) -->
-            </tr>
-        </thead>
-        <tbody>
-            <!--[servicos]-->
-            <tr class="linha-serv-{$servico_id}">
-                <td class="text-center">{$servico_id}</td>
-                <td class="bold">{$servico_descricao}</td>
-                <td class="text-center">{$qtde}</td>
-                <td class="text-right">{$preco}</td>
-                <td class="text-right">{$total_bruto}</td>
-                <td class="text-right">{$desconto} ({$desc_perc}%)</td>
-                <td class="text-right bold text-primary">{$total}</td>
-            </tr>
-            <!--[/servicos]-->
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="4" class="text-right">TOTAL DE SERVIÇOS:</td>
-                <td class="text-right bold">{$subtotal_servico}</td>
-                <td class="text-right bold">TOTAL:</td>
-                <td class="text-right bold">{$total_servico}</td>
-            </tr>
-        </tfoot>
-    </table>
-
-    <!-- BLOCO 5: OBSERVAÇÕES E CONTRATO CONSOLIDADOS -->
-    <table class="grid-table" style="margin-bottom: 6px;">
+    <!-- BLOCO 4: OBSERVAÇÕES -->
+    <table class="grid-table" style="margin-bottom: 8px;">
         <tr>
-            <td class="section-header">Observações e Contrato</td>
+            <td class="section-header">Observação</td>
         </tr>
         <tr>
-            <td style="min-height: 35px; vertical-align: top; font-size: 9px; line-height: 1.4;">
-                <span class="bold">Obs 1:</span> {$obs1}<br>
-                <span class="bold">Obs 2:</span> {$obs2}<br>
-                <span class="bold">Contrato Número:</span> {$contrato_numero}
+            <td style="min-height: 35px; vertical-align: top; font-size: 9px; line-height: 1.3;">
+                {$obs1}<br>
+                {$obs2}
             </td>
         </tr>
     </table>
 
-    <!-- BLOCO 6: RESUMO FINANCEIRO SINO -->
+    <!-- BLOCO 5: RESUMO FINANCEIRO SINO (Sem Serviços) -->
     <table class="grid-table" style="margin-bottom: 8px;">
         <colgroup>
             <col style="width: 15%;">
@@ -333,36 +286,35 @@
         <tr>
             <td class="lbl">Produto: Total Bruto:</td>
             <td class="val">{$subtotal_produto}</td>
-            <td class="lbl">Serviço: Total Bruto:</td>
-            <td class="val">{$subtotal_servico}</td>
+            <td class="lbl">Quantidade Total:</td>
+            <td class="val">{$total_itens}</td>
         </tr>
         <tr>
             <td class="lbl">Produto: Descontos:</td>
             <td class="val">{$desconto_produto} &ndash; {$desc_perc_produto}%</td>
-            <td class="lbl">Serviço: Desconto:</td>
-            <td class="val">{$desconto_servico} &ndash; {$desc_perc_servico}%</td>
-        </tr>
-        <tr>
             <td class="lbl">Produto: Total Líquido:</td>
             <td class="val">{$total_produto}</td>
-            <td class="lbl">Serviço: Total Líquido:</td>
-            <td class="val">{$total_servico}</td>
         </tr>
         <tr>
             <td class="lbl">Forma Pagamento:</td>
             <td class="val">{$financ_forma_pgto_descricao}</td>
-            <td class="lbl">Frete:</td>
-            <td class="val text-left text-primary">{$total_frete}</td>
+            <td class="lbl">+Subst. Tributária:</td>
+            <td class="val">{$total_st_valor}</td>
         </tr>
         <tr>
             <td class="lbl">Prazo Pagamento:</td>
             <td class="val">{$financ_prazo_pgto_descricao}</td>
+            <td class="lbl">Frete:</td>
+            <td class="val text-left text-primary">{$total_frete}</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border: none !important;"></td>
             <td class="total-lbl">Total Geral:</td>
             <td class="total-val text-right">{$total_pedido}</td>
         </tr>
     </table>
 
-    <!-- BLOCO 7: TABELA DE PARCELAS -->
+    <!-- BLOCO 6: TABELA DE PARCELAS -->
     <table class="items-table" style="margin-bottom: 25px;">
         <thead>
             <tr>

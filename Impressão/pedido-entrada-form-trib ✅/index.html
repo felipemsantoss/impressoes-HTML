@@ -3,7 +3,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Orçamento de Venda</title>
+    <title>Pedido de Compra</title>
     <style>
         /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL NO DOMPDF */
         * {
@@ -152,16 +152,16 @@
                 <img src="{$unidade_image}" style="max-width: 120px; max-height: 45px;" alt="Logo da Empresa">
             </td>
             <td style="width: 50%; text-align: right; vertical-align: middle;">
-                <div style="font-size: 10px; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">Orçamento</div>
+                <div style="font-size: 10px; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">Pedido de Compra</div>
                 <div style="font-size: 18px; font-weight: bold; color: #2c3e50;">Nº {$id}</div>
             </td>
         </tr>
     </table>
 
-    <!-- BLOCO 1: INFORMAÇÕES GERAIS, CLIENTE E VEÍCULO -->
+    <!-- BLOCO 1: INFORMAÇÕES GERAIS, FORNECEDOR E VEÍCULO -->
     <table class="grid-table">
         <tr>
-            <td colspan="4" class="section-header">Informações Gerais e Cliente</td>
+            <td colspan="4" class="section-header">Informações Gerais e Fornecedor</td>
         </tr>
         <tr>
             <td class="lbl">Unidade Emissora:</td>
@@ -170,16 +170,17 @@
                 {$pessoa_unidade_cpf_cnpj}<br>
                 {$p_unidade_fone1}
             </td>
-            <td class="lbl">Data Cadastro / Status:</td>
-            <td class="val">{$cadastro} &bull; <span class="bold">{$global_status_descricao}</span></td>
+            <td class="lbl">Data Cadastro:</td>
+            <td class="val bold">{$cadastro}</td>
         </tr>
         <tr>
-            <td class="lbl">Cliente:</td>
+            <td class="lbl">Fornecedor:</td>
             <td class="val">
-                <span class="bold">{$pessoa_id} - {$pessoa_descricao}</span>
+                <span class="bold">{$pessoa_id} - {$pessoa_descricao}</span><br>
+                {$pessoa_pj_fantasia}
             </td>
-            <td class="lbl">Aprovação / Previsão:</td>
-            <td class="val">{$aprovado} &bull; <span class="bold">Prev: {$previsao}</span></td>
+            <td class="lbl">Status Atual:</td>
+            <td class="val">{$global_status_descricao}</td>
         </tr>
         <tr>
             <td class="lbl">Cnpj/Cpf:</td>
@@ -218,27 +219,35 @@
         </tr>
     </table>
 
-    <!-- BLOCO 3: ITENS DA PROPOSTA (PRODUTOS) - 6 COLUNAS ALINHADAS -->
+    <!-- BLOCO 3: ITENS DA PROPOSTA (PRODUTOS) - 10 COLUNAS ALINHADAS -->
     <table class="items-table" style="margin-bottom: 6px;">
         <thead>
             <tr>
-                <th class="text-center" style="width: 8%;">Código</th>
-                <th style="text-align: left; width: 55%;">Produto</th>
-                <th class="text-center" style="width: 6%;">Qtd</th>
-                <th class="text-center" style="width: 6%;">Und</th>
-                <th class="text-right nowrap" style="width: 12%;">Unitário</th>
-                <th class="text-right nowrap" style="width: 13%;">Total Bruto</th>
+                <th class="text-center" style="width: 7%;">Código</th>
+                <th style="text-align: left; width: 29%;">Produto</th>
+                <th class="text-center" style="width: 5%;">Qtd</th>
+                <th class="text-center" style="width: 4%;">Und</th>
+                <th class="text-right" style="width: 9%;">Unitário</th>
+                <th class="text-right" style="width: 9%;">Total Bruto</th>
+                <th class="text-right" style="width: 10%;">Desconto</th>
+                <th class="text-right" style="width: 9%;">IPI</th>
+                <th class="text-right" style="width: 10%;">ICMS ST</th>
+                <th class="text-right" style="width: 10%;">Total Líquido</th>
             </tr>
         </thead>
         <tbody>
             <!--[produtos]-->
             <tr class="linha-prod-{$produto_id}">
                 <td class="text-center">{$produto_id}</td>
-                <td><span class="bold">{$produto_descricao}</span> <span style="color: #7f8c8d; font-size: 8px;">{$produto_complemento}</span></td>
+                <td><span class="bold">{$produto_descricao}</span> <span style="color: #7f8c8d; font-size: 8px;">{$produto_referencia_descricao}</span></td>
                 <td class="text-center">{$qtde}</td>
-                <td class="text-center" style="color: #7f8c8d;">{$sigla}</td>
-                <td class="text-right nowrap">{$preco}</td>
-                <td class="text-right bold nowrap">{$total_bruto}</td>
+                <td class="text-center">{$sigla}</td>
+                <td class="text-right">{$preco}</td>
+                <td class="text-right">{$total_bruto}</td>
+                <td class="text-right">{$desconto} ({$desc_perc}%)</td>
+                <td class="text-right">{$ipi_valor}</td>
+                <td class="text-right">{$st_valor}</td>
+                <td class="text-right bold">{$total}</td>
             </tr>
             <!--[/produtos]-->
         </tbody>
@@ -246,53 +255,73 @@
             <tr>
                 <td colspan="2" class="text-right">TOTAL DE ITENS:</td>
                 <td class="text-center">{$qtde_sum}</td>
-                <td colspan="2" class="text-right nowrap">SUBTOTAL PRODUTOS:</td>
-                <td class="text-right bold nowrap">{$subtotal_produto}</td>
+                <td colspan="2" class="text-right"></td>
+                <td class="text-right bold">{$subtotal_produto}</td>
+                <td colspan="3" class="text-right bold">TOTAL:</td>
+                <td class="text-right bold">{$total_produto}</td>
             </tr>
         </tfoot>
     </table>
 
-    <!-- BLOCO 4: ITENS DA PROPOSTA (SERVIÇOS) - 5 COLUNAS CONTÍNUAS E ALINHADAS -->
+    <!-- BLOCO 4: ITENS DA PROPOSTA (SERVIÇOS) -->
     <table class="items-table" style="margin-bottom: 8px;">
         <thead>
             <tr>
-                <!-- Alinhado exatamente no mesmo eixo vertical da tabela de cima -->
-                <th class="text-center" style="width: 8%;">Código</th>
-                <th style="text-align: left; width: 61%;">Serviço</th> <!-- Alinha com Produto + Qtd (55+6) -->
-                <th class="text-center" style="width: 6%;">Qtde</th> <!-- Alinha com Und (6) -->
-                <th class="text-right nowrap" style="width: 12%;">Unitário</th> <!-- Alinha com Unitário (12) -->
-                <th class="text-right nowrap" style="width: 13%;">Total Bruto</th> <!-- Alinha com Total Bruto (13) -->
+                <!-- 7% -->
+                <th class="text-center" style="width:7%;">Código</th>
+
+                <!-- 29 + 5 + 4 = 38% -->
+                <th style="text-align:left; width:38%;">Serviço</th>
+
+                <!-- 9% -->
+                <th class="text-center" style="width:9%;">Qtd</th>
+
+                <!-- 9% -->
+                <th class="text-right" style="width:9%;">Unitário</th>
+
+                <!-- 10% -->
+                <th class="text-right" style="width:10%;">Total Bruto</th>
+
+                <!-- 9 + 10 = 19% -->
+                <th class="text-right" style="width:19%;">Desconto</th>
+
+                <!-- 10% -->
+                <th class="text-right" style="width:10%;">Total Líquido</th>
             </tr>
         </thead>
+
         <tbody>
             <!--[servicos]-->
             <tr class="linha-serv-{$servico_id}">
                 <td class="text-center">{$servico_id}</td>
-                <td class="bold">{$servico_descricao} {$complemento}</td>
+                <td class="bold">{$servico_descricao}</td>
                 <td class="text-center">{$qtde}</td>
-                <td class="text-right nowrap">{$preco}</td>
-                <td class="text-right bold nowrap">{$total_bruto}</td>
+                <td class="text-right">{$preco}</td>
+                <td class="text-right">{$total_bruto}</td>
+                <td class="text-right">{$desconto} ({$desc_perc}%)</td>
+                <td class="text-right bold">{$total}</td>
             </tr>
             <!--[/servicos]-->
         </tbody>
+
         <tfoot>
             <tr>
-                <td colspan="4" class="text-right nowrap">TOTAL DE SERVIÇOS:</td>
-                <td class="text-right bold nowrap">{$subtotal_servico}</td>
+                <td colspan="4" class="text-right">TOTAL DE SERVIÇOS:</td>
+                <td class="text-right bold">{$subtotal_servico}</td>
+                <td class="text-right bold">TOTAL:</td>
+                <td class="text-right bold">{$total_servico}</td>
             </tr>
         </tfoot>
     </table>
 
-    <!-- BLOCO 5: OBSERVAÇÕES E CONTRATO CONSOLIDADO -->
+       <!-- BLOCO 5: OBSERVAÇÕES -->
     <table class="grid-table" style="margin-bottom: 8px;">
         <tr>
-            <td class="section-header">Observações e Contrato</td>
+            <td class="section-header">Observação</td>
         </tr>
         <tr>
-            <td style="min-height: 35px; vertical-align: top; font-size: 9px; line-height: 1.4;">
-                <span class="bold">Obs 1:</span> {$obs1}<br>
-                <span class="bold">Obs 2:</span> {$obs2}<br>
-                <span class="bold">Contrato Número:</span> {$contrato_numero}
+            <td style="min-height: 25px; vertical-align: top; font-size: 9px; line-height: 1.3;">
+                {$obs1}
             </td>
         </tr>
     </table>
@@ -305,39 +334,46 @@
             <col style="width: 15%;">
             <col style="width: 35%;">
         </colgroup>
+        <!-- Linha 1 -->
         <tr>
-            <td class="lbl">Transportadora:</td>
-            <td class="val">{$pessoa_transportadora_descricao}</td>
-            <td class="lbl">Frete (Tipo):</td>
-            <td class="val">{$frete}</td>
+            <td class="lbl">Ipi:</td>
+            <td class="val text-left">{$total_ipi_valor}</td>
+            <td class="lbl">Icms St:</td>
+            <td class="val text-left">{$total_st_valor}</td>
         </tr>
+        <!-- Linha 2: Desconto Produtos + Prazo de Pagamento -->
         <tr>
-            <td class="lbl">Produto: Total Bruto:</td>
-            <td class="val">{$subtotal_produto}</td>
-            <td class="lbl">Serviço: Total Bruto:</td>
-            <td class="val">{$subtotal_servico}</td>
+            <td class="lbl">Desconto produtos:</td>
+            <td class="val text-left">{$desconto_produto} &ndash; {$desc_perc_produto}%</td>
+            <td class="lbl">Prazo Pagamento:</td>
+            <td class="val text-left">{$financ_prazo_pgto_descricao}</td>
         </tr>
-        <tr>
-            <td class="lbl">Produto: Descontos:</td>
-            <td class="val">{$desconto_produto} &ndash; {$desc_perc_produto}%</td>
-            <td class="lbl">Serviço: Desconto:</td>
-            <td class="val">{$desconto_servico} &ndash; {$desc_perc_servico}%</td>
-        </tr>
-        <tr>
-            <td class="lbl">Produto: Total Líquido:</td>
-            <td class="val">{$total_produto}</td>
-            <td class="lbl">Serviço: Total Líquido:</td>
-            <td class="val">{$total_servico}</td>
-        </tr>
+        <!-- Linha 3: Forma de Pagamento + Desconto Serviços -->
         <tr>
             <td class="lbl">Forma Pagamento:</td>
-            <td class="val">{$financ_forma_pgto_descricao}</td>
-            <td class="lbl">Frete (Valor):</td>
-            <td class="val text-left bold text-primary">{$total_frete}</td>
+            <td class="val text-left">{$financ_forma_pgto_descricao}</td>
+            <td class="lbl">Desconto serviços:</td>
+            <td class="val text-left" >{$desconto_servico} &ndash; {$desc_perc_servico}%</td>
         </tr>
+        <!-- Linha 4: Peso Bruto + Volumes -->
         <tr>
-            <td class="lbl">Prazo Pagamento:</td>
-            <td class="val">{$financ_prazo_pgto_descricao}</td>
+            <td class="lbl">Peso Bruto:</td>
+            <td class="val text-left">{$volume_peso_bruto}</td>
+            <td class="lbl">Volumes:</td>
+            <td class="val text-left">{$volume_qtde}</td>
+        </tr>
+        <!-- Linha 5: Peso Líquido + Frete -->
+        <tr>
+            <td class="lbl">Peso Líquido:</td>
+            <td class="val text-left">{$volume_peso_liquido}</td>
+            <td class="lbl">Frete:</td>
+            <td class="val text-left">{$total_frete}</td>
+        </tr>
+        <!-- Linha 6: Total Geral Alinhado na Direita -->
+        <tr>
+            <!-- Esquerda vazia (Sem borda) -->
+            <td colspan="2" style="border: none !important;"></td>
+            <!-- Direita preenchida com o Total Geral -->
             <td class="total-lbl">Total Geral:</td>
             <td class="total-val text-right">{$total_pedido}</td>
         </tr>
