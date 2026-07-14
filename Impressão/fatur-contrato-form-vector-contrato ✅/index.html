@@ -1,0 +1,302 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrato de Comercialização de Software ERP</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA DAS DIRETRIZES DO LIBREOFFICE (A4 - RETRATO) */
+        @page {
+            size: 21.00cm 29.70cm; /* Tamanho físico A4 */
+            /* Margens: 2.2cm no topo para abrigar o cabeçalho fixo, 1.5cm nas laterais e 2.0cm abaixo */
+            margin: 2.2cm 1.5cm 2.0cm 1.5cm; 
+        }
+
+        /* RESET E CONFIGURAÇÕES DE TEXTO LEGAL */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            color: #2d3748;
+            line-height: 1.4;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* CABEÇALHO REPETÍVEL EM TODAS AS PÁGINAS */
+        .header {
+            position: fixed;
+            top: -1.5cm;
+            left: 0px;
+            right: 0px;
+            height: 1.2cm;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 3px;
+        }
+        .header table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0;
+        }
+
+        /* RODAPÉ REPETÍVEL EM TODAS AS PÁGINAS */
+        .footer {
+            position: fixed;
+            bottom: -1.3cm;
+            left: 0px;
+            right: 0px;
+            height: 25px;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 4px;
+        }
+        .footer table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* EVITA QUE PARÁGRAFOS OU LISTAS SE QUEBREM DE FORMA ÓRFÃ */
+        p, li {
+            page-break-inside: avoid;
+        }
+
+        /* ESTILOS DE PARÁGRAFO E CLÁUSULAS */
+        p {
+            text-align: justify;
+            text-indent: 25px; /* Recuo padrão de parágrafo */
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        
+        .no-indent {
+            text-indent: 0 !important;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        /* ALÍNEAS E LISTAS */
+        ol, ul {
+            margin-top: 0;
+            margin-bottom: 10px;
+            padding-left: 30px;
+        }
+        li {
+            text-align: justify;
+            margin-bottom: 6px;
+        }
+
+        /* TABELA DE ASSINATURAS (IMPEDE QUEBRA ENTRE DUAS PÁGINAS) */
+        .signature-container {
+            page-break-inside: avoid;
+            margin-top: 40px;
+        }
+        .signature-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .signature-table td {
+            border: none;
+            padding: 0;
+            text-align: center;
+            vertical-align: top;
+        }
+        .signature-line {
+            border-top: 1px solid #333333;
+            width: 90%;
+            margin: 0 auto;
+            padding-top: 5px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO FIXO COM LOGO DA EMPRESA (REPETE EM TODAS AS PÁGINAS) -->
+    <div class="header">
+        <table>
+            <tr>
+                <td style="width: 30%; vertical-align: middle; padding: 0;">
+                    <img src="{$unidade_image}" style="max-height: 35px; max-width: 100px;" alt="Logo da Empresa">
+                </td>
+                <td style="width: 70%; text-align: right; vertical-align: middle; padding: 0;">
+                    <span style="font-size: 12px; font-weight: bold; color: #2c3e50;">Contrato de Comercialização de Software ERP</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- RODAPÉ FIXO -->
+    <div class="footer">
+        <table>
+            <tr>
+                <td style="width: 60%; text-align: left; vertical-align: top; font-size: 7.5px; color: #7f8c8d; line-height: 1.2;">
+                    Vector Soluções Digitais<br>
+                    Avenida Antônio Volpato 840 Sala 03 – Sarandi /PR<br>
+                    contato@vectorsd.com.br
+                </td>
+                <td style="width: 40%; text-align: right; vertical-align: bottom; font-size: 7.5px; color: #7f8c8d;">
+                    Impresso em: <span class="bold">{$data_hoje}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- CONTEÚDO DO CONTRATO (FLUXO CONTÍNUO NATURAL) -->
+    <div style="height: 10px;"></div>
+
+    <p>Pelo presente e na melhor forma de direito, as partes abaixo nominadas e qualificadas têm, entre si, justo e firmado o presente contrato que objetiva garantir o perfeito funcionamento e cumprimento das cláusulas com as condições seguintes:</p>
+    
+    <p class="bold no-indent" style="margin-top: 15px;">Cláusula Primeira: Das Partes:</p>
+
+    <p><span class="bold">VECTOR SOLUÇÕES DIGITAIS LTDA</span>, inscrita no CNPJ nº 34.492.753/0001-83, empresa com sede na Av. Antônio Volpato 840 sala 03, SARANDI-PR., doravante denominado <span class="bold">“LICENCIADORA”</span>.</p>
+
+    <p><span class="bold">{$pessoa_descricao}</span>, inscrita no CNPJ nº <span class="bold">{$pes_cpf_cnpj}</span>, empresa com sede na <span class="bold">{$pes_logradouro}</span> <span class="bold">{$pes_numero}</span> <span class="bold">{$pes_bairro}</span>, CEP <span class="bold">{$pes_end_cep}</span> na cidade de <span class="bold">{$pes_local_municipio_descricao}</span> &ndash; <span class="bold">{$pes_local_uf_sigla}</span>, <span class="bold">{$pes_fone1}</span> doravante denominado <span class="bold">“COMERCIANTE”</span>.</p>
+
+    <p class="bold no-indent" style="margin-top: 15px;">CLÁUSULA PRIMEIRA: OBJETO</p>
+    <p>O presente contrato tem por OBJETO a autorização a favor da LICENCIADA, sem exclusividade, na Cessão de Uso do Sistema VECTOR, bem como o suporte técnico e atualizações de versões.</p>
+
+    <p class="bold no-indent" style="margin-top: 15px;">CLÁUSULA SEGUNDA: DIREITOS DE PROPRIEDADE</p>
+    <p>A LICENCIADORA é titular dos direitos sobre o software VECTOR, nos termos de Lei de Software nº 9.609, de 19 de fevereiro de 1998.</p>
+    <p>O Software transferido à LICENCIADA por força de Cessão de Direitos de Uso é representado no País com exclusividade pela LICENCIADORA, não podendo em consequência à LICENCIADA:</p>
+    
+    <ol style="list-style-type: lower-alpha;">
+        <li>De qualquer forma copiar, exibir, adaptar, modificar, traduzir, fazer engenharia reversa, decompilar, desmontar, criar trabalhos derivados do software ou eletronicamente distribuir a codificação;</li>
+        <li>Transferir, ceder, alugar, comercializar, emprestar ou fornecer cópias a terceiros;</li>
+        <li>Utilizar cópias em filiais e empresas coligadas sem autorização prévia da LICENCIADORA.</li>
+        <li>Esta disposição é válida, mesmo após a rescisão do presente instrumento, sob pena de pagamento de indenização prevista, sem prejuízo das demais sanções estabelecidas das leis de informática, isto é, caso venha a comprovar pirataria do software em questão, será estabelecido uma multa que equivale a 100 (cem) vezes do valor da manutenção vigente do sistema, independente da interpelação judicial.</li>
+    </ol>
+
+    <p class="bold no-indent" style="margin-top: 15px;">CLÁUSULA TERCEIRA: DA CONCESSÃO DA LICENÇA</p>
+    <p>A LICENCIADORA concede a LICENCIADA uma licença de uso não exclusiva e intransferível do sistema contrato VECTOR.</p>
+
+    <p class="no-indent" style="margin-top: 15px;">Será aplicado o reajuste ao valor de licenciamento e manutenção mensal definido neste contrato conforme ampliações de empresas ou filiais previamente aprovadas pela LICENCIADA. Será obrigatório o fornecimento da identificação de cada empresa adicional como aditivo deste contrato.</p>
+
+    <p class="bold no-indent" style="margin-top: 15px;">CLÁUSULA QUARTA: DA MANUTENÇÃO</p>
+    <p>A LICENCIADORA compromete-se a fornecer, a pedido da LICENCIADA os serviços de desenvolvimento nos módulos para ajustes à realidade da LICENCIADA, implantação/treinamento/suporte técnico do Sistema.</p>
+    
+    <ol style="list-style-type: lower-roman;">
+        <li><span class="bold">Compreende como os serviços a serem realizados:</span>
+            <ol style="list-style-type: lower-alpha; padding-top: 4px;">
+                <li>Corrigir o mau funcionamento do PROGRAMA, sempre que gerado por erros, em sua concepção e produção.</li>
+                <li>Manter o programa atualizado tecnicamente, fornecendo prontamente as novas versões que venham a ser liberadas e contenham alterações, acréscimos de rotinas ou melhorias de desempenho, de forma geral.</li>
+                <li>Atender desde que feitas em dias úteis e no horário comercial, as ligações telefônicas, fax e mensagens de correio eletrônico, enviados para dirimir dúvidas ou solucionar problemas quanto ao programa fornecido.</li>
+                <li>Atualizações oriundas de mudança de legislação e solicitadas sua inclusão no software pela LICENCIADA.</li>
+            </ol>
+        </li>
+        <li style="margin-top: 10px;"><span class="bold">Não compreende como serviços a serem realizados e será cobrado à parte:</span>
+            <ol style="list-style-type: lower-alpha; padding-top: 4px;">
+                <li>Os serviços de correção de erros de operação ou uso indevido do programa.</li>
+                <li>Os serviços de recuperação de arquivos de dados e acertos feitos no programa, devidos a erros ocorridos por causas diversas que não sejam falhas na sua concepção e produção do sistema.</li>
+                <li>Alterações, customizações ou desenvolvimentos solicitados pela LICENCIADA, por motivos do seu interesse fugindo o conceito do Sistema ou por que sejam somente para a LICENCIADA.</li>
+                <li>Quaisquer outros serviços de assessoramento, treinamento e curso que não digam respeito ao objeto do contrato, ou seja, ao software e as características do sistema propriamente dito.</li>
+            </ol>
+        </li>
+    </ol>
+
+    <p class="bold no-indent" style="margin-top: 15px;">CLÁUSULA QUINTA: DANOS E RESPONSABILIDADES</p>
+    <p>A LICENCIADORA não se responsabiliza por problemas originários de outros programas, aplicativos ou sistemas operacionais que trabalhem no mesmo ambiente.</p>
+    <p>Em nenhuma circunstância, nem por interpelação legal, jurisprudência, contrato ou outra forma, a LICENCIADORA se responsabilizará por quaisquer indenizações especiais, danos diretos, incidentais, punitivas, indiretas ou consequenciais (incluindo entre outras, interpretação fiscal, indenização por perda de receita, lucros ou de informações contidas em Banco de Dados, confidenciais ou não, corrupção, danos e perda de dados ou programas, incluindo deveres previstos em lei, de boa-fé ou de cuidados razoáveis) ato ilícito (incluindo negligencia, declaração falsa, qualquer obrigação ou dever de responsabilidade estrita) mesmo que a LICENCIADORA tenham sido avisados da possibilidade de tais indenizações.</p>
+    <p>A LICENCIADORA não terá nenhuma responsabilidade por dados utilizados e armazenados, inclusive aos custos de recuperação dos mesmos, desde que estes dados não integrem o objeto deste contrato.</p>
+
+    <p class="no-indent" style="margin-top: 15px;">É de responsabilidade exclusiva da LICENCIADA a elaboração de Cópias de Segurança dos Dados, bem como o seu respectivo armazenamento em local seguro.</p>
+
+    <p class="bold no-indent" style="margin-top: 15px;">CLÁUSULA SEXTA: ALTERAÇÕES E VERSÕES</p>
+    <p>Para substituição de novas versões, a LICENCIADORA poderá encaminhar os softwares pelos meios que sejam mais eficientes para ambos.</p>
+    <p>A LICENCIADORA distribuirá uma versão HOMOLOGADA, (ou depurada).</p>
+    <p>Nenhum representante, vendedor ou funcionário da LICENCIADORA, está autorizado a efetuar qualquer modificação ou adendo a este contrato.</p>
+    <p>Entende-se por ALTERAÇÃO as modificações opcionais solicitadas. Todas as alterações serão motivas de análise prévia, passíveis de novo orçamento, cobrança à parte da manutenção ou licenciamento caso não estejam no contexto ou finalidade do sistema;</p>
+    <p>A LICENCIADORA não terá a obrigação de realizar alterações caso estas não estejam inseridas no contexto do software e de suas características.</p>
+    <p>O prazo para efetuar as alterações solicitadas pela LICENCIADA ficará estipulado pela LICENCIADORA de acordo com suas condições e possibilidades.</p>
+
+    <p class="bold no-indent" style="margin-top: 15px;">CLÁUSULA SÉTIMA: EQUIPAMENTOS</p>
+    <p>A LICENCIADA deverá informar a LICENCIADORA a configuração do seu equipamento (hardware) no qual será instalado o (s) software (s) em sua configuração completa.</p>
+    <p>Na eventual troca de equipamentos, e para garantia da continuidade dos serviços, a LICENCIADORA deverá ser consultada com antecedência, para o fim de executar ou não a migração dos softwares.</p>
+
+    <p class="bold no-indent" style="margin-top: 15px;">CLÁUSULA OITAVA: DO ATENDIMENTO</p>
+    <p>A LICENCIADA fica ciente que o atendimento será feito da LICENCIADORA e/ou Representantes autorizados pela LICENCIADORA, por telefone em dias úteis e no horário comercial, de 2ª a 6ª feira, exceto feriados nacionais. Consultas que não puderem ser respondidas de imediato deverão ser formalizadas pelo CLIENTE e enviadas via fax, e-mail ou através do site da PRODUTORA. Questões encaminhadas por fax ou e-mail terão prioridades para serem respondidas no menor prazo possível, a partir do recebimento da mensagem, desde que, formulada de maneira clara e objetiva.</p>
+    <p>Sempre que necessário a LICENCIADA se obriga a ceder suas instalações, equipamentos e pessoal e a facilitar, de forma geral, o acesso e os trabalhos da LICENCIADORA necessários para a execução dos serviços de assistência técnica de manutenção.</p>
+    <p>A LICENCIADA compreende e concorda que a LICENCIADORA solucionará os problemas e corrigirá os erros do programa na medida em que a contratante forneça suficientes informações acerca dos erros ou problemas ocorridos e que a ausência ou insuficiência de informações sobre os problemas ou erros cometidos podem dificultar ou, até, impossibilitar os trabalhos da LICENCIADORA.</p>
+    <p>A LICENCIADA, por sua vez, se obriga a fornecer à LICENCIADORA as diretrizes dos trabalhos a serem executados. A determinar a todos os setores da empresa que emprestem o máximo de colaboração a LICENCIADORA, quando na execução de suas tarefas, seja no que tange a fornecimento de informações e documentos, seja no que diz respeito ao cumprimento de instruções e determinações da LICENCIADA e que se relacionem com os seus trabalhos, como também livre trânsito em toda e qualquer dependência de seus estabelecimentos.</p>
+    <p>Caso necessário, a PRODUTORA poderá solicitar cópia dos arquivos de dados em mídia compatível para análise e solução de problemas.</p>
+    <p>O Suporte Técnico compreende atualizações e problemas de software e hardware.</p>
+    <p>Caso a LICENCIADA solicite a LICENCIADORA treinamento de seus novos funcionários este serviço será cobrado à parte do valor da manutenção.</p>
+    <p>A LICENCIADA compreende que caso a mesma venha a solicitar a solução de erros em sistemas operacionais, hardware ou outros sistemas de softwares que não seja objeto deste contrato por este serviço será cobrado hora técnica conforme tabela de preço vigente.</p>
+
+    <p class="bold no-indent" style="margin-top: 15px;">CLÁUSULA NONA: DO PRAZO</p>
+    <p>O prazo do presente contrato é de 01 (um) ano, a partir da presente data da assinatura deste contrato, sendo renovável automaticamente, podendo a LICENCIADA, após este prazo, rescindi-lo a qualquer tempo, mediante comunicação prévia por escrito, com 30 (trinta) dias de antecedência.</p>
+    <p>A LICENCIADORA, de igual forma, poderá rescindir este contrato caso ocorra o descumprimento por parte da LICENCIADA das condições aqui estipuladas:</p>
+    <ol style="list-style-type: lower-alpha;">
+        <li>Qualquer alteração, modificação, inclusão, exclusão a este contrato dar-se-á por meio de aditivos, numerados em sequência.</li>
+    </ol>
+
+    <p class="bold no-indent" style="margin-top: 15px;">CLÁUSULA DÉCIMA: DOS VALORES</p>
+    <p>Fica estipulado o valor de <span class="bold">R$ {$total_servico}</span> de mensalidade que será cobrada a partir de <span class="bold">{$inicio}</span>, através de boleto bancário todo dia 5 (cinco) de cada mês, que lhe será enviado, após sistema estar totalmente instalado.</p>
+    <p>O não pagamento, todo dia 5 (cinco) conforme citado acima, implicará multa de 1% (um por cento) e juros de 2% (dois por cento) ao mês.</p>
+    <p>Não está autorizado o pagamento das manutenções a pessoas que se identificarem como representantes ou funcionários da LICENCIADORA, este pagamento somente poderá e terá validade se feito via boleto bancário ou depósito bancário na conta da LICENCIADORA.</p>
+    <p>Na condição de atraso superior a 10 dias, poderá ser bloqueado o uso dos referidos softwares e a suspensão da manutenção técnica até a regularização do mesmo.</p>
+    <p>Persistindo o atraso no pagamento superior a 01(um) mês, fica a LICENCIADA sujeita a ter seu nome incluso Serviço Central de Proteção ao Crédito (CPC).</p>
+    <p>Todas e quaisquer despesas que possam ser consideradas extracontratuais, inclusive as despesas de viagem e estadas, desde que efetuadas com o acordo da LICENCIADA, serão pagas por esta, as de viagem e estadas, desde que efetuadas com o acordo da LICENCIADA, serão pagas por esta.</p>
+
+    <p class="bold no-indent" style="margin-top: 15px;">CLÁUSULA DÉCIMA PRIMEIRA: DO REAJUSTE</p>
+    <p>Após este período para compensar os efeitos inflacionários, o valor do licenciamento mensal fica desde logo submetido a reajuste monetário, cuja aplicação será feita a cada período de 12 (doze) meses e 1(um) dia, a contar da data deste contrato, ou em periodicidade inferior que venha a ser permitida, no final do contrato, de acordo com a variação acumulada do IGP-M (Índice Geral de Preços de Mercado) da Fundação Getúlio Vargas ou outro índice que porventura venha a substituí-lo, ficando ainda convencionado o seguinte:</p>
+    <ol style="list-style-type: lower-alpha;">
+        <li>No caso de a qualquer tempo o ordenamento jurídico nacional ou decisão judicial reduzir a periodicidade admitida para reajuste monetário das obrigações pecuniárias atualmente limitadas ao período mínimo de um ano, as parcelas do preço passarão a ser, imediata e automaticamente, reajustadas na periodicidade mínima que vier a ser permitida, observado, porém e sempre, o critério de reajuste agora convencionado, assumindo a LICENCIADA, desde agora, a obrigação de pagar imediatamente a diferença apurada entre o valor nominal da prestação e o seu valor reajustado a cada periodicidade mínima de reajuste monetário admitido.</li>
+    </ol>
+
+    <p class="bold no-indent" style="margin-top: 15px;">CLÁUSULA DÉCIMA SEGUNDA: RESCISÃO</p>
+    <p>O presente contrato pode ser rescindido, a qualquer momento, por comum acordo entre as partes e por qualquer das partes contratantes, desde que se verifique o não cumprimento, pela outra, das obrigações aqui assumidas e, independentemente de qualquer notificação, nos casos de falência, concordata ou liquidação.</p>
+    <p>O presente contrato pode, ainda, ser encerrado por quaisquer das partes, antes do fim do prazo normal, desde que a parte interessada no encerramento comunique à outra sua intenção com antecedência de 90 (noventa) dias e, não existam, por ocasião do encerramento, pendência de pagamento por parte da LICENCIADA.</p>
+    <p>O presente contrato pode, também, ser rescindido, caso uma das partes venha a falir, por determinação de sentença judicial, ou requeira concordata.</p>
+    <p>Caso haja rescisão pela LICENCIADORA do presente contrato, a mesma compromete a fornecer o (s) layout (s) dos arquivos de dados para que a LICENCIADA possa dar seguimento ao trabalho.</p>
+    <p>Caso haja rescisão pela LICENCIADA do presente contrato, fica a cargo da LICENCIADORA, estabelecer valores e procedimentos adequados para fornecer o (s) layout (s) dos arquivos de dados para que a LICENCIADA possa dar seguimento ao trabalho.</p>
+    <p>A LICENCIADA fica ciente que havendo rescisão contratual, a LICENCIADORA ficará isenta de qualquer repasse ou reembolso de valores apresentados neste contrato à LICENCIADA.</p>
+
+    <p class="bold no-indent" style="margin-top: 15px;">CLÁUSULA DÉCIMA TERCEIRA: MULTA CONTRATUAL</p>
+    <p>As partes acordam que, em não havendo cumprimento por parte da LICENCIADORA ou da LICENCIADA, ou havendo insatisfação de ambas as partes as parcelas restantes serão suspensas e os valores já pagos não serão ressarcidas.</p>
+
+    <p class="bold no-indent" style="margin-top: 15px;">CLÁUSULA DÉCIMA QUARTA: FORO</p>
+    <p>Fica eleito o foro da cidade de Maringá – Paraná, com exclusão de qualquer outro por mais privilegiado que seja, para dirimir qualquer dúvida que possa surgir na efetivação do presente contrato, regendo-se pela legislação em vigor todos os casos não previstos no presente instrumento contratuais.</p>
+    <p>E por estarem às partes, LICENCIADORA e LICENCIADA, de pleno acordo com o disposto neste instrumento particular, assinam-no na presença das duas testemunhas abaixo, em 02 (duas) vias de igual teor e forma, destinando-se 01 (uma) via para cada parte interessada.</p>
+
+    <!-- BLOCO DE ASSINATURAS AGRUPADO (IMPEDE QUEBRA INDEVIDA) -->
+    <div class="signature-container">
+        <p class="text-right bold" style="text-indent: 0; margin-top: 30px; font-size: 12px;">Maringá, {$cadastro}</p>
+
+        <table class="signature-table" style="margin-top: 50px;">
+            <tr>
+                <td style="width: 48%;">
+                    <div class="signature-line">
+                        <span class="bold">VECTOR SOLUÇÕES DIGITAIS</span>
+                    </div>
+                </td>
+                <td style="width: 4%;"></td>
+                <td style="width: 48%;">
+                    <div class="signature-line">
+                        <span class="bold">{$pessoa_descricao}</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="height: 60px;"></td>
+            </tr>
+            <tr>
+                <td style="width: 48%;">
+                    <div class="signature-line">
+                        <span>TESTEMUNHA 01</span>
+                    </div>
+                </td>
+                <td style="width: 4%;"></td>
+                <td style="width: 48%;">
+                    <div class="signature-line">
+                        <span>TESTEMUNHA 02</span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>
+<!--[/main]-->

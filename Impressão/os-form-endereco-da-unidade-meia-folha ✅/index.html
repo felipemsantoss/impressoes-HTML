@@ -1,0 +1,294 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Ordem de Serviço</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL NO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO (MICRO-MARGENS) */
+        @page {
+            size: A4 portrait;
+            margin: 25px 20px 35px 20px; /* Margem inferior compactada para o rodapé respirar */
+        }
+
+        /* RESET E FONTES DE ALTA DENSIDADE EM 8PX (MEIA PÁGINA) */
+        body {
+            font-size: 8px; /* Reduzido globalmente para 8px */
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* RODAPÉ REAL E REPETÍVEL (ESTILO LIBREOFFICE) */
+        .footer {
+            position: fixed;
+            bottom: -22px; /* Posicionado no limite da margem inferior */
+            left: 0px;
+            right: 0px;
+            height: 12px;
+            text-align: right;
+            font-size: 8px; /* Mantido 8px */
+            color: #7f8c8d;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 3px;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-prod- { display: none !important; }
+        .linha-parc- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS ULTRA-COMPACTAS */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; /* Força o alinhamento perfeito das colunas */
+            margin-bottom: 4px; /* Margem mínima entre tabelas */
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 2px 3px; /* Padding extremamente reduzido para compactação */
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) */
+        .grid-table {
+            margin-bottom: 4px;
+        }
+        .grid-table td, .grid-table th {
+            border: 1px solid #dce4ec;
+        }
+        
+        /* CABEÇALHOS */
+        .section-header {
+            background-color: #f4f6f8;
+            color: #2c3e50;
+            font-size: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 3px 4px;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-size: 8px;
+            font-weight: bold;
+            width: 15%;
+        }
+        .val {
+            width: 35%;
+            color: #111111;
+        }
+
+        /* TABELAS DE ITENS (PRODUTOS / PARCELAS) */
+        .items-table th {
+            background-color: #2c3e50;
+            color: #ffffff;
+            font-size: 8px;
+            text-transform: uppercase;
+            border: 1px solid #2c3e50;
+            padding: 3px 4px;
+        }
+        .items-table td {
+            border: 1px solid #dce4ec;
+            border-bottom: 1px solid #eeeeee;
+            padding: 2px 3px;
+            font-size: 8px;
+        }
+        .items-table tfoot td {
+            background-color: #f4f6f8;
+            font-weight: bold;
+            border: 1px solid #dce4ec;
+            padding: 2px 3px;
+            font-size: 8px;
+        }
+
+        .total-row td {
+            background-color: #2c3e50 !important;
+            color: #ffffff !important;
+            font-size: 10px;
+            padding: 3px 4px;
+            border-color: #2c3e50 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- RODAPÉ FIXO -->
+    <div class="footer">
+        Impresso em: <span class="bold">{$data_hoje}</span>
+    </div>
+
+    <!-- CABEÇALHO DO DOCUMENTO (Compactado) -->
+    <table style="margin-bottom: 6px; border-bottom: 2px solid #2c3e50; padding-bottom: 3px;">
+        <tr>
+            <td style="width: 30%; vertical-align: middle;">
+                <img src="{$unidade_image}" style="max-width: 100px; max-height: 35px;" alt="Logo da Empresa">
+            </td>
+            <td style="width: 70%; text-align: right; vertical-align: middle;">
+                <span class="bold" style="font-size: 10px; color: #2c3e50;">{$pessoa_unidade_descricao}</span><br>
+                <span style="font-size: 8px; color: #7f8c8d;">
+                    Endereço: {$pessoa_unidade_logradouro}, {$pessoa_unidade_numero} {$pessoa_unidade_complemento} &bull; CEP: {$pessoa_unidade_cep}<br>
+                    {$pessoa_unidade_local_municipio_descricao}/{$pessoa_unidade_local_uf_descricao} &bull; Fone: {$p_unidade_fone1} &bull; Email: {$p_unidade_email}
+                </span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 1: INFORMAÇÕES GERAIS, CLIENTE E VEÍCULO (Grid Compacto) -->
+    <table class="grid-table">
+        <tr>
+            <td class="lbl">Pedido Nº:</td>
+            <td class="val"><span class="bold">{$id}</span></td>
+            <td class="lbl">Data Cadastro:</td>
+            <td class="val bold">{$cadastro}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Cliente:</td>
+            <td class="val"><span class="bold">{$pessoa_id} &ndash; {$pessoa_descricao}</span></td>
+            <td class="lbl">Telefone:</td>
+            <td class="val">{$pessoa_fone1} {$pessoa_fone2}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Cnpj/Cpf:</td>
+            <td class="val">{$pessoa_cpf_cnpj}</td>
+            <td class="lbl">E-mail:</td>
+            <td class="val">{$pessoa_email}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: ENDEREÇO -->
+    <table class="grid-table">
+        <tr class="bg-gray-light bold">
+            <td style="width: 60%; padding-left: 4px;" class="section-header">Endereço</td>
+            <td style="width: 40%;" class="section-header">Cidade / Estado</td>
+        </tr>
+        <tr>
+            <td style="padding-left: 4px;">{$logradouro} &ndash; {$numero} {$complemento} {$bairro}</td>
+            <td>{$local_municipio_descricao} &ndash; {$local_uf_descricao} {$cep}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 3: ITENS DA PROPOSTA (PRODUTOS) - 6 COLUNAS ALINHADAS -->
+    <table class="items-table" style="margin-bottom: 4px;">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 8%;">Código</th>
+                <th style="text-align: left; width: 55%;">Produto</th>
+                <th class="text-center" style="width: 6%;">Qtd</th>
+                <th class="text-center" style="width: 6%;">Und</th>
+                <th class="text-right nowrap" style="width: 12%;">Unitário</th>
+                <th class="text-right nowrap" style="width: 13%;">Total Bruto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[produtos]-->
+            <tr class="linha-prod-{$produto_id}">
+                <td class="text-center">{$produto_id}</td>
+                <td><span class="bold">{$produto_descricao}</span> <span style="color: #7f8c8d; font-size: 7.5px;">{$produto_referencia_descricao}</span></td>
+                <td class="text-center">{$qtde}</td>
+                <td class="text-center">{$sigla}</td>
+                <td class="text-right nowrap">{$preco}</td>
+                <td class="text-right bold nowrap">{$total_bruto}</td>
+            </tr>
+            <!--[/produtos]-->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" class="text-right">TOTAL DE ITENS:</td>
+                <td class="text-center">{$qtde_sum}</td>
+                <td colspan="2" class="text-right nowrap">SUBTOTAL PRODUTOS:</td>
+                <td class="text-right bold nowrap">{$subtotal_produto}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- BLOCO 4: OBSERVAÇÕES COMPACTADO -->
+    <table class="grid-table" style="margin-bottom: 4px;">
+        <tr>
+            <td class="section-header">Observação</td>
+        </tr>
+        <tr>
+            <td style="min-height: 15px; vertical-align: top; font-size: 8px; line-height: 1.2; padding: 2px 4px;">
+                {$obs1}
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 5: RESUMO FINANCEIRO SINO (Compactado em 2 Linhas) -->
+    <table class="grid-table" style="margin-bottom: 4px;">
+        <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+        </colgroup>
+        <tr>
+            <td class="lbl">Forma Pagamento:</td>
+            <td class="val">{$financ_forma_pgto_descricao}</td>
+            <td class="lbl">Frete:</td>
+            <td class="val text-right text-primary">{$total_frete}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Prazo Pagamento:</td>
+            <td class="val">{$financ_prazo_pgto_descricao}</td>
+            <td class="total-lbl">Total Geral:</td>
+            <td class="total-val text-right">{$total_pedido}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 6: TABELA DE PARCELAS -->
+    <table class="items-table" style="margin-bottom: 15px;">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 15%;">Parcela</th>
+                <th class="text-center" style="width: 25%;">Vencimento</th>
+                <th class="text-right" style="width: 25%;">Valor</th>
+                <th style="text-align: left; padding-left: 10px; width: 35%;">Tipo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[parcelas]-->
+            <tr class="linha-parc-{$parcela}">
+                <td class="text-center">{$parcela}</td>
+                <td class="text-center bold">{$vencimento}</td>
+                <td class="text-right bold">{$valor}</td>
+                <td style="padding-left: 10px;">{$financ_forma_pgto_descricao_parcela}</td>
+            </tr>
+            <!--[/parcelas]-->
+        </tbody>
+    </table>
+
+    <!-- ASSINATURAS DUPLAS LADO A LADO (ALINHAMENTO PERFECT SINO) -->
+    <table style="width: 100%; margin-top: 30px; border: none; table-layout: fixed;">
+        <tr>
+            <!-- Assinatura 1: Recebimento -->
+            <td style="width: 48%; text-align: center; vertical-align: bottom; padding: 0;">
+                ____________________________________________<br>
+                <span class="bold" style="font-size: 8px; display: block; margin-top: 3px; color: #555555;">Recebi as mercadorias constantes</span>
+            </td>
+            <td style="width: 4%; padding: 0;"></td>
+            <!-- Assinatura 2: Cliente -->
+            <td style="width: 48%; text-align: center; vertical-align: bottom; padding: 0;">
+                ____________________________________________<br>
+                <span class="bold" style="font-size: 8px; display: block; margin-top: 3px; color: #555555;">{$pessoa_descricao}</span>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

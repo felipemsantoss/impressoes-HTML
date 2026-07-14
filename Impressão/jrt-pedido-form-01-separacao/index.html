@@ -1,0 +1,184 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Conferência de Pedido de Venda</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL NO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 35px 25px 45px 25px; /* Margem inferior de 45px para o rodapé respirar */
+        }
+
+        /* RESET E FONTES PADRONIZADAS EM 9PX (PADRÃO INTEIRO) */
+        body {
+            font-size: 9px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* RODAPÉ REAL E REPETÍVEL (ESTILO LIBREOFFICE) */
+        .footer {
+            position: fixed;
+            bottom: -30px; /* Posiciona no limite da margem inferior */
+            left: 0px;
+            right: 0px;
+            height: 15px;
+            text-align: right;
+            font-size: 9px;
+            color: #7f8c8d;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 4px;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-prod- { display: none !important; }
+
+        /* QUADRO DE MARCAÇÃO / CHECKBOX COMPATÍVEL COM DOMPDF */
+        .checkbox-box {
+            border: 1px solid #777777;
+            width: 14px;
+            height: 14px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+
+        /* ESTRUTURA GERAL DAS TABELAS */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; /* Força o alinhamento perfeito das colunas */
+            margin-bottom: 6px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 3px 4px;
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* TABELAS DE ITENS */
+        .items-table th {
+            background-color: #2c3e50;
+            color: #ffffff;
+            font-size: 9px;
+            text-transform: uppercase;
+            border: 1px solid #2c3e50;
+            padding: 3px 4px;
+        }
+        .items-table td {
+            border: 1px solid #dce4ec;
+            border-bottom: 1px solid #eeeeee;
+            padding: 3px 4px;
+            font-size: 9px;
+        }
+        .items-table tfoot td {
+            background-color: #f4f6f8;
+            font-weight: bold;
+            border: 1px solid #dce4ec;
+            padding: 3px 4px;
+            font-size: 9px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- RODAPÉ FIXO -->
+    <div class="footer">
+        Impresso em: <span class="bold">{$data_hoje}</span>
+    </div>
+
+    <!-- CABEÇALHO DO DOCUMENTO (Personalizado ORIGINAL Auto Parts com variáveis dinâmicas) -->
+    <table style="margin-bottom: 15px; border-bottom: 2px solid #2c3e50; padding-bottom: 6px;">
+        <tr>
+            <td style="width: 40%; vertical-align: middle; padding: 0;">
+                <img src="{$unidade_image}" style="max-height: 50px; max-width: 150px;" alt="Logo Original Auto Parts">
+            </td>
+            <td style="width: 60%; text-align: right; vertical-align: middle; padding: 0; line-height: 1.3;">
+                <div style="font-size: 10px; color: #7f8c8d; font-weight: bold; text-transform: uppercase;">Conferência de Separação</div>
+                <div style="font-size: 14px; font-weight: bold; color: #2c3e50; margin-top: 1px;">Pedido de Venda Nº {$id}</div>
+                <div style="font-size: 9px; color: #555555; margin-top: 2px;">
+                    Cadastro: <span class="bold">{$cadastro}</span><br>
+                    Cliente: <span class="bold">{$pessoa_id} - {$pessoa_descricao}</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: ITENS DA SEPARAÇÃO (COM QUADRO CHECKBOX DO LADO ESQUERDO) -->
+    <table class="items-table" style="margin-bottom: 20px;">
+        <thead>
+            <tr>
+                <!-- Coluna do Quadro Checkbox -->
+                <th class="text-center" style="width: 6%;"></th>
+                <th class="text-center" style="width: 10%;">Código</th>
+                <th style="text-align: left; width: 16%;">Prateleira</th>
+                <th class="text-center" style="width: 8%;">Qtd</th>
+                <th style="text-align: left; width: 52%;">Produto</th>
+                <th class="text-center" style="width: 8%;">Und</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[produtos]-->
+            <tr class="linha-prod-{$produto_id}">
+                <!-- Renderização física do quadrado de conferência -->
+                <td class="text-center">
+                    <div class="checkbox-box"></div>
+                </td>
+                <td class="text-center bold">{$produto_id}</td>
+                <td><span class="bold">{$estoque_local_descricao}</span></td>
+                <td class="text-center bold" style="font-size: 10px;">{$qtde}</td>
+                <td><span class="bold">{$produto_descricao}</span></td>
+                <td class="text-center">{$sigla}</td>
+            </tr>
+            <!--[/produtos]-->
+        </tbody>
+        <tfoot>
+            <tr>
+                <!-- Sincronizado para colocar a somatória de Qtd embaixo do campo de Qtd da tabela -->
+                <td colspan="3" class="text-right">TOTAL DE ITENS:</td>
+                <td class="text-center">{$qtde_sum}</td>
+                <td colspan="2"></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- TRIPLA ASSINATURA LADO A LADO NO RODAPÉ (CONFERENTE, DATA, RECEBEDOR) -->
+    <table style="width: 100%; margin-top: 120px; border: none; table-layout: fixed;">
+        <tr>
+            <!-- Assinatura 1: Conferente -->
+            <td style="width: 31%; text-align: center; vertical-align: bottom; padding: 0;">
+                ____________________________________<br>
+                <span class="bold" style="font-size: 9px; display: block; margin-top: 4px; color: #555555;">Conferente</span>
+            </td>
+            <td style="width: 3.5%; padding: 0;"></td> <!-- Espaçador Invisível -->
+            <!-- Assinatura 2: Data da Conferência -->
+            <td style="width: 31%; text-align: center; vertical-align: bottom; padding: 0;">
+                ____________________________________<br>
+                <span class="bold" style="font-size: 9px; display: block; margin-top: 4px; color: #555555;">Data conferência</span>
+            </td>
+            <td style="width: 3.5%; padding: 0;"></td> <!-- Espaçador Invisível -->
+            <!-- Assinatura 3: Recebedor -->
+            <td style="width: 31%; text-align: center; vertical-align: bottom; padding: 0;">
+                ____________________________________<br>
+                <span class="bold" style="font-size: 9px; display: block; margin-top: 4px; color: #555555;">Recebido por:</span>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

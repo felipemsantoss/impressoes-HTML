@@ -1,0 +1,225 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Laudo Técnico</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL NO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 35px 25px 45px 25px; /* Margem inferior de 45px para o rodapé respirar */
+        }
+
+        /* RESET E FONTES PADRONIZADAS EM 9PX */
+        body {
+            font-size: 9px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* RODAPÉ REAL E REPETÍVEL (ESTILO LIBREOFFICE) */
+        .footer {
+            position: fixed;
+            bottom: -30px; /* Posiciona no limite da margem inferior */
+            left: 0px;
+            right: 0px;
+            height: 15px;
+            text-align: right;
+            font-size: 8px;
+            color: #7f8c8d;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 4px;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-prod- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; /* Força o alinhamento perfeito das colunas */
+            margin-bottom: 6px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 3px 4px;
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) */
+        .grid-table {
+            margin-bottom: 6px;
+        }
+        .grid-table td, .grid-table th {
+            border: 1px solid #dce4ec;
+        }
+        
+        /* CABEÇALHOS */
+        .section-header {
+            background-color: #f4f6f8;
+            color: #2c3e50;
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 5px;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-size: 8px;
+            font-weight: bold;
+            width: 15%;
+        }
+        .val {
+            width: 35%;
+            color: #111111;
+        }
+
+        /* TABELAS DE ITENS (PRODUTOS / PARCELAS) */
+        .items-table th {
+            background-color: #2c3e50;
+            color: #ffffff;
+            font-size: 9px;
+            text-transform: uppercase;
+            border: 1px solid #2c3e50;
+            padding: 3px 4px;
+        }
+        .items-table td {
+            border: 1px solid #dce4ec;
+            border-bottom: 1px solid #eeeeee;
+            padding: 3px 4px;
+            font-size: 9px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- RODAPÉ FIXO -->
+    <div class="footer">
+        Impresso em: <span class="bold">{$data_hoje}</span>
+    </div>
+
+    <!-- CABEÇALHO DO DOCUMENTO -->
+    <table style="margin-bottom: 8px; border-bottom: 2px solid #2c3e50; padding-bottom: 4px;">
+        <tr>
+            <td style="width: 50%; vertical-align: middle;">
+                <img src="{$unidade_image}" style="max-width: 120px; max-height: 45px;" alt="Logo da Empresa">
+            </td>
+            <td style="width: 50%; text-align: right; vertical-align: middle;">
+                <div style="font-size: 10px; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">Laudo de Assistência</div>
+                <div style="font-size: 18px; font-weight: bold; color: #2c3e50;">Pedido Nº {$id}</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 1: INFORMAÇÕES GERAIS, CLIENTE E DETALHES -->
+    <table class="grid-table">
+        <tr>
+            <td colspan="4" class="section-header">Identificação do Laudo e Empresa</td>
+        </tr>
+        <tr>
+            <td class="lbl">Pedido / OS:</td>
+            <td class="val bold">{$id}</td>
+            <td class="lbl">Data Cadastro:</td>
+            <td class="val">{$cadastro}</td>
+        </tr>
+        <tr>
+            <td class="lbl">À Empresa:</td>
+            <td class="val" colspan="3"><span class="bold">{$pessoa_id} &ndash; {$pessoa_descricao}</span></td>
+        </tr>
+        <tr>
+            <td class="lbl">CNPJ:</td>
+            <td class="val">{$pessoa_cpf_cnpj}</td>
+            <td class="lbl">Observação:</td>
+            <td class="val">{$obs1}</td>
+        </tr>
+    </table>
+    <br>
+    <!-- TÍTULO CENTRALIZADO DO LAUDO -->
+    <div style="text-align: center; font-size: 12px; font-weight: bold; color: #2c3e50; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">
+        Laudo Técnico
+    </div>
+
+    <!-- BLOCO 2: DESCRIÇÃO DOS EQUIPAMENTOS (Tabela 3 Colunas) -->
+    <table class="items-table" style="margin-bottom: 6px;">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 15%;">Código</th>
+                <th style="text-align: left; width: 65%;">Descrição dos Equipamentos</th>
+                <th style="text-align: left; width: 20%;">Descrição (Patrimônio)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="linha-prod-{$identificacao}">
+                <td class="text-center">{$identificacao}</td>
+                <td><span class="bold">{$descricao}</span></td>
+                <td>{$patrimonio}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- BLOCO 3: DEFEITO -->
+    <table class="grid-table">
+        <tr>
+            <td class="section-header">Defeito Relatado</td>
+        </tr>
+        <tr>
+            <td style="min-height: 35px; vertical-align: top; font-size: 9px; line-height: 1.35; padding: 4px;">
+                {$defeito}
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 4: LAUDO TÉCNICO -->
+    <table class="grid-table">
+        <tr>
+            <td class="section-header">Laudo Técnico Definitivo</td>
+        </tr>
+        <tr>
+            <td style="min-height: 40px; vertical-align: top; font-size: 9px; line-height: 1.35; padding: 4px;">
+                {$laudo}
+            </td>
+        </tr>
+    </table>
+
+    <!-- ANEXOS/FOTOS (Mapeado com o laço correto do PHP) -->
+    <table class="grid-table" style="margin-bottom: 0;">
+        <thead>
+            <tr>
+                <td colspan="2" class="section-header">Anexos / Fotos do Laudo</td>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[pedido_image]-->
+            <tr>
+                <td style="width: 15%; padding: 4px; text-align: center; border-bottom: 1px solid #dce4ec;">
+                    <img src="{$image}" style="max-width: 90px; max-height: 60px;" alt="{$nome}">
+                </td>
+                <td style="width: 85%; padding: 4px; vertical-align: middle; border-bottom: 1px solid #dce4ec; font-size: 9px;">
+                    <span class="bold" style="color: #2c3e50;">{$nome}</span>
+                </td>
+            </tr>
+            <!--[/pedido_image]-->
+        </tbody>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->
