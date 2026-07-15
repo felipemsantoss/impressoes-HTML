@@ -1,0 +1,75 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiqueta OS</title>
+    <style>
+        /* RESET GLOBAL PARA O DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* DIMENSÕES EXATAS DA PÁGINA (15cm x 10cm) */
+        @page {
+            size: 15cm 10cm;
+            margin: 0.50cm 0.00cm 0.50cm 0.00cm; /* Margens físicas conforme o painel do LibreOffice */
+        }
+
+        /* ALINHAMENTO GERAL DO CONTEÚDO */
+        body {
+            margin: 0;
+            padding: 0 0.80cm; /* Margem interna de segurança para evitar corte na impressão */
+            color: #000000;
+            line-height: 1.4;
+        }
+
+        /* LOGO COM TAMANHO AMPLIADO */
+        .logo {
+            max-width: 300px; /* Tamanho limite da logo aumentado conforme solicitado */
+            max-height: 70px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* LINHAS DE TEXTO DA ETIQUETA COM FONTES AMPLIADAS */
+        .linha-texto {
+            font-size: 16px; /* Tamanho de fonte aumentado conforme solicitado */
+            margin-bottom: 6px;
+            word-wrap: break-word;
+        }
+
+        .negrito {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Logo da Unidade -->
+    <img src="{$unidade_image}" class="logo" alt="Logo">
+
+    <!-- Fantasia -->
+    <div class="linha-texto negrito">
+        {$pessoa_pj_fantasia}
+    </div>
+
+    <!-- Equipamento -->
+    <div class="linha-texto">
+        {$equipamento_descricao}
+    </div>
+
+    <!-- Ordem de Serviço -->
+    <div class="linha-texto negrito">
+        Ordem de Serviço Nº {$id}
+    </div>
+
+    <!-- Observações -->
+    <div class="linha-texto">
+        {$obs1}
+    </div>
+
+</body>
+</html>
+<!--[/main]-->
