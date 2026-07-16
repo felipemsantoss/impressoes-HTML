@@ -1,0 +1,282 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Pedido Venda</title>
+    <style>
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 35px 25px 45px 25px; /* Deixa margem de 45px abaixo para o rodapé respirar */
+        }
+
+        /* RESET E FONTES */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 9px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* RODAPÉ REAL E REPETÍVEL (ESTILO LIBREOFFICE) */
+        .footer {
+            position: fixed;
+            bottom: -30px; /* Posiciona no limite da margem inferior */
+            left: 0px;
+            right: 0px;
+            height: 15px;
+            text-align: right;
+            font-size: 8px;
+            color: #7f8c8d;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 4px;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-prod- { display: none !important; }
+        .linha-serv- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; /* Força o alinhamento perfeito das colunas */
+            margin-bottom: 6px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 3px 4px;
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) */
+        .grid-table {
+            margin-bottom: 6px;
+        }
+        .grid-table td, .grid-table th {
+            border: 1px solid #dce4ec;
+        }
+        
+        /* CABEÇALHOS */
+        .section-header {
+            background-color: #f4f6f8;
+            color: #2c3e50;
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 5px;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-size: 8px;
+            font-weight: bold;
+            width: 15%;
+        }
+        .val {
+            width: 35%;
+            color: #111111;
+        }
+
+       /* TABELAS DE ITENS (SEM PREÇO) */
+        .items-table th {
+            background-color: #2c3e50;
+            color: #ffffff;
+            font-size: 9px;
+            text-transform: uppercase;
+            border: 1px solid #2c3e50;
+            padding: 3px 4px;
+        }
+        .items-table td {
+            border: 1px solid #dce4ec;
+            border-bottom: 1px solid #eeeeee;
+            padding: 3px 4px;
+            font-size: 9px;
+        }
+        .items-table tfoot td {
+            background-color: #f4f6f8;
+            font-weight: bold;
+            border: 1px solid #dce4ec;
+            padding: 3px 4px;
+            font-size: 9px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- RODAPÉ FIXO -->
+    <div class="footer">
+        Impresso em: <span class="bold">{$data_hoje}</span>
+    </div>
+
+    <!-- CABEÇALHO DO DOCUMENTO -->
+    <table style="margin-bottom: 8px; border-bottom: 2px solid #2c3e50; padding-bottom: 4px;">
+        <tr>
+            <td style="width: 50%; vertical-align: middle;">
+                <img src="{$unidade_image}" style="max-width: 120px; max-height: 45px;" alt="Logo da Empresa">
+            </td>
+            <td style="width: 50%; text-align: right; vertical-align: middle;">
+                <div style="font-size: 10px; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">Pedido Venda</div>
+                <div style="font-size: 18px; font-weight: bold; color: #2c3e50;">Nº {$id}</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 1: INFORMAÇÕES GERAIS, CLIENTE, VEÍCULO E ENDEREÇO DA UNIDADE -->
+    <table class="grid-table">
+        <tr>
+            <td colspan="4" class="section-header">Informações Gerais e Cliente</td>
+        </tr>
+        <tr>
+            <td class="lbl">Unidade Emissora:</td>
+            <td class="val">
+                <span class="bold">{$pessoa_unidade_descricao}</span><br>
+                {$pessoa_unidade_cpf_cnpj}<br>
+                {$p_unidade_fone1}
+            </td>
+            <!-- Cadastro e Status Atual agrupados na mesma célula para economizar linha -->
+            <td class="lbl">Cadastro / Status:</td>
+            <td class="val">{$cadastro} &bull; {$global_status_descricao}</td>
+        </tr>
+        <!-- Linha do Endereço da Unidade expandida para 100% de largura -->
+        <tr>
+            <td class="lbl">Endereço Unidade:</td>
+            <td class="val" colspan="3" style="font-size: 8.5px;">
+                {$pessoa_unidade_logradouro}, {$pessoa_unidade_numero} {$pessoa_unidade_complemento} &bull; CEP: {$pessoa_unidade_cep} &bull; {$pessoa_unidade_local_municipio_descricao} - {$pessoa_unidade_local_uf_sigla}
+            </td>
+        </tr>
+        <tr>
+            <td class="lbl">Fornecedor:</td>
+            <td class="val">
+                <span class="bold">{$pessoa_id} - {$pessoa_descricao}</span>
+            </td>
+            <td class="lbl">Insc. Estadual:</td>
+            <td class="val">{$pessoa_pj_inscricao_estadual}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Cnpj/Cpf:</td>
+            <td class="val">{$pessoa_cpf_cnpj}</td>
+            <td class="lbl">Vendedor:</td>
+            <td class="val">{$pessoa_responsavel_id} - {$pessoa_responsavel_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Telefone / E-mail:</td>
+            <td class="val">{$pessoa_fone1} {$pessoa_fone2} &bull; {$pessoa_email}</td>
+            <td class="lbl">Veículo:</td>
+            <td class="val" style="font-size: 8.5px;">
+                <span class="bold">{$veiculo_marca_descricao} - {$veiculo_modelo_descricao}</span><br>
+                Placa: {$veiculo_placa} &bull; KM: {$veiculo_km_atual}
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: ENDEREÇO -->
+    <table class="grid-table">
+        <tr class="bg-gray-light bold">
+            <td style="width: 55%; padding-left: 4px;" class="section-header">Endereço</td>
+            <td style="width: 35%;" class="section-header">Cidade / Estado</td>
+            <td style="width: 10%;" class="section-header">Tipo</td>
+        </tr>
+        <tr>
+            <td style="padding-left: 4px;">{$logradouro} &ndash; {$numero} {$complemento} {$bairro}</td>
+            <td>{$local_municipio_descricao} &ndash; {$local_uf_descricao} {$cep}</td>
+            <td>{$tipo}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 3: ITENS DA PROPOSTA (PRODUTOS SEM PREÇO) -->
+    <table class="items-table" style="margin-bottom: 6px;">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 8%;">Código</th>
+                <th style="text-align: left; width: 72%;">Produto</th>
+                <th class="text-center" style="width: 10%;">Und</th>
+                <th class="text-center" style="width: 10%;">Qtd</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[produtos]-->
+            <tr class="linha-prod-{$produto_id}">
+                <td class="text-center">{$produto_id}</td>
+                <td>{$produto_descricao} &bull; {$produto_complemento}</td>
+                <td class="text-center">{$sigla}</td>
+                <td class="text-center">{$qtde}</td>
+            </tr>
+            <!--[/produtos]-->
+        </tbody>
+    </table>
+
+    <!-- BLOCO 4: ITENS DA PROPOSTA (SERVIÇOS SEM PREÇO - ALINHADO À ESQUERDA) -->
+    <table class="items-table" style="margin-bottom: 8px;">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 8%;">Código</th>
+                <!-- Expandido de 80% para 82% para travar a largura do Código e empurrar a Qtd -->
+                <th style="text-align: left; width: 72%;">Serviço</th>
+                <!-- Reduzido de 10% para 8% para alinhar com a coluna UND do Produto -->
+                <th class="text-center" style="width: 10%;">Qtd</th>
+                <th class="text-center" style="width: 10%;">Unitário</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[servicos]-->
+            <tr class="linha-serv-{$servico_id}">
+                <td class="text-center">{$servico_id}</td>
+                <td>{$servico_descricao}</td>
+                <td class="text-center">{$qtde}</td>
+                <td class="text-center">{$preco}</td>
+            </tr>
+            <!--[/servicos]-->
+        </tbody>
+    </table>
+
+    <!-- BLOCO 5: OBSERVAÇÕES COMPACTADO -->
+    <table class="grid-table" style="margin-bottom: 6px;">
+        <tr>
+            <td class="section-header">Observação</td>
+        </tr>
+        <tr>
+            <td style="min-height: 35px; vertical-align: top; font-size: 8.5px; line-height: 1.35;">
+                {$obs1}<br>
+                {$obs2}
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 6: CONTRATO -->
+    <table class="grid-table">
+        <tr>
+            <td class="section-header">Contrato</td>
+        </tr>
+        <tr>
+            <td class="val bold" style="font-size: 9px; padding: 5px;">
+                Número do Contrato: {$contrato_numero}
+            </td>
+        </tr>
+    </table>
+
+    <!-- ASSINATURA DO FORNECEDOR / CLIENTE -->
+    <table style="margin-top: 40px; border: none;">
+        <tr>
+            <td style="width: 30%;"></td>
+            <td style="width: 40%; text-align: center; border-top: 1px solid #333333; padding-top: 4px;">
+                <span class="bold" style="font-size: 10px;">{$pessoa_descricao}</span>
+            </td>
+            <td style="width: 30%;"></td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

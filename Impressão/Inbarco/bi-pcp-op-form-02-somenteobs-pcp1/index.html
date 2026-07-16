@@ -1,0 +1,188 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Orçamento Venda</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL E CORREÇÃO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important; /* CORREÇÃO DOMPDF */
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 35px 25px 45px 25px; /* Deixa margem abaixo para o rodapé respirar */
+        }
+
+        /* RESET E FONTES PADRONIZADAS EM 9PX */
+        body {
+            font-size: 9px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* RODAPÉ REAL E REPETÍVEL (ESTILO LIBREOFFICE) */
+        .footer {
+            position: fixed;
+            bottom: -30px;
+            left: 0px;
+            right: 0px;
+            height: 15px;
+            text-align: right;
+            font-size: 8px;
+            color: #7f8c8d;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 4px;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-prod- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS - CORREÇÃO DE COLAPSO DO DOMPDF */
+        table {
+            width: 100%;
+            border-collapse: separate !important; /* CORREÇÃO DOMPDF */
+            border-spacing: 0 !important; /* CORREÇÃO DOMPDF */
+            table-layout: fixed;
+            margin-bottom: 6px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 3px 4px;
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) - TRATAMENTO DE BORDAS SEPARATE */
+        .grid-table, .items-table {
+            border-top: 1px solid #dce4ec;
+            border-left: 1px solid #dce4ec;
+        }
+        .grid-table td, .grid-table th, .items-table td, .items-table th {
+            border-right: 1px solid #dce4ec;
+            border-bottom: 1px solid #dce4ec;
+        }
+        
+        /* CABEÇALHOS */
+        .section-header {
+            background-color: #f4f6f8;
+            color: #2c3e50;
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 5px;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-size: 8px;
+            font-weight: bold;
+        }
+        .val {
+            color: #111111;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- RODAPÉ FIXO -->
+    <div class="footer">
+        Impresso em: <span class="bold">{$data_hoje}</span>
+    </div>
+
+    <!-- TÍTULO CENTRALIZADO DA ORDEM DE PRODUÇÃO -->
+    <div style="text-align: center; font-size: 16px; font-weight: bold; color: #2c3e50; margin-bottom: 12px; text-transform: uppercase; border-bottom: 2px solid #2c3e50; padding-bottom: 4px; letter-spacing: 0.5px;">
+        Ordem de Produção {$codigo} – Produção {$id}
+    </div>
+
+    <!-- BLOCO 1: DETALHES DE PRODUTO, CADASTRO (Células alinhadas cirurgicamente a 50%) -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 12%;">   <!-- Produto (lbl) -->
+            <col style="width: 38%;">   <!-- Produto (val) [Soma da esquerda: 50%] -->
+            <col style="width: 12%;">   <!-- Qtde (lbl) [Inicia aos 50% - Alinhado com Término] -->
+            <col style="width: 12%;">   <!-- Qtde (val) -->
+            <col style="width: 8%;">    <!-- Cadastro (lbl) -->
+            <col style="width: 18%;">   <!-- Cadastro (val) [Soma da direita: 50%] -->
+        </colgroup>
+        <tr>
+            <td class="lbl" style="width: 12%;">Produto:</td>
+            <td class="val bold" style="width: 38%;">{$produto_id} - {$produto_descricao}</td>
+            <td class="lbl" style="width: 12%;">Qtde:</td>
+            <td class="val text-center" style="width: 12%;">{$qtde}</td>
+            <td class="lbl" style="width: 8%;">Cadastro:</td>
+            <td class="val text-center" style="width: 18%;">{$cadastro}</td>
+        </tr>
+    </table>
+    <br>
+
+    <table class="grid-table" style="margin-top: -6px;">
+        <colgroup>
+            <col style="width: 12%;">   <!-- Abertura (lbl) -->
+            <col style="width: 38%;">   <!-- Abertura (val) [Soma da esquerda: 50%] -->
+            <col style="width: 12%;">   <!-- Término (lbl) [Inicia aos 50% - Alinhado com Qtde] -->
+            <col style="width: 38%;">   <!-- Término (val) [Soma da direita: 50%] -->
+        </colgroup>
+        <tr>
+            <td class="lbl" style="width: 12%;">Abertura:</td>
+            <td class="val" style="width: 38%;">{$abertura}</td>
+            <td class="lbl" style="width: 12%;">Término:</td>
+            <td class="val" style="width: 38%;">{$termino}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: ESPECIFICAÇÕES TÉCNICAS E DIMENSÕES -->
+    <table class="grid-table" style="margin-top: 6px; margin-bottom: 10px;">
+        <colgroup>
+            <col style="width: 100%;">
+        </colgroup>
+        <tr>
+            <td style="padding: 12px; line-height: 1.6; font-size: 9px; vertical-align: top; width: 100%;">
+                <span class="bold" style="font-size: 10px; color: #2c3e50;">Dimensões:</span><br>
+                Comprimento: ____________________<br>
+                Largura / Boca: ____________________<br>
+                Altura / Borda: ____________________<br>
+                Fundo Livre: ____________________<br><br>
+
+                <!-- Divisor Visual de Chapas -->
+                <div style="text-align: center; border-bottom: 1px dashed #dce4ec; line-height: 0.1em; margin: 10px 0 15px 0;">
+                    <span style="background:#ffffff; padding:0 10px; font-weight: bold; color: #7f8c8d; text-transform: uppercase; font-size: 8px; letter-spacing: 0.5px;">Chapas</span>
+                </div>
+
+                <span class="bold">Chapa do Fundo:</span><br>
+                [&nbsp;&nbsp;] 1,2 mm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;] 1,5 mm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;] 2,0 mm<br><br>
+
+                <span class="bold">Chapas Laterais:</span><br>
+                [&nbsp;&nbsp;] 1,2 mm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;] 1,5 mm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;] 2,0 mm<br><br>
+
+                <span class="bold">Cavernas de borda a borda:</span><br>
+                [&nbsp;&nbsp;] 1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;] 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;] 3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp;&nbsp;] 4<br><br>
+
+                [&nbsp;&nbsp;] Bancos em chapa lisa<br>
+                [&nbsp;&nbsp;] Bancos em chapa xadrez<br><br>
+
+                <!-- Campo de Observações do Sistema -->
+                <div style="margin-top: 15px; font-size: 9px; color: #333333; min-height: 40px; border-top: 1px dashed #e2e8f0; padding-top: 8px;">
+                    <span class="bold">Observações:</span><br>
+                    {$obs}
+                </div>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

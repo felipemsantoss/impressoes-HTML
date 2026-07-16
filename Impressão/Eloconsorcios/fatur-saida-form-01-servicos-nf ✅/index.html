@@ -1,0 +1,480 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Espelho NFS-e</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL E CORREÇÃO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important; /* CORREÇÃO DOMPDF */
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 30px 25px 45px 25px; /* Deixa margem abaixo para o rodapé respirar */
+        }
+
+        /* RESET E FONTES PADRONIZADAS EM 9PX */
+        body {
+            font-size: 9px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* RODAPÉ REAL E REPETÍVEL (ESTILO LIBREOFFICE) */
+        .footer {
+            position: fixed;
+            bottom: -30px;
+            left: 0px;
+            right: 0px;
+            height: 15px;
+            text-align: right;
+            font-size: 8px;
+            color: #7f8c8d;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 4px;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-serv- { display: none !important; }
+        .linha-parc- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS - CORREÇÃO DE COLAPSO DO DOMPDF */
+        table {
+            width: 100%;
+            border-collapse: separate !important; /* CORREÇÃO DOMPDF */
+            border-spacing: 0 !important; /* CORREÇÃO DOMPDF */
+            table-layout: fixed;
+            margin-bottom: 5px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 3px 4px;
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* AUXILIAR PARA TABELAS INTERNAS SEM BORDA (ALINHAMENTO DE IMPOSTOS) */
+        .inner-cell-table {
+            width: 100%;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            margin-bottom: 0 !important;
+            border: none !important;
+        }
+        .inner-cell-table td {
+            border: none !important;
+            padding: 1px 2px !important;
+        }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) - TRATAMENTO DE BORDAS SEPARATE */
+        .grid-table, .items-table {
+            border-top: 1px solid #c0c0c0;
+            border-left: 1px solid #c0c0c0;
+        }
+        .grid-table td, .grid-table th, .items-table td, .items-table th {
+            border-right: 1px solid #c0c0c0;
+            border-bottom: 1px solid #c0c0c0;
+        }
+        
+        /* CABEÇALHOS */
+        .section-header {
+            background-color: #f4f6f8;
+            color: #2c3e50;
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 5px;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-size: 8px;
+            font-weight: bold;
+        }
+        .val {
+            color: #111111;
+        }
+
+        /* AUXILIARES DE CÉLULAS DO GRID FINANCEIRO (ESTILO DANFE INTEGRADO) */
+        .danfe-cell {
+            padding: 2px 4px !important;
+            vertical-align: top !important;
+        }
+        .danfe-cell .lbl-title {
+            color: #555555;
+            font-size: 7.5px;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .danfe-cell .val-content {
+            color: #111111;
+            font-size: 9px;
+            font-weight: bold;
+            text-align: right;
+            display: block;
+        }
+
+        /* TABELAS DE ITENS */
+        .items-table th {
+            background-color: #2c3e50;
+            color: #ffffff;
+            font-size: 8px;
+            text-transform: uppercase;
+            padding: 3px 2px;
+        }
+        .items-table td {
+            padding: 2px 3px;
+            font-size: 8px;
+        }
+        .items-table tfoot td {
+            background-color: #f4f6f8;
+            font-weight: bold;
+            padding: 3px 4px;
+            font-size: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- RODAPÉ FIXO -->
+    <div class="footer">
+        Impresso em: <span class="bold">{$data_hoje}</span>
+    </div>
+
+    <!-- BLOCO 0: CANHOTO / RECIBO DE ENTREGA -->
+    <table class="grid-table" style="margin-bottom: 8px;">
+        <colgroup>
+            <col style="width: 75%;">
+            <col style="width: 25%;">
+        </colgroup>
+        <tr>
+            <td style="width: 75%;">
+                <div style="font-size: 8.5px; font-weight: bold;">Recebi(emos) de: <span style="font-weight: normal;">{$pessoa_descricao}</span></div>
+                <div style="font-size: 8px; color: #555555; margin-top: 3px;">Os serviços constantes nesta Nota Fiscal de Serviços Eletrônica.</div>
+                <div style="margin-top: 15px;">
+                    <span style="font-size: 8px; color: #555555;">____/____/________</span>
+                    <span style="margin-left: 30px; font-size: 8px; color: #555555;">__________________________________________________________</span>
+                </div>
+                <div style="margin-top: 2px;">
+                    <span style="font-size: 7px; color: #7f8c8d; padding-left: 15px;">Data</span>
+                    <span style="margin-left: 120px; font-size: 7px; color: #7f8c8d;">NOME LEGÍVEL E IDENTIFICAÇÃO DO RECEBEDOR (RG)</span>
+                </div>
+            </td>
+            <td style="width: 25%; text-align: center; vertical-align: top; background-color: #fbfcfd;">
+                <div style="font-size: 8px; font-weight: bold; color: #2c3e50;">NOTA FISCAL ELETRÔNICA DE SERVIÇO</div>
+                <div style="font-size: 10px; font-weight: bold; color: #111111; margin-top: 5px;">Nota: {$codigo}</div>
+                <div style="font-size: 7px; color: #555555; margin-top: 5px;">Código de Verificação:</div>
+                <div style="font-size: 8px; font-weight: bold; color: #2c3e50;">{$nfe_chave}</div>
+            </td>
+        </tr>
+    </table>
+    <div style="border-top: 1px dashed #c0c0c0; margin-bottom: 8px;"></div>
+
+    <!-- BLOCO 1: CABEÇALHO INTEGRADO (LOGOMARCA + METADADOS NFS-e) -->
+    <table class="grid-table" style="margin-bottom: 6px;">
+        <colgroup>
+            <col style="width: 25%;">
+            <col style="width: 75%;">
+        </colgroup>
+        <tr>
+            <td style="width: 25%; text-align: center; vertical-align: middle;">
+                <img src="{$pessoa_unidade_logo}" style="max-width: 140px; max-height: 55px;" alt="Logo Unidade">
+            </td>
+            <td style="width: 75%; padding: 0;">
+                <table class="inner-cell-table">
+                    <colgroup>
+                        <col style="width: 100%;">
+                    </colgroup>
+                    <tr>
+                        <td style="text-align: center; font-size: 12px; font-weight: bold; color: #2c3e50; border-bottom: 1px solid #c0c0c0 !important; padding: 5px;">
+                            Espelho de Nota Fiscal<br>
+                            <span style="font-size: 10px; font-weight: normal; color: #555555;">Nota Fiscal de Serviços Eletrônica - NFS-e</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0;">
+                            <table class="inner-cell-table">
+                                <colgroup>
+                                    <col style="width: 33%;">
+                                    <col style="width: 34%;">
+                                    <col style="width: 33%;">
+                                </colgroup>
+                                <tr>
+                                    <td style="border-right: 1px solid #c0c0c0 !important; border-bottom: 1px solid #c0c0c0 !important; font-size: 7.5px; color: #555555; width: 33%;">
+                                        <strong>Número do RPS:</strong><br><span style="font-size: 9px; color: #111111;">{$codigo_rps}</span>
+                                    </td>
+                                    <td style="border-right: 1px solid #c0c0c0 !important; border-bottom: 1px solid #c0c0c0 !important; font-size: 7.5px; color: #555555; width: 34%;">
+                                        <strong>Número Nota Fiscal:</strong><br><span style="font-size: 9px; color: #111111;">{$codigo}</span>
+                                    </td>
+                                    <td style="border-bottom: 1px solid #c0c0c0 !important; font-size: 7.5px; color: #555555; width: 33%;">
+                                        <strong>Data do Fato Gerador:</strong><br><span style="font-size: 9px; color: #111111;">{$cadastro}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-right: 1px solid #c0c0c0 !important; font-size: 7.5px; color: #555555;">
+                                        <strong>Código de Verificação:</strong><br><span style="font-size: 9px; color: #111111; font-weight: bold;">{$nfe_chave}</span>
+                                    </td>
+                                    <td colspan="2" style="font-size: 7.5px; color: #555555;">
+                                        <strong>Data de Emissão:</strong><br><span style="font-size: 9px; color: #111111;">{$cadastro}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: PRESTADOR DE SERVIÇOS -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+        </colgroup>
+        <tr>
+            <td colspan="4" class="section-header">Prestador de Serviços</td>
+        </tr>
+        <tr>
+            <td class="lbl" style="width: 15%;">CNPJ:</td>
+            <td class="val" style="width: 35%;">{$pessoa_unidade_cpf_cnpj}</td>
+            <td class="lbl" style="width: 15%;">I.E:</td>
+            <td class="val" style="width: 35%;">{$pessoa_unidade_pj_inscricao_estadual}</td>
+        </tr>
+        <tr>
+            <td class="lbl">I.M:</td>
+            <td class="val">{$pessoa_unidade_pj_inscricao_municipal}</td>
+            <td class="lbl">Telefone:</td>
+            <td class="val">{$pessoa_unidade_fone1}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Razão Social:</td>
+            <td class="val" colspan="3"><span class="bold">{$pessoa_unidade_descricao}</span></td>
+        </tr>
+        <tr>
+            <td class="lbl">Endereço:</td>
+            <td class="val" colspan="3">{$pessoa_unidade_logradouro} {$pessoa_unidade_numero} {$pessoa_unidade_complemento}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Município:</td>
+            <td class="val">{$pessoa_unidade_local_municipio_descricao}</td>
+            <td class="lbl">UF / E-MAIL:</td>
+            <td class="val">{$pessoa_unidade_local_uf_sigla} &bull; {$pessoa_unidade_email}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 3: TOMADOR DE SERVIÇOS -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+        </colgroup>
+        <tr>
+            <td colspan="4" class="section-header">Tomador de Serviços</td>
+        </tr>
+        <tr>
+            <td class="lbl" style="width: 15%;">CNPJ:</td>
+            <td class="val" style="width: 35%;">{$pessoa_cpf_cnpj}</td>
+            <td class="lbl" style="width: 15%;">I.E / I.M:</td>
+            <td class="val" style="width: 35%;">{$pessoa_pj_inscricao_estadual} &bull; {$pessoa_pj_inscricao_municipal}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Razão Social:</td>
+            <td class="val" colspan="3"><span class="bold">{$pessoa_id} - {$pessoa_descricao}</span></td>
+        </tr>
+        <tr>
+            <td class="lbl">Endereço:</td>
+            <td class="val" colspan="3">{$logradouro} {$numero} {$complemento} {$bairro}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Município:</td>
+            <td class="val">{$local_municipio_descricao}</td>
+            <td class="lbl">UF / E-MAIL:</td>
+            <td class="val">{$local_uf_descricao} &bull; {$pessoa_email}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Telefone:</td>
+            <td class="val" colspan="3">{$pessoa_fone1}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 4: FATURA COM LAÇO DE PARCELAS CORRIGIDO -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+        </colgroup>
+        <tr>
+            <td colspan="2" class="section-header">Fatura</td>
+        </tr>
+        <tr style="background-color: #fbfcfd; font-weight: bold; text-align: center;">
+            <td style="width: 50%; border-bottom: 1px solid #c0c0c0;">Vencimento</td>
+            <td style="width: 50%; border-bottom: 1px solid #c0c0c0;">Valor</td>
+        </tr>
+        <!--[parcelas]-->
+        <tr class="linha-parc-{$parcela}" style="text-align: center;">
+            <td>{$vencimento}</td>
+            <td class="bold">{$valor}</td>
+        </tr>
+        <!--[/parcelas]-->
+    </table>
+
+    <!-- BLOCO 5: DISCRIMINAÇÃO DE SERVIÇOS (9 Colunas perfeitamente distribuídas) -->
+    <table class="items-table">
+        <colgroup>
+            <col style="width: 40%;">
+            <col style="width: 6%;">
+            <col style="width: 8%;">
+            <col style="width: 8%;">
+            <col style="width: 10%;">
+            <col style="width: 10%;">
+            <col style="width: 6%;">
+            <col style="width: 6%;">
+            <col style="width: 6%;">
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="text-left" style="width: 40%;">Serviço</th>
+                <th class="text-center" style="width: 6%;">Qtd</th>
+                <th class="text-right" style="width: 8%;">Unitário</th>
+                <th class="text-right" style="width: 8%;">Desconto</th>
+                <th class="text-right" style="width: 10%;">Valor Total</th>
+                <th class="text-right" style="width: 10%;">Base Cálculo</th>
+                <th class="text-center" style="width: 7%;">Alíquota</th>
+                <th class="text-right" style="width: 6%;">ISSQN</th>
+                <th class="text-right" style="width: 6%;">ISSQN Retido</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[servicos]-->
+            <tr class="linha-serv-{$servico_id}">
+                <td>{$servico_descricao}</td>
+                <td class="text-center">{$qtde}</td>
+                <td class="text-right">{$preco}</td>
+                <td class="text-right">{$desconto}</td>
+                <td class="text-right bold">{$total}</td>
+                <td class="text-right">{$issqn_base}</td>
+                <td class="text-center">{$issqn_aliq}</td>
+                <td class="text-right">{$issqn_valor}</td>
+                <td class="text-right">{$issqn_reter_iss}</td>
+            </tr>
+            <!--[/servicos]-->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-right bold">Total:</td>
+                <td class="text-right bold">{$total_servico}</td>
+                <td colspan="5">&nbsp;</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- BLOCO 6: RETENÇÕES DE TRIBUTOS (ESTILO DANFE) -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 20%;">
+            <col style="width: 20%;">
+            <col style="width: 20%;">
+            <col style="width: 20%;">
+            <col style="width: 20%;">
+        </colgroup>
+        <tr>
+            <td class="danfe-cell" style="width: 20%;">
+                <span class="lbl-title">Valor do Desconto</span>
+                <span class="val-content">{$desconto_servico}</span>
+            </td>
+            <td class="danfe-cell" style="width: 20%;">
+                <span class="lbl-title">Base de Cálculo</span>
+                <span class="val-content">{$total_servico}</span>
+            </td>
+            <td class="danfe-cell" style="width: 20%;">
+                <span class="lbl-title">Alíquota</span>
+                <span class="val-content">&nbsp;</span>
+            </td>
+            <td class="danfe-cell" style="width: 20%;">
+                <span class="lbl-title">Valor do ISSQN</span>
+                <span class="val-content">{$total_issqn_valor}</span>
+            </td>
+            <td class="danfe-cell" style="width: 20%;">
+                <span class="lbl-title">Valor do ISSQN Retido</span>
+                <span class="val-content">{$total_issqn_valor}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="danfe-cell">
+                <span class="lbl-title">COFINS</span>
+                <span class="val-content">{$total_cofins_valor}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">PIS</span>
+                <span class="val-content">{$total_pis_valor}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">INSS</span>
+                <span class="val-content">0,00</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">IR</span>
+                <span class="val-content">{$total_irrf_valor}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">CSLL</span>
+                <span class="val-content">{$total_csll_valor}</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="danfe-cell" style="background-color: #f4f6f8; vertical-align: middle;">
+                <table class="inner-cell-table">
+                    <tr>
+                        <td style="font-size: 8.5px; font-weight: bold; color: #2c3e50; text-align: left; background: none !important;">VALOR TOTAL DA NFS-e:</td>
+                        <td style="font-size: 11px; font-weight: bold; color: #111111; text-align: right; background: none !important;">{$total_servico}</td>
+                    </tr>
+                </table>
+            </td>
+            <td colspan="3" class="danfe-cell" style="background-color: #f4f6f8; vertical-align: middle;">
+                <table class="inner-cell-table">
+                    <tr>
+                        <td style="font-size: 8.5px; font-weight: bold; color: #2c3e50; text-align: left; background: none !important;">VALOR LÍQUIDO DA NFS-e:</td>
+                        <td style="font-size: 11px; font-weight: bold; color: #111111; text-align: right; background: none !important;">{$total_nf}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 7: OUTRAS INFORMAÇÕES -->
+    <table class="grid-table" style="margin-bottom: 0px;">
+        <tr>
+            <td class="section-header">Outras Informações</td>
+        </tr>
+        <tr>
+            <td style="min-height: 35px; vertical-align: top; font-size: 9px; line-height: 1.4;">
+                <span class="bold">Observações:</span><br>
+                {$complementar}
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->
