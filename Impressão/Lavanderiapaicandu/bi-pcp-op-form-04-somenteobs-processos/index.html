@@ -1,0 +1,266 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Ordem de Produção</title>
+    <style>
+        /* FORÇA FONTE ARIAL 16PX EM ABSOLUTAMENTE TODOS OS ELEMENTOS */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important; /* CORREÇÃO DOMPDF */
+            font-size: 14px !important; /* FONTE 16PX GLOBAL ATIVADA */
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO (PORTRAIT) */
+        @page {
+            size: A4 portrait;
+            margin: 35px 25px 45px 25px; /* Deixa margem de 45px abaixo para o rodapé respirar */
+        }
+
+        body {
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* RODAPÉ REAL E REPETÍVEL (ESTILO LIBREOFFICE) */
+        .footer {
+            position: fixed;
+            bottom: -30px;
+            left: 0px;
+            right: 0px;
+            height: 15px;
+            text-align: right;
+            color: #7f8c8d;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 4px;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-prod- { display: none !important; }
+        .linha-mat- { display: none !important; }
+        .linha-proc- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS - CORREÇÃO DE COLAPSO DO DOMPDF */
+        table {
+            width: 100%;
+            border-collapse: separate !important; /* CORREÇÃO DOMPDF */
+            border-spacing: 0 !important; /* CORREÇÃO DOMPDF */
+            table-layout: fixed;
+            margin-bottom: 6px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 5px 6px;
+            word-wrap: break-word;
+            line-height: 1.25;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) - TRATAMENTO DE BORDAS SEPARATE */
+        .grid-table, .items-table {
+            border-top: 1px solid #dce4ec;
+            border-left: 1px solid #dce4ec;
+        }
+        .grid-table td, .grid-table th, .items-table td, .items-table th {
+            border-right: 1px solid #dce4ec;
+            border-bottom: 1px solid #dce4ec;
+        }
+        
+        /* CABEÇALHOS */
+        .section-header {
+            background-color: #f4f6f8;
+            color: #2c3e50;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 6px 8px;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-weight: bold;
+        }
+        .val {
+            color: #111111;
+        }
+
+        /* AUXILIARES DE LARGURA PARA O GRID SIMPLES */
+        .lbl-grid {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-weight: bold;
+        }
+        .val-grid {
+            color: #111111;
+        }
+
+        /* TABELAS DE ITENS */
+        .items-table th {
+            background-color: #2c3e50;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+        .items-table tfoot td {
+            background-color: #f4f6f8;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- RODAPÉ FIXO -->
+    <div class="footer">
+        Impresso em: <span class="bold">{$data_hoje}</span>
+    </div>
+
+    <!-- TÍTULO CENTRALIZADO DA ORDEM DE PRODUÇÃO (AGORA EM 16PX INERENTE) -->
+    <div style="text-align: center; font-weight: bold; color: #2c3e50; margin-bottom: 12px; text-transform: uppercase; border-bottom: 2px solid #2c3e50; padding-bottom: 4px; letter-spacing: 0.5px;">
+        Ordem de Produção {$id}
+    </div>
+
+    <!-- BLOCO 1: DADOS GERAIS (A4 Portrait - Alinhamentos cravados a 50%) -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+        </colgroup>
+        <tr>
+            <td class="lbl-grid" style="width: 15%;">Código:</td>
+            <td class="val-grid" style="width: 35%;">{$codigo}</td>
+            <td class="lbl-grid" style="width: 15%;">Cadastro:</td>
+            <td class="val-grid bold" style="width: 35%;">{$cadastro}</td>
+        </tr>
+        <tr>
+            <td class="lbl-grid">Cliente:</td>
+            <td class="val-grid" colspan="3"><span class="bold">{$pessoa_id} - {$pessoa_descricao}</span></td>
+        </tr>
+    </table>
+
+    <table class="grid-table" style="margin-top: -6px;">
+        <colgroup>
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+        </colgroup>
+        <tr>
+            <td style="width: 25%;"><span class="bold">Abertura:</span> {$abertura}</td>
+            <td style="width: 25%;"><span class="bold">Término:</span> {$termino}</td>
+            <td style="width: 25%;"><span class="bold">Previsão:</span> {$previsao}</td>
+            <td style="width: 25%;"><span class="bold">Vencimento:</span> {$vencimento}</td>
+        </tr>
+        <tr>
+            <td colspan="4"><span class="bold">Observação:</span> {$obs}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: PRODUTOS (Fechamento alinhado sob Unitário) -->
+    <table class="items-table" style="margin-top: 6px;">
+        <colgroup>
+            <col style="width: 8%;">   <!-- Id -->
+            <col style="width: 54%;">  <!-- Produto -->
+            <col style="width: 12%;">  <!-- Quantidade -->
+            <col style="width: 13%;">  <!-- Unitário -->
+            <col style="width: 13%;">  <!-- Total -->
+        </colgroup>
+        <thead>
+            <tr>
+                <th colspan="5" class="section-header" style="text-align: left;">Produtos</th>
+            </tr>
+            <tr>
+                <th class="text-center" style="width: 8%;">Id</th>
+                <th class="text-left" style="width: 54%;">Produto</th>
+                <th class="text-center" style="width: 12%;">Qtde</th>
+                <th class="text-right" style="width: 13%;">Unitário</th>
+                <th class="text-right" style="width: 13%;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[produtos]-->
+            <tr class="linha-prod-{$produto_id}">
+                <td class="text-center">{$produto_id}</td>
+                <td><span class="bold">{$produto_descricao}</span></td>
+                <td class="text-center bold">{$qtde}</td>
+                <td class="text-right">{$preco_venda}</td>
+                <td class="text-right bold">{$total_preco_venda}</td>
+            </tr>
+            <!--[/produtos]-->
+        </tbody>
+    </table>
+
+    <!-- BLOCO 3: LISTA DE MATERIAIS (Sincronização de Eixo Vertical Perfeita com Produtos) -->
+    <table class="items-table" style="margin-top: 6px;">
+        <colgroup>
+            <col style="width: 8%;">   <!-- Id (Alinha com Id de cima) -->
+            <col style="width: 46%;">  <!-- Produto (Alinha com Produto - Sigla = 54% - 6% = 48%) -->
+            <col style="width: 8%;">   <!-- Sigla (Alinha de forma que a coluna seguinte "Quantidade" comece exatamente aos 62%) -->
+            <col style="width: 12%;">  <!-- Quantidade (Alinha com Quantidade de cima) -->
+            <col style="width: 13%;">  <!-- Custo Compra (Alinha com Unitário de cima) -->
+            <col style="width: 13%;">  <!-- Total (Alinha com Total de cima) -->
+        </colgroup>
+        <thead>
+            <tr>
+                <th colspan="6" class="section-header" style="text-align: left;">Lista de Materiais</th>
+            </tr>
+            <tr>
+                <th class="text-center" style="width: 8%;">Id</th>
+                <th class="text-left" style="width: 46%;">Produto</th>
+                <th class="text-center" style="width: 8%;">Sigla</th>
+                <th class="text-center" style="width: 12%;">Qtde</th>
+                <th class="text-right" style="width: 13%;">Custo Compra</th>
+                <th class="text-right" style="width: 13%;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[materiais]-->
+            <tr class="linha-mat-{$produto_material_id}">
+                <td class="text-center">{$produto_material_id}</td>
+                <td>{$produto_material_descricao}</td>
+                <td class="text-center">{$produto_unidade_sigla}</td>
+                <td class="text-center bold">{$qtde}</td>
+                <td class="text-right">{$custo_compra}</td>
+                <td class="text-right bold">{$total_custo_compra}</td>
+            </tr>
+            <!--[/materiais]-->
+        </tbody>
+    </table>
+
+    <!-- BLOCO 4: PROCESSOS (Tabela simétrica dividida a 50%) -->
+    <table class="grid-table" style="margin-top: 6px; margin-bottom: 0px;">
+        <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+        </colgroup>
+        <thead>
+            <tr>
+                <th colspan="2" class="section-header" style="text-align: left;">Processos</th>
+            </tr>
+            <tr class="bg-gray-light bold" style="background-color: #fbfcfd; color: #555555;">
+                <td style="width: 50%;">Processo</td>
+                <td style="width: 50%;">&nbsp;</td>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[processos]-->
+            <tr class="linha-proc-{$pcp_processo_id}">
+                <td>{$pcp_processo_descricao}</td>
+                <td>&nbsp;</td>
+            </tr>
+            <!--[/processos]-->
+        </tbody>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

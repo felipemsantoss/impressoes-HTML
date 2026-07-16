@@ -1,0 +1,272 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Faturamento</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL NO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 35px 25px 45px 25px; /* Margem inferior de 45px para o rodapé respirar */
+        }
+
+        /* RESET E FONTES PADRONIZADAS EM 9PX */
+        body {
+            font-size: 9px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* RODAPÉ REAL E REPETÍVEL (ESTILO LIBREOFFICE) */
+        .footer {
+            position: fixed;
+            bottom: -30px; /* Posiciona no limite da margem inferior */
+            left: 0px;
+            right: 0px;
+            height: 15px;
+            text-align: right;
+            font-size: 9px; /* Padronizado para 9px */
+            color: #7f8c8d;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 4px;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-serv- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; /* Força o alinhamento perfeito das colunas */
+            margin-bottom: 6px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 3px 4px;
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) */
+        .grid-table {
+            margin-bottom: 5px;
+        }
+        .grid-table td, .grid-table th {
+            border: 1px solid #dce4ec;
+        }
+        
+        /* CABEÇALHOS */
+        .section-header {
+            background-color: #f4f6f8;
+            color: #2c3e50;
+            font-size: 9px; /* Padronizado para 9px */
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 5px;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-size: 9px; /* Padronizado para 9px */
+            font-weight: bold;
+            width: 15%;
+        }
+        .val {
+            width: 35%;
+            color: #111111;
+        }
+
+        /* TABELAS DE ITENS (SERVIÇOS) */
+        .items-table th {
+            background-color: #2c3e50;
+            color: #ffffff;
+            font-size: 9px;
+            text-transform: uppercase;
+            border: 1px solid #2c3e50;
+            padding: 3px 4px;
+        }
+        .items-table td {
+            border: 1px solid #dce4ec;
+            border-bottom: 1px solid #eeeeee;
+            padding: 3px 4px;
+            font-size: 9px;
+        }
+        .items-table tfoot td {
+            background-color: #f4f6f8;
+            font-weight: bold;
+            border: 1px solid #dce4ec;
+            padding: 3px 4px;
+            font-size: 9px;
+        }
+
+        /* ESTILO DO TOTAL GERAL DA NOTA EM DESTAQUE E CENTRALIZADO */
+        .total-lbl {
+            background-color: #2c3e50 !important;
+            color: #ffffff !important;
+            font-size: 11px;
+            font-weight: bold;
+            width: 15%;
+            border-color: #2c3e50 !important;
+            text-align: center !important;
+        }
+        .total-val {
+            background-color: #2c3e50 !important;
+            color: #ffffff !important;
+            font-size: 13px;
+            font-weight: bold;
+            width: 35%;
+            border-color: #2c3e50 !important;
+            text-align: right !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- RODAPÉ FIXO -->
+    <div class="footer">
+        Impresso em: <span class="bold">{$data_hoje}</span>
+    </div>
+
+    <!-- CABEÇALHO DO DOCUMENTO -->
+    <table style="margin-bottom: 6px; border-bottom: 2px solid #2c3e50; padding-bottom: 3px;">
+        <tr>
+            <td style="width: 30%; vertical-align: middle;">
+                <img src="{$unidade_image}" style="max-width: 100px; max-height: 35px;" alt="Logo da Empresa">
+            </td>
+            <td style="width: 70%; text-align: right; vertical-align: middle;">
+                <span style="font-size: 16px; font-weight: bold; color: #2c3e50;">Faturamento Id {$id} &ndash; Nº {$codigo}</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 1: DADOS DA EMISSORA E CADASTRO -->
+    <table class="grid-table">
+        <tr>
+            <td class="lbl">Unidade Emissora:</td>
+            <td class="val">
+                <span class="bold">{$pessoa_unidade_descricao}</span><br>
+                {$pessoa_unidade_cpf_cnpj} &bull; {$pessoa_unidade_fone1} &bull; {$pessoa_unidade_email}
+            </td>
+            <td class="lbl">Dados Gerais:</td>
+            <td class="val">
+                Cadastro: <span class="bold">{$created_at}</span><br>
+                Tipo: {$tipo} &bull; Faturar: {$faturar}
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: DADOS DO CLIENTE E ENDEREÇO -->
+    <table class="grid-table">
+        <tr>
+            <td class="lbl" style="width: 15%;">Cliente:</td>
+            <td class="val" style="width: 35%;"><span class="bold">{$pessoa_id} - {$pessoa_descricao}</span></td>
+            <td class="lbl" style="width: 15%;">Operação:</td>
+            <td class="val" style="width: 35%;">{$fatur_operacao_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Cnpj/Cpf:</td>
+            <td class="val">{$pessoa_cpf_cnpj}</td>
+            <td class="lbl">Insc. Estadual:</td>
+            <td class="val">{$pessoa_pj_inscricao_estadual}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Telefone / E-mail:</td>
+            <td class="val">{$pessoa_fone1} &bull; {$pessoa_email}</td>
+            <td class="lbl">Vendedor:</td>
+            <td class="val">{$pessoa_responsavel_id} - {$pessoa_responsavel_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Endereço:</td>
+            <td class="val" colspan="3">{$logradouro}, {$numero} {$complemento} - {$bairro} &bull; <span class="bold">Cidade/UF:</span> {$local_municipio_descricao} / {$local_uf_descricao}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 3: ITENS DO FATURAMENTO (SERVIÇOS) - 6 COLUNAS RETRATO -->
+    <table class="items-table" style="margin-bottom: 5px;">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 10%;">Código</th>
+                <th style="text-align: left; width: 45%;">Serviço</th>
+                <th class="text-center" style="width: 7%;">Qtd</th>
+                <th class="text-right" style="width: 12%;">Unitário</th>
+                <th class="text-right" style="width: 12%;">Desconto</th>
+                <th class="text-right" style="width: 14%;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[servicos]-->
+            <tr class="linha-serv-{$servico_id}">
+                <td class="text-center">{$servico_id}</td>
+                <td>{$servico_descricao}</td>
+                <td class="text-center">{$qtde}</td>
+                <td class="text-right">{$preco}</td>
+                <td class="text-right">{$desconto}</td>
+                <td class="text-right bold text-primary">{$total}</td>
+            </tr>
+            <!--[/servicos]-->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" class="text-right">Total Itens:</td>
+                <td class="text-center">{$qtde_sum}</td>
+                <td colspan="2" class="text-right">Total:</td>
+                <td class="text-right bold">{$total_servico}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- BLOCO 4: OBSERVAÇÕES (POSICIONADO NO TOPO DO FECHAMENTO) -->
+    <table class="grid-table" style="margin-bottom: 6px;">
+        <tr>
+            <td class="section-header">Observação / Justificativa</td>
+        </tr>
+        <tr>
+            <td style="min-height: 30px; vertical-align: top; font-size: 9px; line-height: 1.35;">
+                {$obs1} &bull; {$complementar} &bull; {$justificativa}
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 5: DETALHAMENTO FINANCEIRO COMPACTADO (APENAS 2 LINHAS - 100% SIMÉTRICO) -->
+    <table class="grid-table" style="margin-bottom: 5px;">
+        <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+        </colgroup>
+        <!-- Linha 1 -->
+        <tr>
+            <td class="lbl">Desconto produtos:</td>
+            <td class="val text-left">{$desconto_produto}</td>
+            <td class="lbl">Frete:</td>
+            <td class="val text-left">{$total_frete}</td>
+        </tr>
+        <!-- Linha 2: Pagamentos na esquerda & Total Geral centralizado na direita -->
+        <tr>
+            <td class="lbl">Forma / Prazo Pagamento:</td>
+            <td class="val">{$financ_forma_pgto_descricao} &bull; {$financ_prazao_pgto_descricao}</td>
+            <td class="total-lbl">Total Geral:</td>
+            <td class="total-val text-right">{$total_nf}</td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

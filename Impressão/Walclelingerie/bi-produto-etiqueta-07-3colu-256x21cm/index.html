@@ -1,0 +1,113 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiqueta 3 Colunas</title>
+    <!-- Carrega a biblioteca JsBarcode estável -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <style>
+        /* CONFIGURAÇÃO EXATA DA FONTE EM ARIAL 6PX */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* DIMENSÕES EXATAS DA PÁGINA (11,00cm x 2,10cm) E MARGENS DO LIBREOFFICE */
+        @page {
+            size: 11cm 2.10cm;
+            margin: 0.00cm 0.30cm 0.00cm 0.00cm; /* Cima: 0 | Direita: 0.30cm | Baixo: 0 | Esquerda: 0 */
+        }
+
+        body {
+            font-size: 6px; /* Arial 6px */
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            line-height: 1.1;
+            background-color: #ffffff;
+        }
+
+        /* Estrutura de tabela de 3 colunas sem flexbox para DOMPDF */
+        table {
+            width: 100%;
+            border-collapse: collapse !important;
+            table-layout: fixed;
+        }
+
+        td {
+            width: 33.33%;
+            text-align: center;
+            vertical-align: top;
+            padding: 1px 3px;
+        }
+
+        /* Texto de Descrição em 6px */
+        .desc-text {
+            font-size: 6px;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Texto do Código de Barras abaixo do SVG */
+        .barcode-val {
+            font-size: 6px;
+            margin-top: 1px;
+        }
+
+        svg {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <table>
+        <tr>
+            <!-- Coluna 1 (Esquerda) -->
+            <td>
+                <div class="desc-text">{$descricao}</div>
+                <svg id="barcode-1"></svg>
+                <div class="barcode-val">{$cod_barra}</div>
+            </td>
+            
+            <!-- Coluna 2 (Centro) -->
+            <td>
+                <div class="desc-text">{$descricao}</div>
+                <svg id="barcode-2"></svg>
+                <div class="barcode-val">{$cod_barra}</div>
+            </td>
+            
+            <!-- Coluna 3 (Direita) -->
+            <td>
+                <div class="desc-text">{$descricao}</div>
+                <svg id="barcode-3"></svg>
+                <div class="barcode-val">{$cod_barra}</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Scripts de inicialização JsBarcode individuais para evitar colisão -->
+    <script>
+        var config = {
+            format: "CODE128",
+            lineColor: "#000",
+            width: 1.0,         // Espessura fina das barras para caber na etiqueta estreita
+            height: 14,         // Altura compactada para respeitar o limite de 2,10cm de folha
+            displayValue: false // Desativado para usarmos o controle de texto nativo em Arial 6px abaixo
+        };
+
+        JsBarcode("#barcode-1", "{$cod_barra}", config);
+        JsBarcode("#barcode-2", "{$cod_barra}", config);
+        JsBarcode("#barcode-3", "{$cod_barra}", config);
+    </script>
+
+</body>
+</html>
+<!--[/main]-->
