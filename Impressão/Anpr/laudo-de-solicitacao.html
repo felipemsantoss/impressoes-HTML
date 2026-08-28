@@ -1,0 +1,681 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <title>Laudo para Solicitação/Autorização de Procedimento Ambulatorial</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO (MICRO-MARGENS PARA FORMULÁRIO) */
+        @page {
+            size: A4 portrait;
+            margin: 0.60cm;
+        }
+
+        body {
+            font-size: 11.5px;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            line-height: 1.1;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-center {
+            text-align: center !important;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        /* ESTRUTURA DE TABELAS PADRÃO SUS (COLAPSO DE BORDAS PERFEITO NO DOMPDF) */
+        .sus-table {
+            width: 100%;
+            border-collapse: collapse !important;
+            table-layout: fixed;
+            margin: -1px 0 0 0;
+        }
+
+        .sus-table td {
+            border: 1px solid #000000 !important;
+            padding: 1px 4px;
+            vertical-align: top;
+        }
+
+        /* SEÇÃO DE CABEÇALHOS CINZA DO FORMULÁRIO */
+        .section-header {
+            background-color: #dddddd !important;
+            color: #000000 !important;
+            font-size: 10.5px;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            padding: 1.5px 5px !important;
+        }
+
+        /* RÓTULOS PEQUENOS NO TOPO DO CAMPO */
+        .lbl-title {
+            font-size: 8.5px;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 1px;
+            line-height: 1.05;
+        }
+
+        /* VALORES E PREENCHIMENTOS */
+        .val-content {
+            font-size: 11.5px;
+            display: block;
+            min-height: 10px;
+        }
+
+        /* TABELA DE DIGITOS UNITÁRIOS (CNS, CNES, CEP, ETC) */
+        .digit-table {
+            border-collapse: collapse !important;
+            display: inline-table;
+            margin: 0 3px;
+            padding: 0;
+            vertical-align: middle;
+        }
+        .digit-table td {
+            border: 1px solid #000000 !important;
+            width: 16px;
+            height: 15px;
+            text-align: center;
+            font-size: 11px;
+            padding: 0 !important;
+            line-height: 14px;
+            font-weight: bold;
+        }
+
+        /* PEQUENO QUADRADO DE MARCAÇÃO (CHECKBOX) */
+        .chk-box {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border: 1px solid #000000;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+
+        /* ALINHAMENTOS E ESPAÇADORES */
+        .box-container {
+            display: block;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO SUPERIOR DA FOLHA (SUS + MINISTÉRIO + TÍTULO DO LAUDO) -->
+    <table class="sus-table">
+        <colgroup>
+            <col width="15%">
+            <col width="15%">
+            <col width="70%">
+        </colgroup>
+        <tr>
+            <!-- SUS Logo Textual -->
+            <td style="width: 15%; text-align: center; vertical-align: middle; padding: 3px;">
+                <div style="font-size: 16px; font-weight: bold; border: 1px solid #000; padding: 3px;">SUS</div>
+            </td>
+            <!-- Ministério da Saúde -->
+            <td style="width: 15%; text-align: center; vertical-align: middle; font-size: 8.5px; line-height: 1.15;">
+                <strong>Sistema Único de Saúde</strong><br>
+                Ministério da Saúde
+            </td>
+            <!-- Título do Laudo -->
+            <td class="text-center" style="width: 55%; vertical-align: middle; font-size: 14px; font-weight: bold; font-style: italic; line-height: 1.3;">
+                LAUDO PARA SOLICITAÇÃO/AUTORIZAÇÃO DE<br>PROCEDIMENTO AMBULATORIAL
+            </td>
+        </tr>
+    </table>
+
+    <!-- SEÇÃO 1: IDENTIFICAÇÃO DO ESTABELECIMENTO DE SAÚDE (SOLICITANTE) -->
+    <table class="sus-table">
+        <colgroup>
+            <col width="80%">
+            <col width="20%">
+        </colgroup>
+        <tr>
+            <td colspan="2" class="section-header">IDENTIFICAÇÃO DO ESTABELECIMENTO DE SAÚDE (SOLICITANTE)</td>
+        </tr>
+        <tr>
+            <td style="width: 80%;">
+                <span class="lbl-title">1 - Nome do Estabelecimento de Saúde Solicitante</span>
+                <span class="val-content">{$pessoa_unidade_descricao}</span>
+            </td>
+            <td style="width: 20%;">
+                <span class="lbl-title">2 - CNES</span>
+                <span class="val-content text-center">
+                    <table class="digit-table">
+                        <tr>
+                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                    </table>
+                </span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- SEÇÃO 2: IDENTIFICAÇÃO DO PACIENTE -->
+    <table class="sus-table">
+        <colgroup>
+            <col width="80%">
+            <col width="20%">
+        </colgroup>
+        <tr>
+            <td colspan="2" class="section-header">IDENTIFICAÇÃO DO PACIENTE</td>
+        </tr>
+        <tr>
+            <td style="width: 80%;">
+                <span class="lbl-title">3 - Nome do Paciente</span>
+                <span class="val-content">{$pessoa_descricao}</span>
+            </td>
+            <td style="width: 20%;">
+                <span class="lbl-title">4 - Nº do Prontuário</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="sus-table">
+        <colgroup>
+            <col width="36%">
+            <col width="26%">
+            <col width="22%">
+            <col width="16%">
+        </colgroup>
+        <tr>
+            <td style="width: 36%;">
+                <span class="lbl-title">5 - Cartão Nacional de Saúde (CNS)</span>
+                <span class="val-content">
+                    <table class="digit-table">
+                        <tr>
+                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 26%;">
+                <span class="lbl-title">6 - Data de Nascimento</span>
+                <span class="val-content">
+                    <table class="digit-table">
+                        <tr>
+                            <td></td><td></td>
+                        </tr>
+                    </table>
+                    /
+                    <table class="digit-table">
+                        <tr>
+                            <td></td><td></td>
+                        </tr>
+                    </table>
+                    /
+                    <table class="digit-table">
+                        <tr>
+                            <td></td><td></td><td></td><td></td>
+                        </tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 22%;">
+                <span class="lbl-title">7 - Sexo</span>
+                <span class="val-content">
+                    Masc. <span class="chk-box"></span> &nbsp;&nbsp; Fem. <span class="chk-box"></span>
+                </span>
+            </td>
+            <td style="width: 16%;">
+                <span class="lbl-title">8 - Raça/Cor</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="sus-table">
+        <colgroup>
+            <col width="65%">
+            <col width="35%">
+        </colgroup>
+        <tr>
+            <td style="width: 65%;">
+                <span class="lbl-title">9 - Nome da Mãe</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 35%;">
+                <span class="lbl-title">10 - Telefone de Contato</span>
+                <span class="val-content">
+                    DDD:
+                    <table class="digit-table">
+                        <tr><td></td><td></td></tr>
+                    </table>
+                    Nº:
+                    <table class="digit-table">
+                        <tr>
+                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                    </table>
+                </span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="sus-table">
+        <colgroup>
+            <col width="65%">
+            <col width="35%">
+        </colgroup>
+        <tr>
+            <td style="width: 65%;">
+                <span class="lbl-title">11 - Nome do Responsável</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 35%;">
+                <span class="lbl-title">12 - Telefone de Contato do Responsável</span>
+                <span class="val-content">
+                    DDD: 
+                    <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table>
+                    Nº:
+                    <table class="digit-table">
+                        <tr>
+                            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                        </tr>
+                    </table>
+                </span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="sus-table">
+        <colgroup>
+            <col width="100%">
+        </colgroup>
+        <tr>
+            <td style="width: 100%;">
+                <span class="lbl-title">13 - Endereço (Rua, Nº, Bairro)</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="sus-table">
+        <colgroup>
+            <col width="46%">
+            <col width="16%">
+            <col width="9%">
+            <col width="29%">
+        </colgroup>
+        <tr>
+            <td style="width: 46%;">
+                <span class="lbl-title">14 - Município de Residência</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 16%;">
+                <span class="lbl-title">15 - Cód. IBGE Município</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 9%;">
+                <span class="lbl-title">16 - UF</span>
+                <span class="val-content text-center"></span>
+            </td>
+            <td style="width: 29%;">
+                <span class="lbl-title">17 - CEP</span>
+                <span class="val-content">
+                    <table class="digit-table">
+                        <tr>
+                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                    </table>
+                </span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- SEÇÃO 3: PROCEDIMENTO SOLICITADO -->
+    <table class="sus-table">
+        <colgroup>
+            <col width="25%">
+            <col width="65%">
+            <col width="10%">
+        </colgroup>
+        <tr>
+            <td colspan="3" class="section-header">PROCEDIMENTO SOLICITADO</td>
+        </tr>
+        <tr>
+            <td style="width: 25%;">
+                <span class="lbl-title">18 - Código do Procedimento Principal</span>
+                <span class="val-content">
+                    <table class="digit-table">
+                        <tr>
+                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 65%;">
+                <span class="lbl-title">19 - Nome do Procedimento Principal</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 10%;">
+                <span class="lbl-title">20 - Qtde</span>
+                <span class="val-content text-center"></span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- PROCEDIMENTO(S) SECUNDÁRIO(S) -->
+    <table class="sus-table">
+        <colgroup>
+            <col width="25%">
+            <col width="65%">
+            <col width="10%">
+        </colgroup>
+        <tr>
+            <td colspan="3" class="section-header" style="font-size: 9px; padding: 3px 5px !important;">PROCEDIMENTO(S) SECUNDÁRIO(S)</td>
+        </tr>
+        <!-- Secundário 1 -->
+        <tr>
+            <td style="width: 25%;">
+                <span class="lbl-title">21 - Código do Procedimento Secundário</span>
+                <span class="val-content">
+                    <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 65%;">
+                <span class="lbl-title">22 - Nome do Procedimento Secundário</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 10%;">
+                <span class="lbl-title">23 - Qtde</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+        <!-- Secundário 2 -->
+        <tr>
+            <td style="width: 25%;">
+                <span class="lbl-title">24 - Código do Procedimento Secundário</span>
+                <span class="val-content">
+                    <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 65%;">
+                <span class="lbl-title">25 - Nome do Procedimento Secundário</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 10%;">
+                <span class="lbl-title">26 - Qtde</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+        <!-- Secundário 3 -->
+        <tr>
+            <td style="width: 25%;">
+                <span class="lbl-title">27 - Código do Procedimento Secundário</span>
+                <span class="val-content">
+                    <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 65%;">
+                <span class="lbl-title">28 - Nome do Procedimento Secundário</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 10%;">
+                <span class="lbl-title">29 - Qtde</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+        <!-- Secundário 4 -->
+        <tr>
+            <td style="width: 25%;">
+                <span class="lbl-title">30 - Código do Procedimento Secundário</span>
+                <span class="val-content">
+                    <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 65%;">
+                <span class="lbl-title">31 - Nome do Procedimento Secundário</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 10%;">
+                <span class="lbl-title">32 - Qtde</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+        <!-- Secundário 5 -->
+        <tr>
+            <td style="width: 25%;">
+                <span class="lbl-title">33 - Código do Procedimento Secundário</span>
+                <span class="val-content">
+                    <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 65%;">
+                <span class="lbl-title">34 - Nome do Procedimento Secundário</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 10%;">
+                <span class="lbl-title">35 - Qtde</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- SEÇÃO 4: JUSTIFICATIVA DO(S) PROCEDIMENTO(S) SOLICITADO(S) -->
+    <table class="sus-table">
+        <colgroup>
+            <col width="46%">
+            <col width="18%">
+            <col width="18%">
+            <col width="18%">
+        </colgroup>
+        <tr>
+            <td colspan="4" class="section-header">JUSTIFICATIVA DO(S) PROCEDIMENTO(S) SOLICITADO(S)</td>
+        </tr>
+        <tr>
+            <td style="width: 46%;">
+                <span class="lbl-title">36 - Descrição do Diagnóstico</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 18%;">
+                <span class="lbl-title">37 - CID 10 Principal</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 18%;">
+                <span class="lbl-title">38 - CID 10 Secundário</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 18%;">
+                <span class="lbl-title">39 - CID 10 Causas Associadas</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4" style="height: 50px;">
+                <span class="lbl-title">40 - Observações</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- SEÇÃO 5: SOLICITAÇÃO -->
+    <table class="sus-table">
+        <colgroup>
+            <col width="44%">
+            <col width="26%">
+            <col width="30%">
+        </colgroup>
+        <tr>
+            <td colspan="3" class="section-header">SOLICITAÇÃO</td>
+        </tr>
+        <tr>
+            <td style="width: 44%;">
+                <span class="lbl-title">41 - Nome do Profissional Solicitante</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 26%;">
+                <span class="lbl-title">42 - Data da Solicitação</span>
+                <span class="val-content">
+                    <table class="digit-table">
+                        <tr><td></td><td></td></tr>
+                    </table>
+                    /
+                    <table class="digit-table">
+                        <tr><td></td><td></td></tr>
+                    </table>
+                    /
+                    <table class="digit-table">
+                        <tr><td></td><td></td><td></td><td></td></tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 30%;" rowspan="2">
+                <span class="lbl-title">45 - Assinatura e Carimbo (Nº Registro do Conselho)</span>
+                <span class="val-content" style="height: 30px;"></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <span class="lbl-title">43 - Documento Solicitante &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 44 - Nº do Documento (CNS / CPF)</span>
+                <span class="val-content">
+                    ( ) CNS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ( ) CPF &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                    <table class="digit-table">
+                        <tr>
+                            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                        </tr>
+                    </table>
+                </span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- SEÇÃO 6: AUTORIZAÇÃO -->
+    <table class="sus-table">
+        <colgroup>
+            <col width="30%">
+            <col width="34%">
+            <col width="36%">
+        </colgroup>
+        <tr>
+            <td colspan="3" class="section-header">AUTORIZAÇÃO</td>
+        </tr>
+        <tr>
+            <td>
+                <span class="lbl-title">46 - Nome do Profissional Autorizador</span>
+                <span class="val-content" style="height: 26px;"></span>
+            </td>
+            <td>
+                <span class="lbl-title">47 - Cód. Órgão Emissor</span>
+                <span class="val-content" style="height: 26px;"></span>
+            </td>
+            <td rowspan="2">
+                <span class="lbl-title">52 - Nº da Autorização (APAC)</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <span class="lbl-title">48 - Documento Autorizador &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 49 - Nº do Documento (CNS / CPF)</span>
+                <span class="val-content">
+                    ( ) CNS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ( ) CPF &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <table class="digit-table">
+                        <tr>
+                            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                        </tr>
+                    </table>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="lbl-title">50 - Data da Autorização</span>
+                <span class="val-content">
+                    <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table> / <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table> / <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table>
+                </span>
+            </td>
+            <td>
+                <span class="lbl-title">51 - Assinatura e Carimbo (Nº Registro do Conselho)</span>
+                <span class="val-content" style="height: 30px;"></span>
+            </td>
+            <td>
+                <span class="lbl-title">53 - Período de Validade da APAC</span>
+                <span class="val-content">
+                    <span style="display: inline-block; width: 16px;">De</span><table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table> / <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table> / <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table>
+                    <br>
+                    <span style="display: inline-block; width: 16px;">A</span><table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table> / <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table> / <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table>
+                </span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- SEÇÃO 7: IDENTIFICAÇÃO DO ESTABELECIMENTO DE SAÚDE (EXECUTANTE) -->
+    <table class="sus-table">
+        <colgroup>
+            <col width="80%">
+            <col width="20%">
+        </colgroup>
+        <tr>
+            <td colspan="2" class="section-header">IDENTIFICAÇÃO DO ESTABELECIMENTO DE SAÚDE (EXECUTANTE)</td>
+        </tr>
+        <tr>
+            <td style="width: 80%;">
+                <span class="lbl-title">54 - Nome Fantasia do Estabelecimento de Saúde Executante</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 20%;">
+                <span class="lbl-title">55 - CNES</span>
+                <span class="val-content">
+                    <table class="digit-table">
+                        <tr>
+                            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                        </tr>
+                    </table>
+                </span>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

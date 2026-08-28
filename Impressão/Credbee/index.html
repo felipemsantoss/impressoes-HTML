@@ -1,0 +1,463 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Termos e Condições CredBee</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 2.00cm 1.50cm;
+        }
+
+        body {
+            font-size: 12px; /* Tamanho de fonte ideal para leitura confortável de contratos */
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.45;
+            background-color: #ffffff;
+        }
+
+        /* TEXTO JURÍDICO */
+        .text-justify {
+            text-align: justify;
+        }
+        
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        p {
+            margin: 0 0 10px 0;
+        }
+
+        /* ESTRUTURA GERAL DAS TABELAS - CORREÇÃO DE COLAPSO DO DOMPDF */
+        table {
+            width: 100%;
+            border-collapse: separate !important; /* CORREÇÃO DOMPDF */
+            border-spacing: 0 !important; /* CORREÇÃO DOMPDF */
+            table-layout: fixed;
+            margin-bottom: 8px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 3px 4px;
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) - TRATAMENTO DE BORDAS SEPARATE */
+        .grid-table {
+            border-top: 1px solid #dce4ec;
+            border-left: 1px solid #dce4ec;
+        }
+        .grid-table td, .grid-table th {
+            border-right: 1px solid #dce4ec;
+            border-bottom: 1px solid #dce4ec;
+        }
+
+        /* CABEÇALHOS DE TABELAS */
+        .section-header {
+            background-color: #f4f6f8;
+            color: #2c3e50;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 5px;
+            text-align: center;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-size: 12px;
+            font-weight: bold;
+            width: 25%;
+        }
+        .val {
+            color: #111111;
+        }
+
+        /* TABELA DE ASSINATURAS EVITA QUEBRAS INTERNAS */
+        .signatures-table {
+            width: 100%;
+            border: none;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-top: 30px;
+            page-break-inside: avoid;
+        }
+        .signatures-table td {
+            border: none !important;
+            padding: 0;
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO DA MARCA (Alinhado à Direita) -->
+    <div style="text-align: right; margin-bottom: 15px;">
+        <img src="{$pessoa_unidade_logo}" style="max-height: 35px;" alt="Logo CredBee">
+    </div>
+
+    <!-- TÍTULO PRINCIPAL -->
+    <div class="bold text-center" style="font-size: 12px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px;">
+        LOCATÁRIO - TERMOS E CONDIÇÕES DOS SERVIÇOS CREDBEE
+    </div>
+
+    <!-- TEXTO INTRODUTÓRIO -->
+    <div class="text-justify" style="margin-bottom: 15px;">
+        <p>Pelo presente instrumento (físico e/ou eletrônico), a <span class="bold">CredBee Serviços de Cobrança Ltda.</span>, pessoa jurídica de direito privado, inscrita no CNPJ sob n. 25.275.514/0001-80, com sede à Av. Guaira, 140 - Zona 07 - Maringá - Pr - CEP 87020-050, doravante denominada CredBee, apresenta os termos e condições a seguir:</p>
+        <p>Com o aceite deste termo, seja de forma digital ou física, o usuário reconhece estar de acordo com os termos e condições aqui expostos, durante o período da vigência dos serviços CREDBEE contratados e suas respectivas renovações, se houverem.</p>
+    </div>
+
+    <!-- NÚMERO DO CONTRATO -->
+    <div class="bold text-center" style="font-size: 12px; margin-bottom: 12px; text-transform: uppercase;">
+        CONTRATO Nº {$id}
+    </div>
+
+    <!-- TABELA 1: DADOS LOCATÁRIO -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 25%;">
+            <col style="width: 75%;">
+        </colgroup>
+        <tr>
+            <td colspan="2" class="section-header">DADOS LOCATÁRIO</td>
+        </tr>
+        <tr>
+            <td class="lbl" style="width: 25%;">NOME COMPLETO:</td>
+            <td class="val" style="width: 75%;">{$pes_ana1_pes_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">INSCRITO NO CPF:</td>
+            <td class="val">{$pes_ana1_pes_cpf_cnpj}</td>
+        </tr>
+        <tr>
+            <td class="lbl">RG:</td>
+            <td class="val">{$pes_ana1_pes_pf_rg}</td>
+        </tr>
+        <tr>
+            <td class="lbl">DATA NASCIMENTO:</td>
+            <td class="val">{$pes_ana1_pes_nascimento}</td>
+        </tr>
+        <tr>
+            <td class="lbl">TELEFONE:</td>
+            <td class="val">{$pes_ana1_pes_fone1}</td>
+        </tr>
+        <tr>
+            <td class="lbl">E-MAIL:</td>
+            <td class="val">{$pes_ana1_pes_email}</td>
+        </tr>
+    </table>
+
+    <!-- TABELA 2: DADOS DO CORRESPONSÁVEL -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 25%;">
+            <col style="width: 75%;">
+        </colgroup>
+        <tr>
+            <td colspan="2" class="section-header">DADOS DO CORRESPONSÁVEL</td>
+        </tr>
+        <tr>
+            <td class="lbl" style="width: 25%;">NOME COMPLETO:</td>
+            <td class="val" style="width: 75%;">{$pes_ana2_pes_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">INSCRITO NO CPF:</td>
+            <td class="val">{$pes_ana2_pes_cpf_cnpj}</td>
+        </tr>
+        <tr>
+            <td class="lbl">RG:</td>
+            <td class="val">{$pes_ana2_pes_pf_rg}</td>
+        </tr>
+        <tr>
+            <td class="lbl">DATA NASCIMENTO:</td>
+            <td class="val">{$pes_ana2_pes_nascimento}</td>
+        </tr>
+        <tr>
+            <td class="lbl">TELEFONE:</td>
+            <td class="val">{$pes_ana2_pes_fone1}</td>
+        </tr>
+        <tr>
+            <td class="lbl">E-MAIL:</td>
+            <td class="val">{$pes_ana2_pes_email}</td>
+        </tr>
+    </table>
+
+    <!-- TABELA 3: DADOS DO ADMINISTRADOR -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 25%;">
+            <col style="width: 75%;">
+        </colgroup>
+        <tr>
+            <td colspan="2" class="section-header">DADOS DO ADMINISTRADOR</td>
+        </tr>
+        <tr>
+            <td class="lbl" style="width: 25%;">RAZÃO SOCIAL:</td>
+            <td class="val" style="width: 75%;">{$pessoa_parceiro_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">INSCRITO NO CNPJ:</td>
+            <td class="val">{$pes_parc_cpf_cnpj}</td>
+        </tr>
+        <tr>
+            <td class="lbl">ENDEREÇO:</td>
+            <td class="val">{$pes_parc_logradouro} {$pes_parc_numero}</td>
+        </tr>
+        <tr>
+            <td class="lbl">COMPLEMENTO:</td>
+            <td class="val">{$pes_parc_complemento}</td>
+        </tr>
+        <tr>
+            <td class="lbl">CIDADE:</td>
+            <td class="val">{$pes_parc_local_municipio_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">BAIRRO:</td>
+            <td class="val">{$pes_parc_bairro}</td>
+        </tr>
+        <tr>
+            <td class="lbl">UF:</td>
+            <td class="val">{$pes_parc_local_uf_sigla}</td>
+        </tr>
+        <tr>
+            <td class="lbl">CEP:</td>
+            <td class="val">{$pes_parc_end_cep}</td>
+        </tr>
+    </table>
+
+    <!-- TABELA 4: DADOS DO IMÓVEL (Laço Dinâmico de Imóveis Integrado) -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+        </colgroup>
+        <thead>
+            <tr>
+                <th colspan="3" class="section-header">DADOS DO IMÓVEL</th>
+            </tr>
+            <tr style="background-color: #fbfcfd; font-weight: bold; text-align: left; font-size: 12px;">
+                <td style="width: 50%; padding-left: 4px;">ENDEREÇO</td>
+                <td style="width: 25%;">CIDADE / ESTADO</td>
+                <td style="width: 25%;">TIPO</td>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[imoveis]-->
+            <tr>
+                <td style="padding-left: 4px;">{$logradouro} {$numero} {$complemento} &bull; {$bairro} &bull; {$cep}</td>
+                <td>{$local_municipio_descricao} / {$local_uf_sigla}</td>
+                <td>{$imovel_tipo_descricao} - {$imovel_subtipo_descricao}</td>
+            </tr>
+            <!--[/imoveis]-->
+        </tbody>
+    </table>
+
+    <!-- TABELA 5: DADOS DA CONTRATAÇÃO -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 25%;">
+            <col style="width: 75%;">
+        </colgroup>
+        <tr>
+            <td colspan="2" class="section-header">DADOS DA CONTRATAÇÃO</td>
+        </tr>
+        <tr>
+            <td class="lbl" style="width: 25%;">PLANO GARANTIA CONTRATADO:</td>
+            <td class="val" style="width: 75%;">{$servico_plano_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">VALOR ALUGUEL:</td>
+            <td class="val">{$valor_aluguel}</td>
+        </tr>
+        <tr>
+            <td class="lbl">VALOR CONDOMINIO:</td>
+            <td class="val">{$pai_valor_condominio}</td>
+        </tr>
+        <tr>
+            <td class="lbl">VALOR DESPESA AGUA:</td>
+            <td class="val">{$pai_valor_agua}</td>
+        </tr>
+        <tr>
+            <td class="lbl">VALOR DESPESA ENERGIA:</td>
+            <td class="val">{$pai_valor_energia}</td>
+        </tr>
+        <tr>
+            <td class="lbl">VALOR TOTAL GARANTIA CONTRATADA:</td>
+            <td class="val">{$valor_garantia_01}</td>
+        </tr>
+        <tr>
+            <td class="lbl">PORCENTAGEM DA TAXA PACOTE MENSAL:</td>
+            <td class="val">{$taxa} %</td>
+        </tr>
+        <tr>
+            <td class="lbl">SETUP:</td>
+            <td class="val">{$valor_setup}</td>
+        </tr>
+    </table>
+
+    <!-- SEÇÃO CLÁUSULAS CONTRATUAIS -->
+    <div class="text-justify" style="margin-top: 15px;">
+        <div class="bold" style="margin-bottom: 8px;">1. DO OBJETO DO CONTRATO</div>
+        <p>1.1. O presente Instrumento estabelece os termos e condições Gerais dos Serviços CredBee contratados pelo Locatário, visando a garantia em contratos de locações de imóveis residenciais urbanos e não residenciais urbanos</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">2. DA ANÁLISE E DA APROVAÇÃO DO CADASTRO</div>
+        <p>2.1. Ficará a cargo da imobiliária realizar o cadastro do(s) Locatário(s) interessados nos serviços, mediante preenchimento dos dados solicitados, seja na plataforma eletrônica ou mediante cópia física.</p>
+        <p>2.2. Caberá ainda a imobiliária, disponibilizar todas as informações necessárias, quando solicitadas, referente ao contrato de locação celebrado com o locatário, apresentando todos os documentos exigidos pertinentes ao processo de locação.</p>
+        <p>2.3. A aprovação do cadastro do locatário(s) Interessado (a), ficará a critério da CredBee, a qual fará a avaliação conforme sua política de avaliação, observando a capacidade financeira do envolvido na operação.</p>
+        <p>2.3.1. A CredBee não terá obrigação de justificar eventuais cadastros não aprovados, não assegurando futuras contratações/renovações, ainda que as condições sejam as mesmas, resguardando-se no direito de continuidade ou não dos serviços ora contratados.</p>
+        <p>2.3.2. No caso de não aprovação, a CredBee poderá solicitar à imobiliária o cadastro de mais de um locatário para figurar como corresponsável, procedendo nova análise.</p>
+        <p>2.4. Após análise de cadastro realizada pela CredBee, a mesma emitirá um parecer à imobiliária observando o resultado da avaliação financeira do locatário interessado. O comunicado poderá ser realizado via e-mail, documento físico ou plataforma digital.</p>
+        <p>2.5. Em caso de aprovação do cadastro do interessado, a CredBee, disponibilizará termo de aceite e contratação dos serviços para que o interessado possa firmar a contratação, seja via plataforma digital ou cópia física, cuja assinatura deverá ocorrer, necessariamente, por digital/eletrônico em conformidade com o disposto na Lei 14.063/2020 ou com o reconhecimento de firma de todos interessados.</p>
+        <p>2.6. Após o aceite das condições de contratação, o interessado deverá informar a opção de pagamento relativo aos serviços contratados, dentre as opções disponibilizadas pela CredBee, informando os dados e código de segurança (CCV) dos cartões de crédito cadastrados.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">3. DO CONTRATO DE LOCAÇÃO</div>
+        <p>3.1. Vencidas a etapa de análise e aprovação de cadastro disciplinada no item 2 deste instrumento, competirá à imobiliária a elaboração de contrato de locação entre os interessados, com a inclusão da cláusula abaixo descrita:</p>
+        <p style="padding-left: 15px; font-style: italic;">“O Locatário realizou a contratação da CredBee Serviços de Cobrança Ltda., pessoa jurídica de direito privado, inscrita no CNPJ sob n. 25.275.514/0001-80, com sede à Av. Guaira, 140 - Zona 07 - Maringá - Pr - CEP 87020-050, a qual, se compromete a efetuar o pagamento de eventuais débitos relativos ao aluguel e demais encargos da presente locação que venham a ser inadimplidos pelo Locatário, conforme condições e limitações constantes nos TERMOS E CONDIÇÕES DOS SERVIÇOS CREDBEE, que integram o presente Contrato como ANEXO I</p>
+        <p style="padding-left: 15px; font-style: italic;">As Partes declaram expressamente que estão cientes de todas as condições e limitações relativos à fiança prestada pela CredBee, notadamente no tocante: (i) ao valor máximo de sua responsabilidade; (ii) às limitações de sua responsabilidade; (iii) ao prazo de sua vigência; (iv) às condições para sua renovação; e (v) às hipóteses de sua exoneração.</p>
+        <p style="padding-left: 15px; font-style: italic; margin-bottom: 15px;">O Locatário declara expressamente, ainda, que está ciente que em caso de exoneração da CredBee da condição de fiadora, caberá a ele promover no prazo máximo de 30 (trinta) dias a substituição da garantia locatícia prestada, sob pena de infração contratual e ajuizamentos da competente ação de despejo.”</p>
+        
+        <p>3.2. Após a contratação e assinaturas no contrato de locação, a imobiliária ou interessado deverá providenciar a contratação do seguro obrigatório, nos moldes pactuados (art. 22, VIII, da Lei 8.245/91), devendo a imobiliária promover o envio da respectiva apólice através de inserção na plataforma digital ou envio de cópia física para o endereço da CredBee.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">4. DA EFETIVAÇÃO DO CONTRATO COM A CREDBEE</div>
+        <p>4.1 Os serviços contratados com a CredBee somente serão considerados efetivados após vencidas todas as etapas descritas nos itens anteriores e comprovado o pagamento dos serviços de acordo com a opção escolhida pelo locatário.</p>
+        <p>4.2 Após a contratação dos serviços, não poderá ser realizada nenhuma alteração no contrato de locação sem prévia e expressa anuência, por escrito, da CredBee, sob pena de exoneração da garantia, independentemente de quaisquer notificações.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">5. LIMITAÇÕES DOS SERVIÇOS CONTRATADOS</div>
+        <p>5.1. Independentemente das despesas que venham a ser consideradas inadimplidas pelo locatário e informadas pela imobiliária, a garantia CredBee será considerada conforme segue:</p>
+        <div style="padding-left: 15px; margin-bottom: 15px;">
+            <p>&bull; Valor locatício, compreendido como aluguéis e condomínios (limitado ao pacote contratado), excluídas eventuais multas condominiais por infração ao regimento ou convenção;</p>
+            <p>&bull; Contas de água e energia elétrica, desde que efetivamente contratadas em nome do locatário (limitadas ao pacote contratado);</p>
+            <p>&bull; Danos causados ao imóvel, desde que comprovados em vistoria de entrada devidamente assinadas pelo locatário, mediante 3 (três) orçamentos (limitada ao pacote contratado);</p>
+            <p>&bull; Multas, limitadas ao montante de 10% (dez por cento) da parcela inadimplida e encargos legais decorrentes da inadimplência;</p>
+            <p>&bull; Multa contratual por rescisão antecipada do contrato pelo locatário, limitada ao valor de 10% (dez por cento) sobre o saldo de aluguéis remanescente do período da contratação dos serviços;</p>
+            <p>&bull; Honorários advocatícios, limitados a 20% (vinte por cento) sobre o valor da causa, e custas processuais efetivamente despendidas pela imobiliária em ações judiciais de despejo vinculadas à exoneração da Credbee e ausência de garantia ao contrato de locação, com exceção da caução judicial, desde que devidamente comprovadas, cujos valores serão deduzidos do limite contratado.</p>
+        </div>
+
+        <p><span class="bold">PACOTE GARANTIA CREDBEE:</span> Será o valor total afiançado pela CREDBEE, nos termos do presente Instrumento, o qual corresponde ao múltiplo do Valor Locatício indicado na Plataforma, quando de cada contratação; conforme a modalidade escolhida, na modalidade abaixo;</p>
+        <p>{$servico_plano_texto_adicional}</p>
+        <p><span class="bold">PACOTE CONTRATADO:</span> {$servico_plano_descricao}</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">6. EXCLUSÃO DE GARANTIAS</div>
+        <p>6.1. Não haverá garantia coberta relativo a quaisquer outras despesas se não as descritas no item 5 e especificamente prevista no pacote de serviço contratado, observando que tais garantias somente serão compreendidas como de fato garantidas se for comprovada inadimplência do locatário mencionado no contrato de locação ou mesmo de ocupante do imóvel que comprovadamente viva sob sua dependência econômica.</p>
+        <p>6.2. Quaisquer deteriorações decorrentes do uso normal do imóvel, objeto do contrato de locação; danos causados pela ação paulatina de temperatura, umidade, infiltração e vibração, bem como poluição, contaminação decorrente de qualquer causa; impacto de veículos; queda de aeronaves; vendavais, incêndio, inundação, desmoronamento, tremor de terra; danos causados por terceiros; atos de autoridade pública relevantes, que resultem em alteração econômica substancial; atos de hostilidade ou guerra, operações bélicas, revolução, rebelião, insurreição, confisco, motins, greves; danos causados por atos ilícitos, dolosos ou culpa grave equiparáveis ao dolo, praticados pelo locatário ou pessoa a ele vinculada; recomposição de trabalhos artísticos de qualquer natureza; danos morais; e qualquer outro prejuízo ou dano que venha a ocorrer, e desde que não seja causado pelo locatário, não estarão cobertos no contrato de serviços da CredBee.</p>
+        <p>6.3. Não haverá cobertura de valores devidos fora do período de contratação dos serviços, mesmo que causados pelo locatário com fato gerador anterior ou posterior ao período contratado.</p>
+        <p>6.4. Não haverá cobertura para valores inadimplidos dentro do período contratado e que não tenham sido comunicados pela imobiliária à CredBee, no prazo de 60 dias, a contar da data do vencimento do referido valor.</p>
+        <p>6.5. Não pagamento dos serviços contratados pelo locatário, oriundos de não autorização da operadora de cartão de crédito, falta de apresentação de outra forma de pagamento, ou qualquer outro motivo que caracterize inadimplemento de valores correspondentes a taxas de serviços contratados.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">7. AUTORIZAÇÃO DE PAGAMENTO:</div>
+        <p>7.1. Com a contratação dos serviços oferecidos pela CredBee, mediante aceite das condições comerciais, o locatário deverá informar os dados relativos ao pagamento, obedecendo disposições características da forma de pagamento escolhida, inclusive fornecendo dados do cartão de credito e código de segurança, se esta for a opção escolhida, e autorizando o débito dos serviços contratados de forma irrevogável e irretratável, independente de prévia anuência ou de qualquer outro ato ou formalidade legal ou documental, que, por ordem da CredBee, sejam realizados lançamentos nos cartões de créditos cadastrados, para fins de:</p>
+        <div style="padding-left: 15px; margin-bottom: 15px;">
+            <p>&bull; Pagamento de Taxa Setup, especificada no campo “Dados da Contratação”, devida à CredBee em função do uso da Tecnologia na Plataforma CredBee, devidas no início da contratação dos serviços;</p>
+            <p>&bull; Pagamento da taxa de Serviços Contratados da CredBee, correspondente a taxa contratada, calculada sobre o montante equivalente a 12 (doze) vezes ao aluguel constante no contrato de locação garantido, a ser paga à CredBee como contraprestação aos seus serviços contratados, a cada período de 12 (doze) meses, debitados antecipadamente;</p>
+            <p>&bull; Pagamento da Taxa de Validação de Cartão, correspondente a a taxa no valor de R$ 1,00 (um real), lançada mensalmente pela CredBee no cartão de crédito indicado pelo(s) Locatário(s) e/ou pelo(s) Corresponsável(eis) para fins de verificação de sua validade e vigência, desde que não haja outros lançamentos mensais fixos de acordo com o pacote contratado.</p>
+            <p>&bull; Ressarcimento de eventuais valores pagos pela CredBee para fins de quitação de valores contratados inadimplidos pelo locatário.</p>
+        </div>
+        <p>7.2. Eventuais cobranças realizadas pela CredBee e desde que impossibilitadas de serem lançadas no cartão ou até mesmo quitadas por outro meio, poderão ser cobradas de qualquer outra forma legal, inclusive por via judicial.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">8. INADIMPLEMENTO DE VALORES</div>
+        <p>8.1 A cobrança de alugueis e demais encargos da locação será realizada mensalmente pela imobiliária. A partir de 15 dias de vencido, e desde que não tenha obtido êxito no recebimento por parte da imobiliária, esta deverá comunicar a Credbee através da plataforma digital o inadimplemento ocorrido, para que seja providenciado o ressarcimento dos valores, desde que cobertos e previamente contratados, acrescidos de juros e multa. Caso a imobiliária queira solicitar a garantia antes de 15 dias de vencido, esta poderá fazê-lo, porém será ressarcido o valor original sem os acréscimos de juros e multa.</p>
+        <p>8.2. Após o recebimento do comunicado de inadimplência, a CredBee iniciará o processo de pagamento dos valores garantidos levando em consideração o pacote contratado, ocasião em que também dará início a negociação da dívida junto ao locatário.</p>
+        <p>8.3. O pagamento de valores contratados inadimplidos será realizado pela CredBee mediante quitação de respectivos boletos bancários emitidos pela imobiliária diretamente a esta, na qualidade de procuradora do Locador, cabendo a ela o repasse ao locador e demais credores dos valores garantidos pela CredBee.</p>
+        <p>8.3.1. Efetuado o pagamento dos valores inadimplidos pelo locatário, a CredBee se sub-rogará nos direitos de credora, estando autorizada a debitar tais valores pagos por ela no cartão de crédito do locatário e ou eventuais corresponsáveis para ressarcimento dos valores desembolsados. Caso os débitos não sejam adimplidos, a CredBee se sub-rogará nos direitos de ajuizar ação de cobrança do(s) Locatário(s) e corresponsável, inclusive incluindo o registro de seus nomes junto ao cadastro de Proteção de Crédito (SCPC / Serasa).</p>
+        <p>8.3.2. A CredBee não terá qualquer responsabilidade perante o Locador, cabendo à Imobiliária isentar a CredBee de qualquer responsabilidade, indenizando-a em relação a quaisquer prejuízos.</p>
+        <p>8.4. Após a quitação por parte da CredBee dos valores inadimplidos, este não mais deverão ser pagos à imobiliária, e sim negociados uma forma de pagamento entre o Locatário e a CredBee, ficando terminantemente proibido o recebimento dos mesmos débitos por parte da imobiliária.</p>
+        <p>8.4.1. Uma vez sub-rogada no crédito, o Locatário deverá efetuar a restituição dos valores garantidos pela CredBee, mediante lançamento em cartão de crédito cadastrado, conforme autorizado no item 7, sob pena de multa de 10% (dez por cento) sobre o montante devido, acrescidos de correção monetária pelo IGP-M e juros moratórios de 1% (um por cento) ao mês, sem prejuízo das demais sansões previstas no contrato de locação.</p>
+        <p>8.4.2. Havendo a necessidade de intervenção do jurídico da CredBee para recebimento dos valores garantidos, será devido, ainda, honorários advocatícios de 10% (Dez por cento) para cobranças extrajudiciais e 20% (Vinte por cento) para cobranças judiciais.</p>
+        <p>8.4.3. Caso ocorra qualquer recebimento indevido pela imobiliária, deverá esta repassá-los imediatamente os valores recebidos para a CredBee, para proceder as devidas compensações, sob pena de pagamento de multa/juros e ainda da rescisão de contrato de garantia, e consequentemente, ajuizamento de ação de cobrança para restituição valores devidos.</p>
+        <p>8.5. Caso a CredBee não logre êxito na cobrança dos valores inadimplidos pelo(s) Locatário(s) e seja obrigada a arcar com o pagamento de montante equivalente a 01 (uma) vez o valor do aluguel constante no contrato de locação, de forma consecutiva ou não, poderá rescindir a contratação dos serviços.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">9. DA VIGÊNCIA CONTRATUAL</div>
+        <p>9.1. A contratação dos serviços CredBee, é celebrado por prazo determinado correspondente ao constante no contrato de locação, conforme termo de aceitação, pagamento e contratação dos serviços.</p>
+        <p>9.2. A Taxa CredBee será devida a cada período de 12 (doze) meses de efetiva contratação dos Serviços CredBee, de modo que a cada início de novo período de 12 (doze) meses a empresa procederá à cobrança da referida Taxa na forma prevista no Item7. O valor nominal em reais da Taxa CredBee será corrigido anualmente pela variação positiva do IGPM ou do IPCA, podendo aplicar o que for maior.</p>
+        <p>9.2. Fica ressalvada à vigência deste contrato, as causas de rescisão aqui estabelecidas.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">10. DA RESCISÃO</div>
+        <p>10.1. A rescisão deste instrumento se dará sempre ao fim de cada período contratado e desde que não tenha ocorrido a renovação do prazo de garantias.</p>
+        <p>10.2. Em caso de desocupação por parte do locatário dentro do prazo de vigência da contratação, a imobiliária deverá comunicar o ocorrido a CredBee, observando se o locatário quitou suas obrigações ou se restou dívida remanescente. Caso o locatário tenha cumprido com todas as suas obrigações, fica este comunicado como certificado de pagamento e rescisão dos serviços contratados, ocasião em que a CredBee efetuara o débito relativo ao saldo remanescente das taxas contratadas e realizará a paralisação das cobranças junto ao locatário e corresponsáveis.</p>
+        <p>10.3. Havendo a rescisão do contrato de locação e desocupação do imóvel devidamente comunicadas à CredBee pela Imobiliária, mediante apresentação do respectivo termo de quitação quanto à totalidade dos valores devidos pelo(s) Locatário(s) no âmbito do Contrato de Locação.</p>
+        <p>10.3.1. A rescisão deste instrumento também poderá ser solicitada pelo locatário ainda na hipótese de substituição de modalidade de garantia, devidamente aceita pela imobiliária e ou pelo locador, formalizada por meio de aditivo ao contrato de locação celebrado entre as partes e mediante comunicação a CredBee.</p>
+        <p>10.4. A contratação dos serviços CredBee, poderá ser rescindida:</p>
+        <div style="padding-left: 15px; margin-bottom: 15px;">
+            <p>10.4.1 Na hipótese de o locador transferir a gestão do imóvel, objeto do contrato de locação, a terceiros, sem prévia e expressa autorização da CredBee. Havendo a rescisão por esse motivo, será cessada a cobrança dos valores relativos a garantias, e não haverá cobertura de danos ou prejuízos posteriores a esse fato.</p>
+            <p>10.4.2. A não apresentação de novo cartão de crédito no prazo 5 (cinco) dias, em razão de cancelamento, verificação de falta de validade/vigência, roubo ou clonagem de qualquer um dos cartões de crédito vinculados, ou qualquer outro motivo inviabilize sua utilização, e/ou a falta de aprovação de novo(s) Corresponsável(eis).</p>
+            <p>10.4.3. A falta de pagamento e/ou contestação dos lançamentos relativos às taxas descritas no item 7, não quitados no prazo de 5 (cinco) dias, a contar da notificação pela CredBee.</p>
+            <p>10.4.4. Falta de contratação de seguro obrigatório.</p>
+            <p>10.4.5. O pagamento de montante equivalente a 01(UM) vez o valor do aluguel constante no contrato de locação, de forma consecutiva ou não, no prazo de 15 (quinze) dias a contar da notificação.</p>
+        </div>
+        <p>10.5. A ocorrência de quaisquer uma das hipóteses supracitadas, implicará na rescisão do contrato dos serviços com a CredBee e a consequente exoneração da fiança prestada no âmbito do Contrato de Locação.</p>
+        <p>10.6. Operada a rescisão contratual, a CredBee cessará a cobrança das taxas de Serviços Contratados, operando o cancelamento do débito de eventuais parcelas vincendas no cartão de crédito em que houver sido lançada, ou devolução, ao(s) Locatário(s), de eventual saldo remanescente calculado de forma proporcional aos meses em que os Serviços da CredBee foram efetivamente prestados, descontada eventual taxa do cartão de crédito.</p>
+        <p>10.7. Em caso de rescisão contratual antecipada, por iniciativa do Locatário(s), será devida multa contratual de 20% (vinte por cento) a incidir sobre o valor total da garantia contratada, especificada no campo “Dados da Contratação”, calculada proporcionalmente aos meses restantes do contrato.</p>
+        <p>10.8. A Taxa Setup não será restituída em quaisquer hipóteses de rescisão de contrato e/ou desistência, em razão da necessidade de realização de análise prévia para cadastro e confecção dos contratos.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">11. DA EXONERAÇÃO DA FIANÇA</div>
+        <p>11.1. Havendo exoneração da CredBee da condição de Fiadora, em decorrência da rescisão do contrato, caberá ao(s) Locatário(s) promover a substituição da garantia prestada no Contrato de Locação, no prazo de 30 (trinta) dias, a contar do recebimento de notificação enviada no e-mail cadastrado, sob pena de infração contratual e ajuizamento da competente ação de despejo, com pedido liminar de despejo compulsório.</p>
+        <p>11.2. Na falta de substituição de garantia no contrato de locação por parte do locatário e corresponsável, ficarão responsáveis por eventuais prejuízos causados a CredBee, além da penalização de multa em favor da desta, no valor equivalente a 01 (um) aluguel vigente à época da rescisão.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">12. DA COMUNICAÇÕES E DAS NOTIFICAÇÕES</div>
+        <p>12.1. As comunicações decorrentes da contratação dos Serviços CredBee e relacionadas à utilização da Plataforma deverão se dar por meio de e-mail, devendo-se considerar, para tanto, o endereço eletrônico contato@credbee.com.br, assim como os endereços eletrônicos confirmados pelo(s) Locatário(s) e eventual(ais) Corresponsável(eis) no momento da contratação dos Serviços CredBee.</p>
+        <p>12.2. É obrigação do(s) Locatário(s) e eventual(ais) Corresponsável(eis) manter seus endereços eletrônicos devidamente atualizados, informando qualquer alteração à CredBee, por meio do endereço eletrônico indicado acima.</p>
+        <p>12.3. Para fins do Item 10.3, a data de recebimento das comunicações será considerada como sendo a data em que o e-mail tiver sido transmitido para o destinatário, se em dia útil e horário comercial. Se a transmissão para o destinatário for promovida em dia não útil e/ou fora do horário comercial, considerar-se-á a comunicação como recebida no primeiro dia útil subsequente à transmissão.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">13. ALTERAÇÕES DESTE INSTRUMENTO</div>
+        <p>13.1. A CredBee se reserva no direito de realizar atualizações e alterações no presente instrumento, disponibilizando nova versão para visualização do locatário e eventuais corresponsáveis, observando sempre a facilidade nas operações.</p>
+        <p>13.2. Eventuais alterações de ordem substanciais, não poderão ser aplicadas durante o período de vigência da contratação.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">14. DA CONFIDENCIALIDADE</div>
+        <p>A CredBee se responsabiliza pela guarda e segurança das informações confidenciais que forem fornecidas na plataforma decorrentes da contratação dos serviços de garantia.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">15. DO FORO</div>
+        <p>As partes elegem o foro da comarca da imobiliária que administra o imóvel, para dirimir eventuais dúvidas ou conflitos decorrentes deste instrumento, renunciando a qualquer outro, por mais privilegiado que seja.</p>
+
+        <p class="text-right" style="margin-top: 15px; margin-bottom: 40px;">Maringá, {$cadastro}</p>
+
+        <!-- Seção de Assinaturas (Tabela sem bordas com page-break-inside) -->
+        <table style="width: 100%; border: none; border-collapse: collapse; margin-top: 20px; table-layout: fixed; page-break-inside: avoid;">
+            <colgroup>
+                <col style="width: 45%;">
+                <col style="width: 10%;">
+                <col style="width: 45%;">
+            </colgroup>
+            <!-- Linha 1 de Assinatura -->
+            <tr>
+                <td style="border: none !important; border-top: 1px solid #111111 !important; text-align: center; padding-top: 5px; font-size: 12px;">
+                    <span class="bold">Locatário</span>
+                </td>
+                <td style="border: none !important;">&nbsp;</td>
+                <td style="border: none !important; border-top: 1px solid #111111 !important; text-align: center; padding-top: 5px; font-size: 12px;">
+                    <span class="bold">CredBee Serviços de Cobrança Ltda.</span>
+                </td>
+            </tr>
+        </table>
+        
+        <p class="bold text-center" style="font-size: 11px; margin-top: 40px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px;">
+            O ACEITE REALIZADO PELO LOCATÁRIO, ATRAVÉS DE ASSINATURA ELETRÔNICA OU PLATAFORMA DIGITAL, SERÁ CONSIDERADO COMO ACEITO OS TERMOS E CONDIÇÕES DA CONTRATAÇÃO DOS SERVIÇOS CREDBEE.
+        </p>
+    </div>
+
+</body>
+</html>
+<!--[/main]-->

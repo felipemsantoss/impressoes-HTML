@@ -1,0 +1,84 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiqueta de Gôndola - Horizontal Expandida</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* TRAVA CRÍTICA DAS DIMENSÕES FÍSICAS DA ETIQUETA (10.00cm x 2.80cm) */
+        @page {
+            size: 10.00cm 2.80cm;
+            margin: 0px !important;
+        }
+
+        /* LIMITAÇÃO DO CANVAS DO CORPO */
+        html, body {
+            width: 10.00cm;
+            height: 2.80cm;
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #ffffff;
+            overflow: hidden; /* Elimina quebras e rolagens verticais */
+            color: #000000;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        /* ESTRUTURA DE TABELA UNIFICADA COM CONTROLE DE EXPANSÃO HORIZONTAL */
+        table {
+            width: 10.00cm;
+            height: 2.80cm;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            table-layout: fixed !important;
+        }
+
+        td {
+            border: none !important;
+            word-wrap: break-word;
+        }
+
+        /* TRUQUE DE MÁGICA CSS: SE A VARIÁVEL DE VALOR VIER VAZIA DO BANCO, FORÇA EXIBIÇÃO DE "0,00" */
+        .price-value:empty::before {
+            content: "0,00";
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tabela Principal com Linha Superior em Colspan (Permite que a descrição ocupe toda a largura) -->
+    <table>
+        <colgroup>
+            <col width="50%">
+            <col width="50%">
+        </colgroup>
+        
+        <!-- Linha 1: Descrição ocupando a linha inteira até o final -->
+        <tr>
+            <td colspan="2" style="text-align: left; vertical-align: top; padding-left: 0.40cm; padding-right: 0.40cm; padding-top: 0.35cm;">
+                <div style="font-size: 13px; text-transform: uppercase; line-height: 1.15; width: 100%;">{$descricao}</div>
+            </td>
+        </tr>
+        
+        <!-- Linha 2: Código na esquerda e Preço rebaixado ao limite no rodapé da direita -->
+        <tr>
+            <td style="text-align: left; vertical-align: bottom; padding-left: 0.40cm; padding-bottom: 0.15cm;">
+                <div style="font-size: 9px; color: #555555;">cod. interno: {$id}</div>
+            </td>
+            <td style="text-align: right; vertical-align: bottom; padding-right: 0.40cm; padding-bottom: 0.10cm;">
+                <div style="font-size: 21px; font-weight: bold; line-height: 1.0;">R$ <span class="price-value">{$preco_venda}</span></div>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

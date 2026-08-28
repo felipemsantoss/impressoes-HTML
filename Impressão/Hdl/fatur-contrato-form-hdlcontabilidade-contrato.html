@@ -1,0 +1,227 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrato de Prestação de Serviços Profissionais Contábeis</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 2.00cm 1.50cm;
+        }
+
+        body {
+            font-size: 10.5px; /* Tamanho de fonte ideal e legível para contratos */
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            background-color: #ffffff;
+        }
+
+        /* TEXTO JURÍDICO */
+        .text-justify {
+            text-align: justify;
+        }
+        
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        p {
+            margin: 0 0 10px 0;
+        }
+
+        .clause-title {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        /* ESTRUTURA SEM BORDAS PARA CABEÇALHOS DO CONTRATO */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse !important;
+            table-layout: fixed;
+            margin-bottom: 20px;
+        }
+        .header-table td {
+            border: none !important;
+            padding: 0;
+            vertical-align: top;
+        }
+
+        /* TABELA de ASSINATURAS EVITA QUEBRAS INTERNAS */
+        .signatures-table {
+            width: 100%;
+            border: none;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-top: 40px;
+            page-break-inside: avoid;
+        }
+        .signatures-table td {
+            border: none !important;
+            padding: 0;
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho Alinhado Especial (35% esquerda com imagem de logo, 65% direita com título) -->
+    <table class="header-table">
+        <colgroup>
+            <col style="width: 35%;">
+            <col style="width: 65%;">
+        </colgroup>
+        <tr>
+            <td style="vertical-align: middle;">
+                <img src="{$unidade_image}" style="max-width: 140px; max-height: 60px;" alt="Logo da Empresa">
+            </td>
+            <td style="text-align: right; vertical-align: middle; line-height: 1.4;">
+                <div style="font-size: 10px; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">CONTRATO Nº {$id}</div>
+                <div class="bold" style="font-size: 11px; text-transform: uppercase; margin-top: 2px;">
+                    INSTRUMENTO PARTICULAR DE CONTRATO DE PRESTAÇÃO DE SERVIÇOS PROFISSIONAIS CONTÁBEIS
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Corpo do Contrato em Fluxo Contínuo -->
+    <div class="text-justify">
+        <p><span class="bold">CONTRATADA: {$pessoa_unidade_descricao}</span>, localizada à {$pes_un_logradouro} {$pes_un_numero} {$pes_un_bairro}, {$pes_un_end_cep} {$pes_un_local_municipio_descricao} / {$pes_un_local_uf_sigla} , inscrita no CRC/PR sob o nº. 006495/O-6, e no Cadastro de Pessoas Jurídicas do Ministério da Fazenda CNPJ/MF sob o nº. {$pes_un_cpf_cnpj}, Telefone/Fax: (44) 3035-3700, E-mail: hdl@hdlcontabilidade.com.br, neste ato representada por seu Contador o SR. DAYON FRANCISCO HARDT, inscrito no CRC/PR sob o n°. 057772/O-3 e CPF n°. 045.505.709-54.</p>
+        
+        <p><span class="bold">CONTRATANTE: {$pessoa_descricao}</span>, localizada no endereço {$pes_logradouro} {$pes_numero} {$pes_bairro}, {$pes_end_cep} - {$pes_local_municipio_descricao} – {$pes_local_uf_sigla} inscrita no CNPJ/MF sob o n° {$pes_cpf_cnpj} ; neste ato, representada por seu representante, legalmente constituído na forma de Contrato Social, o(a) Sr.(a) {$representante_legal}, portadora da cédula de Identidade RG nº {$representante_rg}, devidamente inscrito no Cadastro Nacional de Pessoas Físicas do Ministério da Fazenda CPF/MF sob nº {$representante_cpf}, na qualidade de SÓCIO ADMINISTRADOR.</p>
+        
+        <p>Pelo presente instrumento particular, as partes acima devidamente qualificadas, doravante denominadas simplesmente <span class="bold">CONTRATADA</span> e <span class="bold">CONTRATANTE</span>, na melhor forma de direito, ajustam e contratam a prestação de serviços profissionais, segundo as cláusulas e condições adiante arroladas.</p>
+
+        <div class="clause-title">CLÁUSULA PRIMEIRA - OBJETO DO CONTRATO:</div>
+        <p>O objeto do presente consiste na prestação pela CONTRATADA à CONTRATANTE, dos seguintes serviços profissionais:</p>
+        
+        <p><span class="bold">1 - ÁREA CONTÁBIL</span><br>
+        1.1.1 - Classificação e escrituração da contabilidade de acordo com as normas e princípios contábeis vigentes; Apuração de balancetes; Elaboração do Balanço Patrimonial Anual e Demonstração de Resultados.</p>
+        
+        <p><span class="bold">1.2 - AREA FISCAL</span><br>
+        1.2.1 – Orientação, controle e aplicação dos dispositivos legais vigentes, sejam federais, estaduais ou municipais; Escrituração dos registros fiscais do ISS, ICMS e elaboração das guias de informação e de recolhimento dos tributos devidos; Atendimento das demais exigências previstas em atos normativos, bem como de eventuais procedimentos de fiscalização tributária.</p>
+        
+        <p><span class="bold">1.3 - ÁREA DO IMPOSTO DE RENDA PESSOA JURÍDICA</span><br>
+        1.3.1 - Orientação e controle de aplicação dos dispositivos legais vigentes; Elaboração da declaração anual de rendimentos e documentos correlatos; Atendimento das demais exigências previstas em atos normativos, bem como de eventuais procedimentos de fiscalização.</p>
+        
+        <p><span class="bold">1.4 - ÁREA TRABALHISTA E PREVIDENCIÁRIA</span><br>
+        1.4.1 - Orientação e controle da aplicação dos preceitos da Consolidação das Leis do Trabalho, bem como aqueles atinentes à Previdência Social, "PIS" FGTS e outros aplicáveis às relações de emprego mantidas pela CONTRATANTE; Orientação trabalhista de cunho administrativo; Orientação previdenciária de cunho administrativo; Atendimento das demais exigências previstas na legislação, bem como de eventuais procedimentos de fiscalização.</p>
+
+        <div class="clause-title">CLÁUSULA SEGUNDA - DAS CONDIÇÕES DE EXECUÇÃO DOS SERVIÇOS</div>
+        <p>Os serviços serão executados nas dependências da CONTRATADA, em obediência às seguintes condições:</p>
+        <p>2.1 - A documentação indispensável para o desempenho dos serviços arrolados na cláusula primeira, será fornecida pela CONTRATANTE, consistindo, basicamente, em:</p>
+        <p>2.1.1 - Boletim de caixa e documentos nele constantes;</p>
+        <p>2.1.2 - Extratos de todas as contas correntes bancárias, inclusive aplicações, e documentos relativos aos lançamentos, tais como depósitos, cópias de cheques, borderôs de cobrança, descontos, contratos de crédito, avisos de créditos, débitos, etc.;</p>
+        <p>2.1.3 - Notas-Fiscais de compra (entradas) e de venda (saídas), bem como comunicação de eventual cancelamento das mesmas;</p>
+        <p>2.1.4 - Controle de frequência dos empregados e eventual comunicação para concessão de férias, admissão ou rescisão contratual, bem como correções salariais espontâneas.</p>
+        <p>2.2 - A documentação deverá ser enviada pela CONTRATANTE de forma completa e em boa ordem nos seguintes prazos:</p>
+        <p>2.2.1 - Até 5 (cinco) dias após o encerramento do mês, os documentos relacionados nos itens 2.1.1 e 2.1.2, acima;</p>
+        <p>2.2.2 - Semanalmente, os documentos mencionados no item 2.1.3 acima, sendo que os relativos a última semana do mês, no 1º (primeiro) dia útil do mês seguinte;</p>
+        <p>2.2.3 - Até o dia 25 do mês de referência quando se tratar dos documentos do item 2.1.4;</p>
+        <p>2.3 - A CONTRATADA compromete-se a cumprir todos os prazos estabelecidos na legislação de regência quanto aos serviços contratados, especificando-se, porém, os prazos abaixo:</p>
+        <p>2.3.1 - A entrega das guias de recolhimento de tributos e encargos trabalhistas à CONTRATANTE se fará com antecedência de 1 (um) dia do vencimento da obrigação.</p>
+        <p>2.3.2 - A entrega de Balancete se fará até o dia 20 do 2º (segundo) mês subsequente ao período a que se referir.</p>
+        <p>2.3.3 - A entrega do Balanço Patrimonial Anual se fará até 30 (trinta) dias após a entrega de todos os dados necessários à sua elaboração, principalmente o Inventário Anual de Estoques, por escrito, cuja execução é de responsabilidade da CONTRATANTE.</p>
+        <p>2.4 - A remessa de documentos entre os contratantes deverá ser feita sempre sob protocolo.</p>
+
+        <div class="clause-title">CLÁUSULA TERCEIRA - DOS DEVERES DO CONTRATADO</div>
+        <p>3.1 – A CONTRATADA desempenhará os serviços enumerados na cláusula primeira com todo zelo, diligência e honestidade, observada a legislação vigente, resguardando os interesses da CONTRATANTE, sem prejuízo da dignidade e independência profissional, sujeitando-se, ainda, às normas do Código de Ética Profissional do Contabilista, aprovado pela Resolução Nº. 803/96 do Conselho Federal de Contabilidade.</p>
+        <p>3.2 - Responsabilizar-se-á a CONTRATADA por todos os prepostos que atuarem nos serviços ora contratados, indenizando à CONTRATANTE, em caso de culpa ou dolo.</p>
+        <p>3.2.1 - A CONTRATADA assume integral responsabilidade por eventuais multas fiscais decorrentes de imperfeições ou atrasos nos serviços ora contratados, excetuando-se os ocasionados por força maior ou caso fortuito, assim definidos em lei, depois de esgotados os procedimentos de defesa administrativa, sempre observado o disposto no item 3.5.</p>
+        <p>3.2.1.1 - Não se incluem na responsabilidade assumida pela CONTRATADA os juros e a correção monetária de qualquer natureza, visto que não se trata de apenamento pela mora, mas sim recomposição e remuneração do valor não recolhido.</p>
+        <p>3.3 - Obriga-se a CONTRATADA a fornecer à CONTRATANTE, no escritório dessa e dentro do horário normal de expediente, todas as informações relativas ao andamento dos serviços ora contratados.</p>
+        <p>3.4 - Responsabilizar-se-á a CONTRATADA por todos os documentos a ela entregues pela CONTRATANTE, enquanto permanecerem sob sua guarda para a consecução dos serviços pactuados, respondendo pelo seu mau uso, perda, extravio ou inutilização, salvo comprovado caso fortuito ou força maior, mesmo se tal ocorrer por ação ou omissão de seus prepostos ou quaisquer pessoas que a eles tenham acesso.</p>
+        <p>3.5 - A CONTRATADA não assume nenhuma responsabilidade pelas consequências de informações, declarações ou documentação inidôneas ou incompletas que lhe forem apresentadas, bem como por omissões próprias da CONTRATANTE ou decorrentes do desrespeito à orientação prestada.</p>
+
+        <div class="clause-title">CLÁUSULA QUARTA - DOS DEVERES DA CONTRATANTE</div>
+        <p>4.1 - Obriga-se a CONTRATANTE a fornecer à CONTRATADA todos os dados, documentos e informações que se façam necessários ao bom desempenho dos serviços ora contratados, em tempo hábil, nenhuma responsabilidade cabendo a segundo caso os dados e documentos sejam recebidos intempestivamente.</p>
+        <p>4.2 - Para a execução dos serviços constantes da cláusula primeira a CONTRATANTE pagará à CONTRATADA os honorários profissionais correspondentes a R$ {$total_servico} mensais, até o dia 05 do mês subsequente ao vencido, podendo a cobrança ser veiculada através da respectiva duplicata de serviços, recibo de pagamento, mantida em carteira ou via cobrança bancária.</p>
+        <p>4.2.1 - Além da parcela acima avençada, a CONTRATANTE pagará à CONTRATADA um adicional anual, correspondente ao valor de uma parcela mensal, para atendimento ao acréscimo de serviços e encargos próprios do período final do exercício, tais como o encerramento das demonstrações contábeis anuais, Declaração de Rendimentos da Pessoa Jurídica, elaboração de informes de rendimento, "RAIS", Folhas de Pagamento do 13º (décimo terceiro) Salário, "DIRF" e demais.</p>
+        <p>4.2.1.1 - A mensalidade adicional mencionada no item anterior será paga em parcela única com vencimento no último dia útil do mês de novembro de cada exercício e seu valor será equivalente aos dos honorários vigentes no mês de pagamento.</p>
+        <p>4.2.1.2 - Mesmo no caso de início do contrato em qualquer mês do exercício, a parcela adicional será devida integralmente.</p>
+        <p>4.2.1.3 - Caso o presente envolva a recuperação de serviços não realizados - atrasados - a mensalidade adicional será integralmente devida desde o primeiro mês de atualização.</p>
+        <p>4.2.2 - Os honorários pagos após a data avençada no item 4.2. Acarretarão à CONTRATANTE o acréscimo de multa de 10% (dez por cento), sem prejuízo de juros moratórios de 1% (um por cento) ao mês ou fração.</p>
+        <p>4.2.3 - Os honorários serão reajustados anualmente e automaticamente segundo a correção aplicada ao salário-mínimo determinado pelo Governo Federal (salário mínimo governamental).</p>
+        <p>4.2.4 - O valor dos honorários previstos no item 4.2. Foi estabelecido segundo os parâmetros socioeconômicos e a estrutura atual da empresa, ficando certo que se a média trimestral de serviços, emissão de notas ou faturamento da empresa forem superiores aos parâmetros iniciais, na proporção de 20% (vinte por cento), passará a vigorar nova mensalidade no mesmo patamar de aumento do volume de serviço, automaticamente, a partir do primeiro dia após o trimestre findo.</p>
+        <p>4.2.5 - O percentual de reajuste anual previsto no item 4.2.3. Incidirá sobre o valor resultante da aplicação do critério de revisão pelo volume de serviços, conforme item 4.2.4.</p>
+        <p>4.3 - A CONTRATANTE reembolsará a CONTRATADA o custo de todos os materiais utilizados na execução dos serviços ora ajustados, tais como formulários contínuos, impressos fiscais, trabalhistas e contábeis, bem como livros fiscais, pastas, cópias reprográficas, autenticações, reconhecimento de firmas, custas, emolumentos e taxas exigidas pelos serviços públicos, sempre que utilizados e mediante recibo discriminado acompanhado dos respectivos comprovantes de desembolso.</p>
+        <p>4.4 - Os serviços solicitados pela CONTRATANTE não especificados na cláusula primeira serão cobrados pela CONTRATADA em apartado, como extraordinário, segundo valor específico constante de orçamento previamente aprovado pela primeira, englobando nessa previsão toda e qualquer inovação da legislação relativamente ao regime tributário, trabalhista ou previdenciário.</p>
+        <p>4.4.1 - São considerados serviços extraordinários ou para contábeis, exemplificativamente: 1) alteração contratual; 2) abertura de empresa; 3) certidões negativas do INSS, FGTS, Federais, ICMS e ISS; 4) Certidão negativa de falências ou protestos; 5) Homologação junto à DRT e Sindicato; 6) Autenticação/Registro de Livros; 7) Encadernação de livros; 8) Declaração de ajuste do imposto de renda pessoa física; 9) Preenchimento de fichas cadastrais/IBGE.</p>
+        <p>4.4.2 - Não estão cobertos por este contrato, quaisquer serviços de natureza jurídica, seja a que título for, e em qualquer instância administrativa ou judicial, sendo os referidos serviços cobrados em apartado, na forma da Tabela da OAB.</p>
+
+        <div class="clause-title">CLÁUSULA QUINTA - DA VIGÊNCIA E RESCISÃO</div>
+        <p>5.1 - O presente contrato vigorará a partir de {$inicio} por prazo indeterminado, podendo a qualquer tempo ser rescindido mediante pré-viagem de 60 (sessenta) dias, por escrito.</p>
+        <p>5.1.1 - A parte que não comunicar por escrito a rescisão ou efetuá-la de forma sumaria, desrespeitando o pré-aviso previsto, ficará obrigada ao pagamento de multa compensatória no valor de 3 (três) parcelas mensais dos honorários vigentes à época.</p>
+        <p>5.1.2 - No caso de rescisão, a dispensa pela CONTRATANTE da execução de quaisquer serviços, seja qual for a razão, durante o prazo do pré-aviso, deverá ser feita por escrito, não desobrigando-a do pagamento dos honorários integrais até o termo final do contrato.</p>
+        <p>5.2 - Ocorrendo a transferência dos serviços para outra Empresa Contábil, a CONTRATANTE deverá informar à CONTRATADA, por escrito, seu nome, endereço, nome do responsável e número da inscrição junto ao Conselho Regional de Contabilidade, sem o que não será possível À CONTRATADA cumprir as formalidades ético-profissionais, inclusive a transmissão de dados e informações necessárias à continuidade dos serviços, em relação às quais, diante da eventual inércia da CONTRATANTE, estará desobrigada de cumprimento.</p>
+        <p>5.2.1 - Entre os dados e informações a serem fornecidos não se incluem detalhes técnicos dos sistemas de informática da CONTRATADA, os quais são de sua exclusiva propriedade.</p>
+        <p>5.3 - A falta de pagamento de qualquer parcela de honorários faculta à CONTRATADA suspender imediatamente a execução dos serviços ora pactuados, bem como considerar rescindido o presente, independente de notificação judicial ou extrajudicial, sem prejuízo do previsto no item 4.2.2.</p>
+        <p>5.4 - A falência ou a concordata da CONTRATANTE facultará a rescisão do presente pela CONTRATADA, independentemente de notificação judicial ou extrajudicial, não estando incluídos nos serviços ora pactuados a elaboração das peças contábeis arroladas no artigo 159 do Decreto-Lei 7761/45 e demais decorrentes.</p>
+        <p>5.5 - Considerar-se-á rescindido o presente contrato, independentemente de notificação judicial ou extrajudicial, caso qualquer das partes CONTRATANTES venha a infringir clausula ora convencionada, assim como dispositivos da Lei Federal 8.137/90 e suas alterações.</p>
+        <p>5.5.1 - Fica estipulada a multa contratual de uma parcela mensal vigente relativa aos honorários exigível por inteiro em face da parte que der causa à rescisão motivada sem prejuízo da penalidade específica do item 4.2.2., se o caso.</p>
+
+        <div class="clause-title">CLÁUSULA SEXTA – DA PROTEÇÃO DE DADOS</div>
+        <p>6.1 – As partes declaram estar cientes e de acordo com as disposições da Lei Geral de Proteção de Dados (Lei n° 13.709/2018), comprometendo-se a tratar os dados pessoais eventualmente compartilhados no âmbito deste contrato de forma lícita, leal, transparente e segura.</p>
+        <p>6.2 – O CONTRATADO utilizará os dados pessoais fornecidos pelo CONTRATANTE exclusivamente para execução dos serviços contábeis contratados, incluindo o uso do certificado digital, acesso à plataforma gov.br e informação bancárias. Esses dados serão armazenados de forma segura e não serão compartilhados com terceiros sem a autorização e o consentimento prévio e expresso do titular, salvo nas hipóteses legais em que o consentimento possa ser dispensado.</p>
+        <p>6.3 – Caso ocorra qualquer incidente de segurança que possa comprometer os dados pessoais tratados, o CONTRATADO se compromete a comunicar o CONTRATANTE em prazo razoável, indicando as medidas tomadas para mitigar os possíveis danos.</p>
+        <p>6.4 – Ao término da relação contratual, o CONTRATADO se compromete, conforme orientação do CONTRATANTE, a eliminar ou devolver os dados pessoais tratados no contexto deste contrato, salvo em caso de obrigação legal de retenção.</p>
+
+        <div class="clause-title">CLÁUSULA SÉTIMA - DO FORO</div>
+        <p>Fica eleito o Foro da comarca de Sarandi, Estado do Paraná, através do Juizado Especial de Defesa do Consumidor com expressa renuncia a qualquer outro, por mais privilegiado que seja, para dirimir as questões oriundas da interpretação e execução do presente contrato, depois de ouvido o Sindicato dos Contadores e Técnicos em Contabilidade do Estado do Paraná.</p>
+        <p>E, por estarem justos e contratados, assinam o presente, em 2 (duas) vias de igual teor e para um só efeito, na presença de 02(duas) testemunhas instrumentárias.</p>
+        
+        <p class="text-right" style="margin-top: 20px; margin-bottom: 40px;">
+            {$pes_un_local_municipio_descricao} / {$pes_un_local_uf_sigla} {$cadastro}.
+        </p>
+
+        <!-- Seção de Assinaturas (Tabela sem bordas com page-break-inside) -->
+        <table class="signatures-table">
+            <colgroup>
+                <col style="width: 45%;">
+                <col style="width: 10%;">
+                <col style="width: 45%;">
+            </colgroup>
+            <!-- Linha 1 de Assinatura -->
+            <tr>
+                <td style="border: none !important; border-top: 1px solid #111111 !important; padding-top: 5px; font-size: 10px; vertical-align: top;">
+                    <span class="bold">Assinatura da CONTRATADA</span><br>
+                    DAYON FRANCISCO HARDT<br>
+                    CRC PR nº. 057772/O-3<br>
+                    HDL CONTABILIDADE LTDA.-ME<br>
+                    CNPJ/MF nº. 10.726.728/0001-59
+                </td>
+                <td style="border: none !important;">&nbsp;</td>
+                <td style="border: none !important; border-top: 1px solid #111111 !important; padding-top: 5px; font-size: 10px; vertical-align: top;">
+                    <span class="bold">Assinatura do (a) CONTRATANTE</span><br>
+                    EMPRESA: {$pessoa_descricao}<br>
+                    CNPJ/MF: {$pes_cpf_cnpj}<br>
+                    RESPONSAVEL LEGAL: {$representante_legal}<br>
+                    CPF/MF nº. {$representante_cpf}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>
+<!--[/main]-->

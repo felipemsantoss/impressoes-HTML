@@ -1,0 +1,406 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Orçamento Nº {$id}</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 1.50cm 1.50cm 2.00cm 1.50cm;
+        }
+
+        body {
+            font-size: 8.5px;
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.35;
+            background-color: #ffffff;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* TABELAS E GRIDS DO DOCUMENTO (SEM GRADE OU BORDAS OUTLINE) */
+        table {
+            width: 100%;
+            border-collapse: collapse !important;
+            table-layout: fixed !important; /* CORREÇÃO CRÍTICA DOMPDF */
+            margin-bottom: 6px;
+        }
+
+        td, th {
+            padding: 3px 4px;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+
+        /* DIVISORES HORIZONTAIS IDÊNTICOS AO PDF */
+        .solid-divider {
+            border-bottom: 1px solid #111111;
+            margin: 8px 0;
+        }
+
+        /* CONFIGURAÇÃO DO RODAPÉ FIXO REQUISITADO */
+        .footer-fixed {
+            position: fixed;
+            bottom: -1.30cm;
+            left: 0;
+            right: 0;
+            height: 25px;
+            border-top: 1px solid #111111;
+            padding-top: 4px;
+        }
+        .footer-fixed table {
+            width: 100%;
+            margin: 0;
+        }
+        .footer-fixed td {
+            font-size: 8px;
+            color: #111111;
+            padding: 0;
+        }
+        .preservar-linhas {
+            white-space: pre-wrap !important;
+        }
+
+        .linha-prod- { display: none !important; }
+        .linha-desc- { display: none !important; }
+        .linha-serv- { display: none !important; }
+        .linha-parc- { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- RODAPÉ FIXO COMPACTO COM A FRASE RELIGIOSA E DATA DE IMPRESSÃO -->
+    <div class="footer-fixed">
+        <table>
+            <tr>
+                <td style="width: 75%; text-align: left;">
+                    "...Lembre-se que eu estarei c/ vocês todos os dias, até o fim dos tempos." Mateus 28,20
+                </td>
+                <td style="width: 25%; text-align: right;">
+                    Impresso em: {$data_hoje}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- CABEÇALHO DO PEDIDO (Fixo conforme PDF, puxando logo dinâmica) -->
+    <table style="border: none; margin-bottom: 10px;">
+        <colgroup>
+            <col width="35%">
+            <col width="65%">
+        </colgroup>
+        <tr>
+            <td style="padding: 0; border: none; vertical-align: middle;">
+                <img src="{$unidade_image}" style="width: 200px; max-height: 55px; object-fit: contain;" alt="Logo Unidade">
+            </td>
+            <td style="padding: 0; border: none; text-align: center; font-size: 8px; line-height: 1.3;">
+                <div class="bold" style="font-size: 11px; margin-bottom: 3px;">DONADONI COMERCIO DE ELETRONICOS LTDA</div>
+                <div>AVENIDA COLOMBO, 4713 – 87.030-121 – MARINGÁ/PR</div>
+                <div>Fone: (44) 30282826</div>
+                <div>07.274.832/0001-45</div>
+                <div>CONTATO@TRIAXTI.COM.BR</div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="solid-divider"></div>
+
+    <!-- TÍTULO DO PEDIDO -->
+    <table style="border: none; margin-bottom: 8px;">
+        <tr>
+            <td style="font-size: 13px; font-weight: bold; padding: 0;">Orçamento Nº {$id}</td>
+            <td style="font-size: 13px; font-weight: bold; text-align: right; padding: 0;">Emissão {$cadastro}</td>
+        </tr>
+    </table>
+
+    <!-- Linha horizontal divisora abaixo de Ordem de Serviço solicitado -->
+    <div class="solid-divider"></div>
+
+    <!-- DADOS DO CLIENTE (Mapeamento exato de variáveis) -->
+    <table style="border: none; margin-bottom: 8px; line-height: 1.3;">
+        <colgroup>
+            <col width="50%">
+            <col width="50%">
+        </colgroup>
+        <tr>
+            <td><span class="bold">Cliente:</span> {$pessoa_id} – {$pessoa_descricao}</td>
+            <td><span class="bold">Fantasia:</span> {$pessoa_pj_fantasia}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Telefone:</span> {$pessoa_fone1} {$pessoa_fone2}</td>
+            <td><span class="bold">Cnpj/Cpf:</span> {$pessoa_cpf_cnpj} &nbsp;&nbsp;&nbsp;&nbsp; <span class="bold">IE:</span> {$pessoa_pj_inscricao_estadual}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Endereço:</span> {$logradouro} – {$numero} – {$complemento}</td>
+            <td><span class="bold">Cidade:</span> {$local_municipio_descricao} – {$local_uf_descricao}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Bairro:</span> {$bairro}</td>
+            <td><span class="bold">CEP:</span> {$cep}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Contato:</span> {$contato} - {$contato_fone}</td>
+            <td><span class="bold">E-mail:</span> {$pessoa_email}</td>
+        </tr>
+        <tr>
+            <td colspan="2"><span class="bold">Descrição do Orçamento:</span> {$cod_externo}</td>
+        </tr>
+    </table>
+
+    <!-- Linha horizontal divisora antes de produtos -->
+    <div class="solid-divider"></div>
+
+    <!-- TABELA DE PRODUTOS -->
+    <table style="border: none; margin-bottom: 4px;">
+        <colgroup>
+            <col width="10%">
+            <col width="54%">
+            <col width="12%">
+            <col width="12%">
+            <col width="12%">
+        </colgroup>
+        <thead>
+            <tr style="font-weight: bold;">
+                <th style="width: 10%; padding: 3px 4px; text-align: left;">Código</th>
+                <th style="width: 54%; padding: 3px 4px; text-align: left;">Produto</th>
+                <th style="width: 12%; padding: 3px 4px; text-align: right;">Qtde</th>
+                <th style="width: 12%; padding: 3px 4px; text-align: right;">Unitário</th>
+                <th style="width: 12%; padding: 3px 4px; text-align: right;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[produtos]-->
+            <tr class="linha-prod-{$produto_id}">
+                <td>{$produto_id}</td>
+                <td>{$produto_descricao} {$produto_referencia_descricao}</td>
+                <td style="text-align: right;">{$qtde}</td>
+                <td style="text-align: right;">{$preco}</td>
+                <td style="text-align: right;">{$total_bruto}</td>
+            </tr>
+            <!--[/produtos]-->
+            <tr style="font-weight: bold;">
+                <td colspan="4" style="text-align: right; padding-top: 8px;">Totalização de Produto:</td>
+                <td style="text-align: right; padding-top: 8px;">{$subtotal_produto}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="solid-divider"></div>
+
+    <!-- TABELA DE DESCRITIVO (Segundo bloco de produtos solicitado) -->
+    <table style="border: none; margin-bottom: 4px;">
+        <colgroup>
+            <col width="10%">
+            <col width="54%">
+            <col width="12%">
+            <col width="12%">
+            <col width="12%">
+        </colgroup>
+        <thead>
+            <tr style="font-weight: bold;">
+                <th style="width: 10%; padding: 3px 4px; text-align: left;">Código</th>
+                <th style="width: 54%; padding: 3px 4px; text-align: left;">Produto</th>
+                <th style="width: 12%; padding: 3px 4px; text-align: right;">Qtde</th>
+                <th style="width: 12%; padding: 3px 4px; text-align: right;">Unitário</th>
+                <th style="width: 12%; padding: 3px 4px; text-align: right;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[descritivos]-->
+            <tr class="linha-desc-{$pedido_id}">
+                <td>{$pedido_id}</td>
+                <td>{$descricao}</td>
+                <td style="text-align: right;">{$qtde}</td>
+                <td style="text-align: right;">{$preco}</td>
+                <td style="text-align: right;">{$total}</td>
+            </tr>
+            <!--[/descritivos]-->
+            <tr style="font-weight: bold;">
+                <td colspan="4" style="text-align: right; padding-top: 8px;">Totalização Descritivo:</td>
+                <td style="text-align: right; padding-top: 8px;">{$total_descritivo}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="solid-divider"></div>
+
+    <!-- TABELA DE SERVIÇOS (Unitário e Total removidos; larguras reajustadas) -->
+    <table style="border: none; margin-bottom: 8px;">
+        <colgroup>
+            <col width="10%">
+            <col width="78%">
+            <col width="12%">
+        </colgroup>
+        <thead>
+            <tr style="font-weight: bold;">
+                <th style="width: 10%; padding: 3px 4px; text-align: left;">Código</th>
+                <th style="width: 78%; padding: 3px 4px; text-align: left;">Serviço</th>
+                <th style="width: 12%; padding: 3px 4px; text-align: right;">Qtde</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[servicos]-->
+            <tr class="linha-serv-{$servico_id}">
+                <td>{$servico_id}</td>
+                <td>{$servico_grupo_descricao} - {$servico_descricao}</td>
+                <td style="text-align: right;">{$qtde}</td>
+            </tr>
+            <!--[/servicos]-->
+            <tr style="font-weight: bold;">
+                <td colspan="2" style="text-align: right; padding-top: 8px;">Totalização Serviço:</td>
+                <td style="text-align: right; padding-top: 8px;">{$subtotal_servico}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="solid-divider"></div>
+
+    <!-- SEÇÃO EQUIPAMENTOS: DEFEITO E DIAGNÓSTICO -->
+    <!--[equipamentos]-->
+    <div style="margin-bottom: 6px; page-break-inside: avoid;">
+        <div class="bold" style="font-size: 9px; margin-bottom: 3px;">Defeito</div>
+        <div style="padding: 2px 4px;" class="preservar-linhas">{$defeito}</div>
+    </div>
+    
+    <div class="solid-divider"></div>
+
+    <div style="margin-bottom: 6px; page-break-inside: avoid;">
+        <div class="bold" style="font-size: 9px; margin-bottom: 3px;">Diagnóstico</div>
+        <div style="padding: 2px 4px;" class="preservar-linhas">{$diagnostico}</div>
+    </div>
+
+    <div class="solid-divider"></div>
+    <!--[/equipamentos]-->
+
+    <!-- RESUMO FINANCEIRO (Sem linhas/bordas, idêntico ao PDF) -->
+    <table style="border: none; margin-bottom: 12px; page-break-inside: avoid;">
+        <colgroup>
+            <col width="50%">
+            <col width="50%">
+        </colgroup>
+        <tr>
+            <td style="padding: 0; border: none; padding-right: 15px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 2px 0;"><span class="bold">Forma Pagamento:</span></td>
+                        <td style="text-align: right; padding: 2px 0;">{$financ_forma_pgto_descricao}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 2px 0;"><span class="bold">Prazo Pagamento:</span></td>
+                        <td style="text-align: right; padding: 2px 0;">{$financ_prazo_pgto_descricao}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 2px 0;"><span class="bold">Frete:</span></td>
+                        <td style="text-align: right; padding: 2px 0;">{$frete}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 2px 0;"><span class="bold">Descontos:</span></td>
+                        <td style="text-align: right; padding: 2px 0;">{$desconto_unificado} – {$desc_perc_unificado} %</td>
+                    </tr>
+                </table>
+            </td>
+            <td style="padding: 0; border: none;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 2px 0;"><span class="bold">Total Produto:</span></td>
+                        <td style="text-align: right; padding: 2px 0;">{$subtotal_produto}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 2px 0;"><span class="bold">Total Descritivo:</span></td>
+                        <td style="text-align: right; padding: 2px 0;">{$total_descritivo}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 2px 0;"><span class="bold">Total Serviço:</span></td>
+                        <td style="text-align: right; padding: 2px 0;">{$subtotal_servico}</td>
+                    </tr>
+                    <tr style="font-size: 10px; font-weight: bold;">
+                        <td style="padding-top: 4px;"><span class="bold">Total Geral</span></td>
+                        <td style="text-align: right; padding-top: 4px; font-size: 11px;">{$total_geral}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Linha horizontal divisora abaixo de Total Geral solicitado -->
+    <div class="solid-divider"></div>
+
+    <!-- TABELA DE PARCELAS (Sem grade/bordas, idêntica às outras tabelas, larguras travadas) -->
+    <table style="border: none; margin-bottom: 25px;">
+        <colgroup>
+            <col width="20%">
+            <col width="30%">
+            <col width="50%">
+        </colgroup>
+        <thead>
+            <tr style="font-weight: bold;">
+                <th style="width: 20%; padding: 3px 4px; text-align: left;">Parcela</th>
+                <th style="width: 30%; padding: 3px 4px; text-align: right;">Valor</th>
+                <th style="width: 50%; padding: 3px 4px; text-align: left; padding-left: 20px;">Tipo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[parcelas]-->
+            <tr class="linha-parc-{$parcela}">
+                <td>{$parcela}</td>
+                <td style="text-align: right; font-weight: bold;">{$valor}</td>
+                <td style="padding-left: 20px;">{$financ_forma_pgto_descricao}</td>
+            </tr>
+            <!--[/parcelas]-->
+        </tbody>
+    </table>
+
+    <!-- OBSERVAÇÃO -->
+    <div style="margin-bottom: 8px; page-break-inside: avoid;">
+        <span class="bold">Observação:</span>
+        <div style="margin-top: 2px;" class="preservar-linhas">{$obs1}</div>
+    </div>
+
+    <!-- NOTA LEGAL / EXPLICATIVA -->
+    <p class="no-indent" style="font-size: 7.5px; line-height: 1.25; margin-bottom: 10px; text-align: justify; page-break-inside: avoid;">
+        *** Por não haver projeto estrutural serão adotadas as melhores práticas para um bom desenvolvimento e qualidade do projeto. Os valores da proposta se limitam aos quantitativos descritos em mão de obra e material. Caso seja necessárias estruturas não inclusas ou aumento nos quantitativos os mesmas poderão ser orçadas a parte.
+    </p>
+
+    <!-- ASSINATURAS E RESPONSÁVEL -->
+    <table style="border: none; margin-top: 30px; page-break-inside: avoid;">
+        <colgroup>
+            <col width="45%">
+            <col width="10%">
+            <col width="45%">
+        </colgroup>
+        <tr>
+            <td style="border: none; padding: 0; line-height: 1.35; font-size: 9px; vertical-align: top; text-align: center;">
+                <span class="bold" style="font-size: 10px;">{$pessoa_responsavel_descricao}</span><br>
+                {$p_unidade_fone1}<br>
+                contato@triaxti.com.br
+            </td>
+            <td style="border: none;">&nbsp;</td>
+            <td style="border: none; border-top: 1px solid #111111; padding-top: 5px; text-align: center; vertical-align: top; font-size: 9px;">
+                <span class="bold">{$pessoa_descricao}</span>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

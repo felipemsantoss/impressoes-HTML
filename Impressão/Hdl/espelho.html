@@ -1,0 +1,631 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- DECLARAÇÃO DUPLA COMPATÍVEL WITH ALL VERSIONS OF DOMPDF TO FORCE UTF-8 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <title>Espelho DANFE</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL E CORREÇÃO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important; /* CORREÇÃO DOMPDF */
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO (MICRO-MARGENS PARA DANFE) */
+        @page {
+            size: A4 portrait;
+            margin: 0.80cm;
+        }
+
+        /* RESET E FONTES PADRONIZADAS EM ALTA DENSIDADE */
+        body {
+            font-size: 8px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+        /* MARCA D'ÁGUA DIAGONAL "SEM VALOR FISCAL" COMPATÍVEL COM MOTOR DOMPDF */
+        .watermark {
+            position: fixed;
+            top: 30%;
+            left: 5%;
+            width: 100%;
+            text-align: center;
+            z-index: -1000; /* Senta atrás de todas as tabelas */
+            opacity: 0.08; /* Tom suave e semi-transparente como no PDF */
+            color: #ff0000; /* Vermelho */
+            font-size: 70px;
+            font-weight: bold;
+            transform: rotate(-35deg); /* Rotação diagonal */
+            transform-origin: 50% 50%;
+            pointer-events: none;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-prod- { display: none !important; }
+        .linha-parc- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS - CORREÇÃO DE COLAPSO DO DOMPDF */
+        table {
+            width: 100%;
+            border-collapse: separate !important; /* CORREÇÃO DOMPDF */
+            border-spacing: 0 !important; /* CORREÇÃO DOMPDF */
+            table-layout: fixed !important; /* FORÇA COMPATIBILIDADE DE LARGURA */
+            margin-bottom: 5px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 2px 3px;
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* AUXILIAR PARA TABELAS INTERNAS SEM BORDA (ALINHAMENTO DE IMPOSTOS) */
+        .inner-cell-table {
+            width: 100%;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            margin-bottom: 0 !important;
+            border: none !important;
+        }
+        .inner-cell-table td {
+            border: none !important;
+            padding: 1px 2px !important;
+        }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) - TRATAMENTO DE BORDAS SEPARATE */
+        .grid-table, .items-table {
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+        }
+        .grid-table td, .grid-table th, .items-table td, .items-table th {
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+        }
+        
+        /* CABEÇALHOS DE SEÇÃO DANFE */
+        .section-header {
+            background-color: #f4f6f8;
+            color: #000000;
+            font-size: 7.5px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 2px 4px;
+        }
+
+        /* CÉLULAS CLÁSSICAS DE FORMULÁRIO DANFE (LABEL NO TOPO E VALOR EMBAIXO) */
+        .danfe-cell {
+            padding: 2px 4px !important;
+            vertical-align: top !important;
+        }
+        .danfe-cell .lbl-title {
+            color: #555555;
+            font-size: 6px;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 1px;
+        }
+        .danfe-cell .val-content {
+            color: #111111;
+            font-size: 8px;
+            display: block;
+        }
+
+        /* TABELAS DE ITENS DO DANFE */
+        .items-table th {
+            background-color: #ffffff;
+            color: #000000;
+            font-size: 6px;
+            text-transform: uppercase;
+            font-weight: bold;
+            padding: 3px 2px;
+        }
+        .items-table td {
+            padding: 2px 3px;
+            font-size: 7px;
+        }
+
+        /* CORREÇÃO PARA INTERPRETAR QUEBRAS DE LINHA DO TEXTAREA NO DOMPDF */
+        .preservar-linhas {
+            white-space: pre-wrap !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MARCA D'ÁGUA DE HOMOLOGAÇÃO DIAGONAL (SEM VALOR FISCAL) -->
+    <div class="watermark">SEM VALOR FISCAL</div>
+
+    <!-- BLOCO 0: CANHOTO / COMPROVANTE DE RECEBIMENTO -->
+    <table class="grid-table" style="margin-bottom: 6px;">
+        <colgroup>
+            <col style="width: 78%;">
+            <col style="width: 22%;">
+        </colgroup>
+        <tr>
+            <td style="width: 78%; padding: 4px; font-size: 6.5px;">
+                RECEBEMOS DE <span class="bold">{$pessoa_unidade_descricao}</span> OS PRODUTOS CONSTANTES DA NOTA FISCAL INDICADA AO LADO
+                <div style="border-top: 1px dashed #000; margin-top: 10px; padding-top: 2px;">
+                    <span style="font-size: 5.5px; color: #555;">Data de recebimento</span>
+                    <span style="margin-left: 140px; font-size: 5.5px; color: #555;">Identificação e assinatura do recebedor</span>
+                </div>
+            </td>
+            <td class="text-center" style="background-color: #fbfcfd; padding: 4px; width: 22%;">
+                <div style="font-weight: bold; font-size: 7.5px; text-transform: uppercase;">NF-e</div>
+                <div style="font-weight: bold; font-size: 9px; margin-top: 3px;">Nº {$codigo}</div>
+                <div style="font-size: 7px; font-weight: bold; margin-top: 2px;">Série</div>
+            </td>
+        </tr>
+    </table>
+    <div style="border-top: 1px dashed #000000; margin: 6px 0; width: 100%;"></div>
+
+    <!-- BLOCO 1: CABEÇALHO GERAL (EMITENTE + DANFE + CHAVE DE ACESSO TEXTO) -->
+    <table class="grid-table" style="margin-bottom: 5px;">
+        <colgroup>
+            <col style="width: 32%;">
+            <col style="width: 23%;">
+            <col style="width: 45%;">
+        </colgroup>
+        <tr>
+            <!-- Coluna 1: Emitente -->
+            <td style="width: 32%; padding: 4px; vertical-align: top;">
+                <div style="text-align: center; margin-bottom: 4px;">
+                    <img src="{$unidade_image}" style="max-height: 35px; max-width: 120px;" alt="Logo Emitente">
+                </div>
+                <div class="bold" style="font-size: 8px; text-align: center;">{$pessoa_unidade_descricao}</div>
+            </td>
+            <!-- Coluna 2: DANFE Meta -->
+            <td class="text-center" style="width: 23%; vertical-align: top; padding: 4px; line-height: 1.15;">
+                <div class="bold" style="font-size: 10px; margin-bottom: 2px;">DANFE</div>
+                <div style="font-size: 5.5px; color: #555555; margin-bottom: 4px;">Documento Auxiliar da Nota Fiscal Eletrônica</div>
+                <div class="bold" style="font-size: 8px; margin-top: 2px;">Nº {$codigo}</div>
+                <div class="bold" style="font-size: 8px; margin-top: 1px;">SÉRIE</div>
+            </td>
+            <!-- Coluna 3: Chave de Acesso Texto (Sem código de barras conforme solicitado) -->
+            <td style="width: 45%; padding: 6px; vertical-align: top; font-size: 7px; line-height: 1.35;">
+                <div class="bold" style="font-size: 8px; margin-bottom: 3px;">CHAVE DE ACESSO:</div>
+                <div style="border-top: 1px solid #c0c0c0; padding-top: 4px; font-size: 6px; color: #555555;">
+                    Consulta de autenticidade no portal nacional da NF-e<br>
+                    <span class="bold">www.nfe.fazenda.gov.br/portal</span> ou no site da Sefaz autorizadora
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: NATUREZA DA OPERAÇÃO / PROTOCOLO (Sem Valor Fiscal conforme solicitado) -->
+    <table class="grid-table" style="margin-bottom: 5px;">
+        <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+        </colgroup>
+        <tr>
+            <td class="danfe-cell" style="width: 50%;">
+                <span class="lbl-title">Natureza da operação</span>
+                <span class="val-content">{$fatur_operacao_descricao}</span>
+            </td>
+            <td class="danfe-cell" style="width: 50%;">
+                <span class="lbl-title">Protocolo de autorização de uso</span>
+                <span class="val-content bold">DOCUMENTO SEM VALOR FISCAL</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 3: INSCRIÇÃO ESTADUAL / CNPJ -->
+    <table class="grid-table" style="margin-bottom: 5px;">
+        <colgroup>
+            <col style="width: 33%;">
+            <col style="width: 34%;">
+            <col style="width: 33%;">
+        </colgroup>
+        <tr>
+            <td class="danfe-cell" style="width: 33%;">
+                <span class="lbl-title">Inscrição Estadual</span>
+                <span class="val-content">{$pessoa_unidade_pj_inscricao_estadual}</span>
+            </td>
+            <td class="danfe-cell" style="width: 34%;">
+                <span class="lbl-title">Inscr.est. do subst.trib.</span>
+                <span class="val-content">{$pessoa_unidade_ie_st}</span>
+            </td>
+            <td class="danfe-cell" style="width: 33%;">
+                <span class="lbl-title">CNPJ</span>
+                <span class="val-content">{$pessoa_unidade_cpf_cnpj}</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 4: DESTINATÁRIO / REMETENTE -->
+    <table class="grid-table" style="margin-bottom: 5px;">
+        <colgroup>
+            <col style="width: 45%;">
+            <col style="width: 20%;">
+            <col style="width: 15%;">
+            <col style="width: 10%;">
+            <col style="width: 10%;">
+        </colgroup>
+        <tr>
+            <td colspan="5" class="section-header">Destinatário / Remetente</td>
+        </tr>
+        <tr>
+            <td class="danfe-cell" colspan="2" style="width: 65%;">
+                <span class="lbl-title">Nome / Razão Social</span>
+                <span class="val-content bold">{$pessoa_descricao}</span>
+            </td>
+            <td class="danfe-cell" style="width: 15%;">
+                <span class="lbl-title">CNPJ/CPF</span>
+                <span class="val-content">{$pessoa_cpf_cnpj}</span>
+            </td>
+            <td class="danfe-cell" colspan="2" style="width: 20%;">
+                <span class="lbl-title">Data emissão</span>
+                <span class="val-content text-center">{$cadastro}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="danfe-cell" colspan="2">
+                <span class="lbl-title">Endereço</span>
+                <span class="val-content">{$logradouro} {$numero} {$complemento}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">Bairro</span>
+                <span class="val-content">{$bairro}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">CEP</span>
+                <span class="val-content">{$cep}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">Data saída</span>
+                <span class="val-content text-center">{$cadastro}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="danfe-cell">
+                <span class="lbl-title">Município</span>
+                <span class="val-content">{$local_municipio_descricao}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">UF</span>
+                <span class="val-content">{$local_uf_descricao}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">Inscrição Estadual</span>
+                <span class="val-content">{$pessoa_pj_inscricao_estadual}</span>
+            </td>
+            <td class="danfe-cell" colspan="2">
+                <span class="lbl-title">Hora saída</span>
+                <span class="val-content text-center">{$hora_saida}</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 5: FATURA / DUPLICATAS (Com laço de parcelas dinâmico) -->
+    <table class="items-table" style="margin-bottom: 5px;">
+        <colgroup>
+            <col style="width: 33.33%;">
+            <col style="width: 33.33%;">
+            <col style="width: 33.33%;">
+        </colgroup>
+        <thead>
+            <tr>
+                <th colspan="3" class="section-header" style="text-align: left; font-size: 7.5px; padding: 2px 4px;">Faturas</th>
+            </tr>
+            <tr style="background-color: #fbfcfd; color: #555555; font-size: 6px; font-weight: bold;">
+                <td class="text-center">Número</td>
+                <td class="text-center">Vencimento</td>
+                <td class="text-right">Valor</td>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[parcelas]-->
+            <tr class="linha-parc-{$parcela}">
+                <td class="text-center">{$parcela}</td>
+                <td class="text-center bold">{$vencimento}</td>
+                <td class="text-right bold">{$valor}</td>
+            </tr>
+            <!--[/parcelas]-->
+        </tbody>
+    </table>
+
+    <!-- BLOCO 6: CÁLCULO DO IMPOSTO -->
+    <table class="grid-table" style="margin-bottom: 5px;">
+        <colgroup>
+            <col style="width: 16%;">
+            <col style="width: 16%;">
+            <col style="width: 17%;">
+            <col style="width: 17%;">
+            <col style="width: 17%;">
+            <col style="width: 17%;">
+        </colgroup>
+        <tr>
+            <td colspan="6" class="section-header" style="font-size: 7.5px; padding: 2px 4px;">Cálculo do imposto</td>
+        </tr>
+        <tr>
+            <td class="danfe-cell" style="width: 16%;">
+                <span class="lbl-title">Base de cálculo do ICMS</span>
+                <span class="val-content">{$total_icms_base}</span>
+            </td>
+            <td class="danfe-cell" style="width: 16%;">
+                <span class="lbl-title">Valor do ICMS</span>
+                <span class="val-content">{$total_icms_valor}</span>
+            </td>
+            <td class="danfe-cell" style="width: 17%;">
+                <span class="lbl-title">Base de cálculo do ICMS Subst.</span>
+                <span class="val-content">{$total_st_base}</span>
+            </td>
+            <td class="danfe-cell" style="width: 17%;">
+                <span class="lbl-title">Valor do ICMS Subst.</span>
+                <span class="val-content">{$total_st_valor}</span>
+            </td>
+            <td class="danfe-cell" style="width: 17%;">
+                <span class="lbl-title">Valor do FCP ST</span>
+                <span class="val-content">{$total_fcp_st_valor}</span>
+            </td>
+            <td class="danfe-cell" style="width: 17%;">
+                <span class="lbl-title">Valor total dos produtos</span>
+                <span class="val-content bold">{$subtotal_produto}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="danfe-cell">
+                <span class="lbl-title">Valor do frete</span>
+                <span class="val-content">{$total_frete}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">Valor do seguro</span>
+                <span class="val-content">{$total_seguro_valor}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">Desconto</span>
+                <span class="val-content">{$desconto_produto}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">Outras despesas acessórias</span>
+                <span class="val-content">{$total_despesa_outras}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">Valor do IPI</span>
+                <span class="val-content">{$total_ipi_valor}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">Valor total da nota</span>
+                <span class="val-content bold">{$total_nf}</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 7: TRANSPORTADOR / VOLUMES TRANSPORTADOS -->
+    <table class="grid-table" style="margin-bottom: 5px;">
+        <colgroup>
+            <col style="width: 25%;">
+            <col style="width: 15%;">
+            <col style="width: 10%;">
+            <col style="width: 15%;">
+            <col style="width: 10%;">
+            <col style="width: 25%;">
+        </colgroup>
+        <tr>
+            <td colspan="6" class="section-header" style="font-size: 7.5px; padding: 2px 4px;">Transportador/Volumes transportados</td>
+        </tr>
+        <tr>
+            <td class="danfe-cell" style="width: 25%;">
+                <span class="lbl-title">Nome / Razão Social</span>
+                <span class="val-content">{$pessoa_transportadora_descricao}</span>
+            </td>
+            <td class="danfe-cell" style="width: 15%;">
+                <span class="lbl-title">Frete por conta</span>
+                <span class="val-content">{$frete_por_conta}</span>
+            </td>
+            <td class="danfe-cell" style="width: 10%;">
+                <span class="lbl-title">Código ANTT</span>
+                <span class="val-content">{$antt_codigo}</span>
+            </td>
+            <td class="danfe-cell" style="width: 15%;">
+                <span class="lbl-title">Placa do veículo</span>
+                <span class="val-content">{$veiculo_placa}</span>
+            </td>
+            <td class="danfe-cell" style="width: 10%;">
+                <span class="lbl-title">UF</span>
+                <span class="val-content text-center">{$veiculo_uf}</span>
+            </td>
+            <td class="danfe-cell" style="width: 25%;">
+                <span class="lbl-title">CNPJ/CPF</span>
+                <span class="val-content">{$pessoa_transportadora_cpf_cnpj}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="danfe-cell" colspan="3">
+                <span class="lbl-title">Endereço</span>
+                <span class="val-content">{$pessoa_transportadora_logradouro}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">Município</span>
+                <span class="val-content">{$pessoa_transportadora_local_municipio_descricao}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">UF</span>
+                <span class="val-content text-center">{$pessoa_transportadora_local_uf_sigla}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">Inscrição Estadual</span>
+                <span class="val-content">{$pessoa_transportadora_pj_inscricao_estadual}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="danfe-cell">
+                <span class="lbl-title">Quantidade</span>
+                <span class="val-content text-center">{$volume_qtde}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">Espécie</span>
+                <span class="val-content">{$volume_especie}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">Marca</span>
+                <span class="val-content">{$volume_marca}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">Numeração</span>
+                <span class="val-content text-center">{$volume_numeracao}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">Peso bruto</span>
+                <span class="val-content text-center">{$volume_peso_bruto}</span>
+            </td>
+            <td class="danfe-cell">
+                <span class="lbl-title">Peso líquido</span>
+                <span class="val-content text-center">{$volume_peso_liquido}</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 8.1: TÍTULO ITENS DA NOTA FISCAL (Borda divisória inferior adicionada para união perfeita de 1px solid #000000) -->
+    <table style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; border-bottom: 1px solid #000000; margin-bottom: 0px !important;">
+        <tr>
+            <td class="section-header" style="font-size: 7.5px; padding: 2px 4px;">Itens da nota fiscal</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 8.2: ITENS DA NOTA FISCAL (PRODUTOS) (Colunas travadas nas células do cabeçalho) -->
+    <table class="items-table" style="margin-bottom: 5px; border-top: none !important;">
+        <colgroup>
+            <col width="5%">
+            <col width="25%">
+            <col width="8%">
+            <col width="6%">
+            <col width="5%">
+            <col width="4%">
+            <col width="6%">
+            <col width="7%">
+            <col width="8%">
+            <col width="6%">
+            <col width="6%">
+            <col width="5%">
+            <col width="4%">
+            <col width="5%">
+        </colgroup>
+        <thead>
+            <tr style="font-size: 6px;">
+                <th class="text-center" style="width: 5%;">Cód</th>
+                <th class="text-left" style="width: 25%;">Descrição do produto/serviço</th>
+                <th class="text-center" style="width: 8%;">Ncm/Sh</th>
+                <th class="text-center" style="width: 6%;">Csosn</th>
+                <th class="text-center" style="width: 5%;">Cfop</th>
+                <th class="text-center" style="width: 4%;">Un</th>
+                <th class="text-center" style="width: 6%;">Qtde</th>
+                <th class="text-right" style="width: 7%;">Preço un</th>
+                <th class="text-right" style="width: 8%;">Preço total</th>
+                <th class="text-right" style="width: 6%;">BC ICMS</th>
+                <th class="text-right" style="width: 6%;">Vlr.ICMS</th>
+                <th class="text-right" style="width: 5%;">Vlr.IPI</th>
+                <th class="text-center" style="width: 4%;">%ICMS</th>
+                <th class="text-center" style="width: 5%;">%IPI</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[produtos]-->
+            <tr class="linha-prod-{$produto_id}" style="font-size: 7px;">
+                <td class="text-center">{$produto_id}</td>
+                <td class="bold">{$produto_descricao}</td>
+                <td class="text-center">{$tributo_tab_classfiscal_ncm}</td>
+                <td class="text-center">{$tributo_tab_icms_st_origem_cst_codigo}{$tributo_tab_icms_st_cst_codigo}</td>
+                <td class="text-center">{$tributo_tab_cfop_codigo}</td>
+                <td class="text-center">{$sigla}</td>
+                <td class="text-center">{$qtde}</td>
+                <td class="text-right">{$preco}</td>
+                <td class="text-right bold">{$total}</td>
+                <td class="text-right">{$icms_base}</td>
+                <td class="text-right">{$icms_valor}</td>
+                <td class="text-right">{$ipi_valor}</td>
+                <td class="text-center">{$icms_aliq}</td>
+                <td class="text-center">{$ipi_aliq}</td>
+            </tr>
+            <!--[/produtos]-->
+        </tbody>
+    </table>
+
+    <!-- BLOCO 9: CÁLCULO DO ISSQN -->
+    <table class="grid-table" style="margin-bottom: 5px;">
+        <colgroup>
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+        </colgroup>
+        <tr>
+            <td colspan="4" class="section-header" style="font-size: 7.5px; padding: 2px 4px;">Cálculo do ISSQN</td>
+        </tr>
+        <tr>
+            <td class="danfe-cell" style="width: 25%;">
+                <span class="lbl-title">Inscrição Municipal</span>
+                <span class="val-content">{$inscricao_municipal}</span>
+            </td>
+            <td class="danfe-cell" style="width: 25%;">
+                <span class="lbl-title">Valor total dos serviços</span>
+                <span class="val-content">{$subtotal_servico}</span>
+            </td>
+            <td class="danfe-cell" style="width: 25%;">
+                <span class="lbl-title">Base de cálculo do ISSQN</span>
+                <span class="val-content">{$total_issqn_base}</span>
+            </td>
+            <td class="danfe-cell" style="width: 25%;">
+                <span class="lbl-title">Valor do ISSQN</span>
+                <span class="val-content">{$total_issqn_valor}</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 10: DADOS ADICIONAIS -->
+<table class="grid-table" style="margin-bottom: 0px;">
+    <colgroup>
+        <col style="width: 60%;">
+        <col style="width: 40%;">
+    </colgroup>
+
+    <tr>
+        <td colspan="2" class="section-header"
+            style="font-size: 7.5px; padding: 2px 4px;">
+            Dados adicionais
+        </td>
+    </tr>
+
+    <tr>
+    <td class="danfe-cell"
+        style="width: 60%; height: 60px; vertical-align: top !important; font-size: 7px; padding: 4px;">
+
+        <div style="font-size: 7px; margin: 0 0 8px 0;">
+            Observações
+        </div>
+
+        <div style="font-size: 7px; margin: 0;">
+            {$dados_complementares}
+        </div>
+
+    </td>
+
+    <td class="danfe-cell"
+        style="width: 40%; height: 60px; vertical-align: top !important; font-size: 7px; padding: 4px;">
+
+        <div style="font-size: 7px; margin: 0 0 8px 0;">
+            Reservado ao fisco
+        </div>
+
+        </td>
+    </tr>
+
+</table>
+
+</body>
+</html>
+<!--[/main]-->

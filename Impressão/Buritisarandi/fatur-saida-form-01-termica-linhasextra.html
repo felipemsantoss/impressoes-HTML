@@ -1,0 +1,198 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cupom de Faturamento</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL NO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            font-weight: bold !important;
+            color: #000000 !important;
+        }
+
+        /* DIMENSÕES FÍSICAS EXATAS DO SEU PRINT DO LIBREOFFICE (BOBINA TÉRMICA) */
+        @page {
+            size: 8.00cm 14.80cm; /* Largura padrão de 80mm por 14.8cm de altura */
+            /* Margens: Top (0.0cm) | Right (0.6cm) | Bottom (0.4cm) | Left (0.3cm) */
+            margin: 0.00cm 0.60cm 0.40cm 0.30cm; 
+        }
+
+        /* RESET E FONTES DE ALTA DENSIDADE EM 8PX PARA CUPOM TÉRMICO */
+        body {
+            font-size: 10px;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-prod- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS ULTRA-COMPACTAS */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; /* Força o alinhamento perfeito das colunas */
+            margin-bottom: 4px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 1.5px 2px; /* Espaçamento microscópico para bobina estreita */
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .nowrap { white-space: nowrap; }
+
+        /* TABELA SEM GRADE PARA CLIENTE E FINANCEIRO */
+        .grid-table {
+            margin-bottom: 4px;
+        }
+        .grid-table td, .grid-table th {
+            border: none; /* Remove as grades */
+        }
+        
+        /* CABEÇALHOS */
+        .section-header {
+            background-color: #e5e5e5;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 2px 3px;
+        }
+
+        .lbl {
+            font-size: 10px;
+            width: 35%; /* Ajustado proporcionalmente para a largura do cupom */
+        }
+        .val {
+            width: 65%;
+        }
+
+        /* TABELAS DE ITENS (BOBINA) - ESTAS MANTÊM AS GRADES */
+        .items-table th {
+            background-color: #e5e5e5;
+            font-size: 9px;
+            text-transform: uppercase;
+            border: 1px solid #000000;
+            padding: 2px 2px;
+        }
+        .items-table td {
+            border-bottom: 1px dashed #000000;
+            padding: 2px 2px;
+            font-size: 9px;
+        }
+
+        /* DESTAQUE DO TOTAL GERAL SEM GRADE NO CUPOM */
+        .total-row td {
+            font-size: 11px;
+            padding: 3px 4px;
+            border: none !important; /* Remove as grades do total */
+        }
+        .divider {
+            border-bottom: 1px solid #000000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO DO CUPOM TÉRMICO -->
+    <div style="text-align: center; border-bottom: 1px solid #000000; padding-bottom: 4px; margin-bottom: 5px; margin-top: 5px;">
+        <span style="font-size: 10px; text-transform: uppercase;">Emissão: {$cadastro}</span><br>
+        <span style="font-size: 10px;">Faturamento Id {$id} &ndash; Nº {$codigo}</span><br>
+        <span style="font-size: 10px; display: block; margin-top: 3px;">{$pessoa_unidade_descricao}</span>
+        <span style="font-size: 9px; display: block; margin-top: 1px;">
+            Fone: {$p_unidade_fone1} &bull; Email: {$pessoa_unidade_email}
+        </span>
+    </div>
+
+    <!-- BLOCO 1: DADOS DO CLIENTE (Sem grades) -->
+    <table class="grid-table">
+        <tr>
+            <td class="lbl">Cliente:</td>
+            <td class="val">{$pessoa_id} &ndash; {$pessoa_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Cnpj/Cpf:</td>
+            <td class="val">{$pessoa_cpf_cnpj}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Telefone:</td>
+            <td class="val">{$pessoa_fone1}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Endereço:</td>
+            <td class="val">{$logradouro} {$numero}, {$bairro}, {$local_municipio_descricao}/{$local_uf_descricao}</td>
+        </tr>
+    </table>
+
+    <!-- TRÊS LINHAS ESPAÇADAS PARA ESCRITA MANUAL CONFORME REQUISITADO -->
+    <div class="divider" style="margin-top: 15px;"></div>
+    <div class="divider" style="margin-top: 15px;"></div>
+    <div class="divider" style="margin-top: 15px; margin-bottom: 8px;"></div>
+
+    <!-- BLOCO 2: ITENS DO FATURAMENTO (PRODUTOS) - MANTÉM AS BORDAS -->
+    <table class="items-table" style="margin-bottom: 4px;">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 11%;">Cód</th>
+                <th style="text-align: left; width: 38%;">Produto</th>
+                <th class="text-center" style="width: 13%;">Qtd</th>
+                <th class="text-center" style="width: 9%;">Un</th>
+                <th class="text-right" style="width: 15%;">Preço</th>
+                <th class="text-right" style="width: 16%;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[produtos]-->
+            <tr class="linha-prod-{$produto_id}">
+                <td class="text-center">{$produto_id}</td>
+                <td><span>{$produto_descricao}</span></td>
+                <td class="text-center">{$qtde}</td>
+                <td class="text-center">{$sigla}</td>
+                <td class="text-right">{$preco}</td>
+                <td class="text-right">{$total}</td>
+            </tr>
+            <!--[/produtos]-->
+        </tbody>
+    </table>
+
+    <!-- BLOCO 3: FECHAMENTO FINANCEIRO VERTICAL (Sem grades) -->
+    <table class="grid-table" style="margin-bottom: 4px;">
+        <tr>
+            <td class="lbl" style="width: 40%;">Desconto:</td>
+            <td class="val text-right">{$desconto_produto}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Produto:</td>
+            <td class="val text-right">{$total_produto}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Pgto:</td>
+            <td class="val text-right">{$financ_forma_pgto_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Prazo:</td>
+            <td class="val text-right">{$financ_prazao_pgto_descricao}</td>
+        </tr>
+        <tr class="total-row">
+            <td style="padding: 3px 4px; font-size: 10px;">Total:</td>
+            <td class="text-right" style="padding: 3px 4px; font-size: 11px;">{$total_nf}</td>
+        </tr>
+    </table>
+
+    <!-- BANNER SEM VALOR FISCAL & VENDEDOR -->
+    <div style="text-align: center; font-size: 9px; margin-top: 8px; margin-bottom: 5px; letter-spacing: 0.5px; text-transform: uppercase;">
+        DOCUMENTO SEM VALOR FISCAL
+    </div>
+    <div style="font-size: 8px; margin-top: 5px; border-top: 1px dashed #000000; padding-top: 3px;">
+        <span>Vendedor:</span> {$pessoa_responsavel_descricao}
+    </div>
+
+</body>
+</html>
+<!--[/main]-->

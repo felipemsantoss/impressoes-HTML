@@ -1,0 +1,199 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrato de Comodato</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA DAS DIRETRIZES DO LIBREOFFICE (A4 - RETRATO) */
+        @page {
+            size: 21.00cm 29.70cm; /* Tamanho físico A4 */
+            margin: 1.8cm 1.5cm 1.8cm 1.5cm; 
+        }
+
+        /* RESET E CONFIGURAÇÕES DE TEXTO LEGAL */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10.5px;
+            color: #111111;
+            line-height: 1.4;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* EVITA QUE PARÁGRAFOS OU LISTAS SE QUEBREM DE FORMA ÓRFÃ */
+        p, li {
+            page-break-inside: avoid;
+        }
+
+        /* ESTILOS DE PARÁGRAFO E CLÁUSULAS */
+        p {
+            text-align: justify;
+            text-indent: 25px; /* Recuo padrão de parágrafo */
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+        
+        .no-indent {
+            text-indent: 0 !important;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        /* TABELA DE ITENS - CORREÇÃO DE COLAPSO DO DOMPDF */
+        .grid-table {
+            width: 100%;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            border-top: 1px solid #cbd5e0;
+            border-left: 1px solid #cbd5e0;
+            margin-top: 5px;
+            margin-bottom: 12px;
+            page-break-inside: avoid;
+        }
+        .grid-table th, .grid-table td {
+            border-right: 1px solid #cbd5e0;
+            border-bottom: 1px solid #cbd5e0;
+            padding: 5px 6px;
+            text-align: left;
+            font-size: 9.5px;
+            vertical-align: middle;
+        }
+        .grid-table th {
+            background-color: #f7fafc;
+            font-weight: bold;
+        }
+
+        /* TABELA DE ASSINATURAS */
+        .signature-container {
+            page-break-inside: avoid;
+            margin-top: 30px;
+        }
+        .signature-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .signature-table td {
+            border: none;
+            padding: 0;
+            text-align: center;
+            vertical-align: top;
+        }
+        .signature-line {
+            border-top: 1px solid #111111;
+            width: 80%;
+            margin: 0 auto;
+            padding-top: 5px;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Logo e Cabeçalho do Contrato (Tamanho 200px) -->
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr>
+            <td style="width: 30%; vertical-align: middle; padding: 0; border: none;">
+                <img src="{$unidade_image}" style="width: 200px; max-height: 50px; object-fit: contain;" alt="Logo">
+            </td>
+            <td style="width: 70%; text-align: right; vertical-align: middle; padding: 0; border: none;">
+                <span class="bold" style="font-size: 14px; color: #2c3e50; text-transform: uppercase;">Contrato de comodato</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Qualificação das Partes com variáveis exatas do PDF -->
+    <p>Pelo presente instrumento particular de COMODATO, de um lado o <span class="bold">{$pessoa_unidade_descricao}</span>, residente na {$pes_un_logradouro} {$pes_un_numero}, {$pes_un_bairro}. {$pes_un_local_municipio_descricao}/{$pes_un_local_uf_sigla} CNPJ nº {$pes_un_cpf_cnpj}, de ora em diante denominado simplesmente COMODANTE, e, de outro lado <span class="bold">{$pessoa_descricao}</span>, residente na {$pes_logradouro} {$pes_numero}, {$pes_bairro}. {$pes_local_municipio_descricao}/{$pes_local_uf_sigla} portador do CPF / CNPJ nº {$pes_cpf_cnpj}, de ora em diante denominado simplesmente de COMODATÁRIO, têm justo e contratado o seguinte:</p>
+
+    <!-- Cláusula 1ª e Tabela de Itens (Produtos) -->
+    <p class="bold no-indent">CLÁUSULA 1°. O COMODANTE dá em comodato ao COMODATÁRIO dos itens abaixo</p>
+
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 10%;">
+            <col style="width: 54%;">
+            <col style="width: 12%;">
+            <col style="width: 12%;">
+            <col style="width: 12%;">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Cod.</th>
+                <th>Produto</th>
+                <th style="text-align: right;">Quantidade</th>
+                <th style="text-align: right;">Unitário</th>
+                <th style="text-align: right;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[produtos]-->
+            <tr>
+                <td>{$id}</td>
+                <td>{$produto_descricao}</td>
+                <td style="text-align: right; font-weight: bold;">{$qtde}</td>
+                <td style="text-align: right;">{$preco}</td>
+                <td style="text-align: right; font-weight: bold;">{$total}</td>
+            </tr>
+            <!--[/produtos]-->
+        </tbody>
+    </table>
+
+    <!-- Cláusulas Contratuais Adicionais -->
+    <p class="no-indent">para conservação de sorvetes e produtos congelados que serão fornecidos pelo COMODANTE para revenda pelo COMODATÁRIO em seu estabelecimento situado na {$pes_logradouro} {$pes_numero}, {$pes_bairro}. {$pes_local_municipio_descricao}/{$pes_local_uf_sigla}.</p>
+
+    <p class="no-indent"><span class="bold">CLÁUSULA 2°.</span> O comodato é por prazo de <span class="bold">1 (um) ano</span>, cessando, de direito, quando não mais for de interesse de qualquer das partes.</p>
+
+    <p class="no-indent"><span class="bold">CLÁUSULA 3°.</span> O COMODATÁRIO se obriga a devolver os itens da cláusula 1 em condições de perfeito funcionamento, devendo mantê-la como se dono fosse.</p>
+
+    <p class="no-indent"><span class="bold">CLÁUSULA 4°.</span> Os produtos a serem conservados na referida somente serão os fornecidos pelo COMODANTE, (sorvetes e seus derivados ou outros semelhantes como sucos, doces, cremes, etc.).</p>
+
+    <p class="no-indent"><span class="bold">CLÁUSULA 5°.</span> Correrão por conta do COMODATÁRIO todas as despesas dos dos itens como: eletricidade, despesas com manutenção de mecânico, limpeza e outras que se fizerem necessárias.</p>
+
+    <p class="no-indent"><span class="bold">CLÁUSULA 6°.</span> O COMODATÁRIO não poderá removê-la para outro local sem a devida autorização, por escrito, do COMODANTE, bem como é vedado o empréstimo ou aluguel a terceiros.</p>
+
+    <p class="no-indent"><span class="bold">CLÁUSULA 7°.</span> Para efeito deste contrato os itens têm o preço de {$total_servico} ({$total_servico_extenso}).</p>
+
+    <p class="no-indent"><span class="bold">CLÁUSULA 8°.</span> Fica Obrigatório o valor de pedido mínimo mensal de {$obs1}.</p>
+
+    <p class="no-indent"><span class="bold">CLÁUSULA 9°.</span> Fica eleito o foro desta cidade TAL para dirimir qualquer dúvida referente a este contrato.</p>
+
+    <p class="no-indent" style="margin-top: 15px;">Para firmeza e prova de assim haverem contratado, firmam o presente instrumento em duas vias de igual teor, na presença de testemunhas que a tudo assistiram e que de tudo conhecimento tiveram.</p>
+
+    <!-- BLOCO DE ASSINATURAS AGRUPADO (IMPEDE QUEBRA INDEVIDA) -->
+    <div class="signature-container">
+        <p class="bold no-indent" style="margin-bottom: 40px; font-size: 11px;">{$pes_local_municipio_descricao}/{$pes_local_uf_sigla} - {$cadastro}</p>
+
+        <table class="signature-table">
+            <colgroup>
+                <col style="width: 48%;">
+                <col style="width: 4%;">
+                <col style="width: 48%;">
+            </colgroup>
+            <tr>
+                <td>
+                    <div class="signature-line">
+                        <span class="bold">{$pessoa_unidade_descricao}</span><br>
+                        COMODANTE
+                    </div>
+                </td>
+                <td>&nbsp;</td>
+                <td>
+                    <div class="signature-line">
+                        <span class="bold">{$pessoa_descricao}</span><br>
+                        COMODATÁRIO
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Indicador de página 1/1 discreto no rodapé -->
+    <div style="position: fixed; bottom: -1.2cm; right: 0; font-size: 8px; color: #7f8c8d;">
+        1/1
+    </div>
+
+</body>
+</html>
+<!--[/main]-->

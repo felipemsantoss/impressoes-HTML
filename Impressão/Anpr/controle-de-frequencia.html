@@ -1,0 +1,464 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <title>Controle de Frequência Individual - Reabilitação Física</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO (MICRO-MARGENS PARA FORMULÁRIO) */
+        @page {
+            size: A4 portrait;
+            margin: 0.50cm 0.60cm;
+        }
+
+        body {
+            font-size: 13px;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            line-height: 1.15;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-center {
+            text-align: center !important;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        /* ESTRUTURA DE TABELAS PADRÃO (COLAPSO DE BORDAS PERFEITO NO DOMPDF) */
+        .sus-table {
+            width: 100%;
+            border-collapse: collapse !important;
+            table-layout: fixed;
+            margin: -1px 0 0 0;
+        }
+
+        .sus-table td {
+            border: 1px solid #000000 !important;
+            padding: 1px 4px;
+            vertical-align: top;
+        }
+
+        /* SEÇÃO DE CABEÇALHOS CINZA DO FORMULÁRIO */
+        .section-header {
+            background-color: #dddddd !important;
+            color: #000000 !important;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            padding: 2px 5px !important;
+        }
+
+        /* GRADE DA TABELA DE FREQUÊNCIA (BORDAS COMPLETAS) */
+        .freq-table {
+            width: 100%;
+            border-collapse: collapse !important;
+            table-layout: fixed;
+            margin-top: -1px;
+        }
+
+        .freq-table th, .freq-table td {
+            border: 1px solid #000000 !important;
+            padding: 2px 4px;
+            vertical-align: middle;
+        }
+
+        .freq-table th {
+            background-color: #eeeeee;
+            font-weight: bold;
+            font-size: 11.5px;
+            text-transform: uppercase;
+        }
+
+        /* RÓTULOS PEQUENOS NO TOPO DO CAMPO */
+        .lbl-title {
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #000000;
+            display: block;
+            margin-bottom: 1px;
+            line-height: 1.05;
+        }
+
+        /* VALORES E PREENCHIMENTOS */
+        .val-content {
+            font-size: 13px;
+            display: block;
+            min-height: 15px;
+        }
+
+        /* TABELA DE DIGITOS UNITÁRIOS (CNPJ, CPF, CEP, ETC) */
+        .digit-table {
+            border-collapse: collapse !important;
+            display: inline-table;
+            margin: 0 3px;
+            padding: 0;
+            vertical-align: middle;
+        }
+        .digit-table td {
+            border: 1px solid #000000 !important;
+            width: 17px;
+            height: 17px;
+            text-align: center;
+            font-size: 11px;
+            padding: 0 !important;
+            line-height: 16px;
+            font-weight: bold;
+        }
+
+        /* MINI CAIXAS DE MARCAÇÃO (SEXO / CONVÊNIO) */
+        .chk-box {
+            display: inline-block;
+            width: 11px;
+            height: 11px;
+            border: 1px solid #000000;
+            vertical-align: middle;
+        }
+
+        .mini-chk-table {
+            border-collapse: collapse;
+            display: inline-table;
+            margin: 0;
+        }
+
+        .mini-chk-table td {
+            border: none !important;
+            text-align: center;
+            padding: 0 8px !important;
+            font-size: 7.5px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO SUPERIOR DA FOLHA (SUS + MINISTÉRIO + TÍTULO DO CONTROLE) -->
+    <table class="sus-table" style="border: 1px solid #000000; margin-bottom: 6px;">
+        <colgroup>
+            <col width="15%">
+            <col width="15%">
+            <col width="50%">
+            <col width="20%">
+        </colgroup>
+        <tr>
+            <!-- SUS Logo Textual -->
+            <td style="width: 15%; text-align: center; vertical-align: middle; padding: 4px; border-right: 1px solid #000 !important;">
+                <div style="font-size: 15px; font-weight: bold; border: 1px solid #000; padding: 3px;">SUS</div>
+            </td>
+            <!-- Ministério da Saúde -->
+            <td style="width: 15%; text-align: center; vertical-align: middle; font-size: 8px; line-height: 1.15; border-right: 1px solid #000 !important;">
+                <strong>Sistema Único de Saúde</strong><br>
+                Ministério da Saúde
+            </td>
+            <!-- Título do Controle -->
+            <td class="text-center" style="width: 50%; vertical-align: middle; font-size: 12.5px; font-weight: bold; line-height: 1.3; border-right: 1px solid #000 !important;">
+                CONTROLE DE FREQUÊNCIA INDIVIDUAL<br>REABILITAÇÃO FÍSICA
+            </td>
+            <!-- Número de Prontuário -->
+            <td style="width: 20%; vertical-align: top; padding: 2px 4px;">
+                <span class="lbl-title">Nº do Prontuário</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 1: IDENTIFICAÇÃO DA UNIDADE -->
+    <table class="sus-table">
+        <colgroup>
+            <col width="55%">
+            <col width="45%">
+        </colgroup>
+        <tr>
+            <td colspan="2" class="section-header">Identificação da Unidade</td>
+        </tr>
+        <tr>
+            <td style="width: 55%; vertical-align: middle;">
+                <span class="val-content bold" style="font-size: 12.5px;">{$pessoa_unidade_descricao}</span>
+            </td>
+            <td style="width: 45%; text-align: right; vertical-align: middle;">
+                <span class="lbl-title" style="display: inline-block; margin-right: 5px; vertical-align: middle;">CNPJ</span>
+                <table class="digit-table" style="vertical-align: middle;">
+                    <tr>
+                        <td>7</td><td>9</td><td>1</td><td>4</td><td>0</td><td>8</td><td>2</td><td>8</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>3</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: DADOS DO USUÁRIO -->
+    <table class="sus-table">
+        <colgroup>
+            <col width="100%">
+        </colgroup>
+        <tr>
+            <td class="section-header">Dados do Usuário</td>
+        </tr>
+        <tr>
+            <td>
+                <span class="lbl-title">Nome do Usuário</span>
+                <span class="val-content">{$pessoa_descricao}</span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="sus-table">
+        <colgroup>
+            <col width="45%">
+            <col width="55%">
+        </colgroup>
+        <tr>
+            <td style="width: 45%;">
+                <span class="lbl-title">CPF ou CNS</span>
+                <span class="val-content" style="white-space: nowrap;">
+                    <table class="digit-table">
+                        <tr>
+                            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                        </tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 55%;">
+                <span class="lbl-title">Nome da Mãe ou Responsável</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="sus-table">
+        <colgroup>
+            <col width="64%">
+            <col width="9%">
+            <col width="27%">
+        </colgroup>
+        <tr>
+            <td style="width: 64%;">
+                <span class="lbl-title">Endereço (Logradouro, nº, complemento, bairro)</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 9%;">
+                <span class="lbl-title">DDD</span>
+                <span class="val-content" style="white-space: nowrap;">
+                    <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 27%;">
+                <span class="lbl-title">Nº Telefone</span>
+                <span class="val-content" style="white-space: nowrap;">
+                    <table class="digit-table">
+                        <tr>
+                            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                        </tr>
+                    </table>
+                </span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="sus-table">
+        <colgroup>
+            <col width="20%">
+            <col width="9%">
+            <col width="25%">
+            <col width="30%">
+            <col width="16%">
+        </colgroup>
+        <tr>
+            <td style="width: 20%;">
+                <span class="lbl-title">Município</span>
+                <span class="val-content"></span>
+            </td>
+            <td style="width: 9%;">
+                <span class="lbl-title">UF</span>
+                <span class="val-content" style="white-space: nowrap;">
+                    <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 25%;">
+                <span class="lbl-title">CEP</span>
+                <span class="val-content" style="white-space: nowrap;">
+                    <table class="digit-table">
+                        <tr>
+                            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                        </tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 30%;">
+                <span class="lbl-title">Data de Nascimento</span>
+                <span class="val-content" style="white-space: nowrap;">
+                    <table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table><span style="display: inline-block; vertical-align: middle;">/</span><table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table><span style="display: inline-block; vertical-align: middle;">/</span><table class="digit-table">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 16%;">
+                <span class="lbl-title">Sexo</span>
+                <span class="val-content">
+                    <table class="mini-chk-table">
+                        <tr><td>Masc.</td><td>Fem.</td></tr>
+                        <tr><td><span class="chk-box"></span></td><td><span class="chk-box"></span></td></tr>
+                    </table>
+                </span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="sus-table">
+        <colgroup>
+            <col width="12%">
+            <col width="6%">
+            <col width="6%">
+            <col width="76%">
+        </colgroup>
+        <tr>
+            <td style="width: 12%; vertical-align: middle;">
+                <span class="lbl-title" style="margin-bottom: 0;">Convênio</span>
+            </td>
+            <td style="width: 6%;" class="text-center">
+                <span class="lbl-title" style="text-align: center;">Sim</span>
+                <span class="val-content text-center"><span class="chk-box"></span></span>
+            </td>
+            <td style="width: 6%;" class="text-center">
+                <span class="lbl-title" style="text-align: center;">Não</span>
+                <span class="val-content text-center"><span class="chk-box"></span></span>
+            </td>
+            <td style="width: 76%;">
+                <span class="lbl-title">Nome do Convênio</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 3: DADOS DA SOLICITAÇÃO -->
+    <table class="sus-table">
+        <colgroup>
+            <col width="45%">
+            <col width="55%">
+        </colgroup>
+        <tr>
+            <td colspan="2" class="section-header">Dados da Solicitação</td>
+        </tr>
+        <tr>
+            <td style="width: 45%;">
+                <span class="lbl-title">Código do Procedimento</span>
+                <span class="val-content" style="white-space: nowrap;">
+                    <table class="digit-table">
+                        <tr>
+                            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                        </tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 55%;">
+                <span class="lbl-title">Nome do Procedimento</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 45%;">
+                <span class="lbl-title">CPF do Médico</span>
+                <span class="val-content" style="white-space: nowrap;">
+                    <table class="digit-table">
+                        <tr>
+                            <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                        </tr>
+                    </table>
+                </span>
+            </td>
+            <td style="width: 55%;">
+                <span class="lbl-title">Nome do Médico</span>
+                <span class="val-content"></span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 4: DECLARAÇÃO -->
+    <table class="sus-table" style="border: 1px solid #000000; margin-top: 4px;">
+        <colgroup>
+            <col width="100%">
+        </colgroup>
+        <tr>
+            <td class="text-center bold" style="font-size: 10.5px; padding: 4px; background-color: #eeeeee; border-bottom: 1px solid #000000 !important;">
+                DECLARAÇÃO
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; font-size: 10.5px; line-height: 1.4;">
+                DECLARO QUE NO MÊS <span class="bold">_________________________</span> DE 20<span class="bold">____</span>, O USUÁRIO IDENTIFICADO ACIMA FOI SUBMETIDO AO PROCEDIMENTO ACIMA RELACIONADO, CONFORME ASSINATURA DO MESMO ABAIXO.
+                <br><br>
+                MARINGÁ, <span class="bold">_____</span> DE <span class="bold">___________________________</span> DE 20<span class="bold">____</span>.
+                <br><br><br>
+                <div class="text-right" style="width: 90%; margin-left: auto; border-top: 1px solid #000; padding-top: 2px; font-size: 8px; text-transform: uppercase; font-weight: bold;">
+                    Assinatura do Responsável da Unidade
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 5: TABELA DE FREQUÊNCIA (1 A 15) -->
+    <table class="freq-table">
+        <colgroup>
+            <col width="8%">
+            <col width="22%">
+            <col width="70%">
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 8%;">N.º</th>
+                <th class="text-center" style="width: 22%;">Data</th>
+                <th style="width: 70%; text-align: left; padding-left: 10px;">Assinatura do Usuário</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Gerando as 15 linhas físicas exatas para o controle de frequência -->
+            <tr><td class="text-center bold">1</td><td class="text-center">&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; /</td><td>&nbsp;</td></tr>
+            <tr><td class="text-center bold">2</td><td class="text-center">&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; /</td><td>&nbsp;</td></tr>
+            <tr><td class="text-center bold">3</td><td class="text-center">&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; /</td><td>&nbsp;</td></tr>
+            <tr><td class="text-center bold">4</td><td class="text-center">&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; /</td><td>&nbsp;</td></tr>
+            <tr><td class="text-center bold">5</td><td class="text-center">&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; /</td><td>&nbsp;</td></tr>
+            <tr><td class="text-center bold">6</td><td class="text-center">&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; /</td><td>&nbsp;</td></tr>
+            <tr><td class="text-center bold">7</td><td class="text-center">&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; /</td><td>&nbsp;</td></tr>
+            <tr><td class="text-center bold">8</td><td class="text-center">&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; /</td><td>&nbsp;</td></tr>
+            <tr><td class="text-center bold">9</td><td class="text-center">&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; /</td><td>&nbsp;</td></tr>
+            <tr><td class="text-center bold">10</td><td class="text-center">&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; /</td><td>&nbsp;</td></tr>
+            <tr><td class="text-center bold">11</td><td class="text-center">&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; /</td><td>&nbsp;</td></tr>
+            <tr><td class="text-center bold">12</td><td class="text-center">&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; /</td><td>&nbsp;</td></tr>
+            <tr><td class="text-center bold">13</td><td class="text-center">&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; /</td><td>&nbsp;</td></tr>
+            <tr><td class="text-center bold">14</td><td class="text-center">&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; /</td><td>&nbsp;</td></tr>
+            <tr><td class="text-center bold">15</td><td class="text-center">&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; /</td><td>&nbsp;</td></tr>
+        </tbody>
+    </table>
+
+    <div style="font-size: 6px; color: #555555; margin-top: 3px; font-weight: bold;">
+        Cód 11.2 - Mod 324
+    </div>
+
+</body>
+</html>
+<!--[/main]-->

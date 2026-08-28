@@ -1,0 +1,112 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Capa do Contrato de Locação</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 2.00cm 1.50cm;
+        }
+
+        body {
+            font-size: 11px;
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.45;
+            background-color: #ffffff;
+            text-align: center;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        /* CONFIGURAÇÃO DE ESPAÇAMENTO VERTICAL DA CAPA */
+        .container {
+            width: 100%;
+            margin-top: 2.00cm;
+        }
+
+        .logo-box {
+            margin-bottom: 60px;
+        }
+
+        .title-box {
+            margin-bottom: 120px;
+        }
+
+        .client-name {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .contract-info {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .vehicle-box {
+            margin-bottom: 120px;
+        }
+
+        .vehicle-model {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .vehicle-plate {
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .date-box {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Logo Centralizada (Tamanho 200px conforme especificado) -->
+        <div class="logo-box">
+            <img src="{$unidade_image}" style="width: 250px; max-height: 120px; object-fit: contain;" alt="Logo Unidade">
+        </div>
+
+        <!-- Informações do Contrato e Cliente -->
+        <div class="title-box">
+            <div class="client-name">{$pessoa_descricao}</div>
+            <div class="contract-info">Contrato N {$id} - {$cadastro}</div>
+        </div>
+
+        <!-- Seção do Veículo com Laço de Repetição [veiculos] Ativo -->
+        <!--[veiculos]-->
+        <div class="vehicle-box">
+            <div class="vehicle-model">{$veiculo_modelo_descricao}</div>
+            <div class="vehicle-plate">{$veiculo_placa}</div>
+        </div>
+        <!--[/veiculos]-->
+
+        <!-- Informações de Vigência -->
+        <div class="date-box">
+            <div>{$inicio}</div>
+            <div>Retorno: {$termino}</div>
+        </div>
+    </div>
+
+</body>
+</html>
+<!--[/main]-->

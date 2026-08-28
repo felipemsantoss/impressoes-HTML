@@ -1,0 +1,287 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Ordem de Serviço - Donadoni</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL E CORREÇÃO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 20px 20px 35px 20px;
+        }
+
+        /* RESET, FONTES 9PX E COR PRETA (MONOCROMÁTICO) */
+        body {
+            font-size: 9px;
+            color: #000000; /* Preto absoluto */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* RODAPÉ REAL E REPETÍVEL (DATA DA IMPRESSÃO) */
+        .footer {
+            position: fixed;
+            bottom: -20px;
+            left: 0px;
+            right: 0px;
+            height: 15px;
+            text-align: right;
+            font-size: 8px;
+            color: #333333;
+        }
+
+        /* ESTRUTURA GERAL DAS TABELAS TIPO FORMULÁRIO */
+        table {
+            width: 100%;
+            border-collapse: collapse !important;
+            table-layout: fixed !important; /* CORREÇÃO CRÍTICA DOMPDF */
+            margin-bottom: 5px; /* Espaço entre os blocos */
+        }
+        
+        td, th {
+            border: 1px solid #000000; /* Borda preta sólida padrão */
+            vertical-align: middle;
+            padding: 3px 4px;
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        /* CLASSE PARA TABELA SEM BORDAS (USADA NOS DADOS DO CLIENTE) */
+        .no-border td {
+            border: none !important;
+            padding: 2px 4px;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .bold { font-weight: bold; }
+        
+        /* FUNDO CINZA CLARO PARA CABEÇALHOS */
+        .bg-gray {
+            background-color: #cccccc;
+            font-weight: bold;
+        }
+
+        /* TRUQUE DO PONTO BRANCO (FORÇA ALTURA DA LINHA) */
+        .dot-height {
+            color: #ffffff; /* Fica invisível no papel branco */
+            font-size: 9px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- RODAPÉ FIXO -->
+    <div class="footer">
+        Impresso em: <span class="bold">{$data_hoje}</span>
+    </div>
+
+    <!-- BLOCO 1: CABEÇALHO (LOGO, DADOS DA EMPRESA ESTÁTICOS, OS) -->
+    <table style="margin-bottom: 0; border-bottom: none;">
+        <colgroup>
+            <col width="25%">
+            <col width="50%">
+            <col width="25%">
+        </colgroup>
+        <tr>
+            <td style="width: 25%; text-align: center; border-right: none; padding: 5px;">
+                <img src="{$unidade_image}" style="max-width: 150px; max-height: 60px;" alt="Logo TRIAX">
+            </td>
+            <td style="width: 50%; text-align: center; border-left: none; border-right: 1px solid #000000; font-size: 9px; line-height: 1.2;">
+                <span class="bold">DONADONI COMERCIO DE ELETRONICOS LTDA</span><br>
+                AVENIDA COLOMBO, 4713 &ndash; 87.030-121 &ndash; MARINGÁ/PR<br>
+                <span class="bold">Fone:</span> (44) 30282826<br>
+                07.274.832/0001-45<br>
+                <span style="font-style: italic;">CONTATO@TRIAXTI.COM.BR</span>
+            </td>
+            <td style="width: 25%; font-size: 10px; line-height: 1.4; vertical-align: top; padding: 5px;">
+                <span class="bold" style="font-size: 11px;">OS: [{$id}]</span><br>
+                Data: {$cadastro}<br>
+                Por: {$pessoa_responsavel_descricao}
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: DADOS DO CLIENTE (SEM GRADES / BORDAS - COLUNAS TRAVADAS VIA COLGROUP E INLINE NO PRIMEIRO TR) -->
+    <table class="no-border" style="border: 1px solid #000000; border-top: none;">
+        <colgroup>
+            <col width="35%">
+            <col width="15%">
+            <col width="15%">
+            <col width="35%">
+        </colgroup>
+        <tr>
+            <td colspan="2" style="width: 50%;"><span class="bold">Cliente:</span> {$pessoa_id} - {$pessoa_descricao}</td>
+            <td colspan="2" style="width: 50%;"><span class="bold">Fantasia:</span> {$pessoa_pj_fantasia}</td>
+        </tr>
+        <tr>
+            <td style="width: 35%;"><span class="bold">Telefone:</span> {$pessoa_fone1} - {$pessoa_fone2}</td>
+            <td style="width: 30%;" colspan="2"><span class="bold">Cnpj/Cpf:</span> {$pessoa_cpf_cnpj}</td>
+            <td style="width: 35%;"><span class="bold">IE:</span> {$pessoa_pj_inscricao_estadual}</td>
+        </tr>
+        <tr>
+            <td colspan="3"><span class="bold">Endereço:</span> {$logradouro} &ndash; {$numero} &ndash; {$complemento}</td>
+            <td><span class="bold">Cidade:</span> {$local_municipio_descricao} &ndash; {$local_uf_descricao}</td>
+        </tr>
+        <tr>
+            <td colspan="3"><span class="bold">Bairro:</span> {$bairro}</td>
+            <td><span class="bold">CEP:</span> {$cep}</td>
+        </tr>
+        <tr>
+            <td colspan="2"><span class="bold">Contato:</span> {$contato} - {$contato_fone}</td>
+            <td colspan="2"><span class="bold">E-mail:</span> {$pessoa_email}</td>
+        </tr>
+        <tr>
+            <td colspan="4"><span class="bold">Descrição do Orçamento:</span> {$cod_externo}</td>
+        </tr>
+        <tr>
+            <td colspan="4" style="font-size: 10px; padding-bottom: 5px;"><span class="bold">Solicitação:</span> {$defeito}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 3: TABELA DE PRODUTOS (COLUNAS TRAVADAS ATRAVÉS DE ATRIBUTO WIDTH E INLINE NO CABEÇALHO) -->
+    <table>
+        <colgroup>
+            <col width="10%">
+            <col width="50%">
+            <col width="10%">
+            <col width="15%">
+            <col width="15%">
+        </colgroup>
+        <thead>
+            <tr class="bg-gray text-center">
+                <td style="width: 10%;">Código</td>
+                <td class="text-left" style="width: 50%;">Produto</td>
+                <td style="width: 10%;">Quant.</td>
+                <td style="width: 15%;">Unitário</td>
+                <td style="width: 15%;">Total</td>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 8 Linhas vazias forçadas pelo ponto invisível -->
+            <tr><td class="text-center"><span class="dot-height">.</span></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td class="text-center"><span class="dot-height">.</span></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td class="text-center"><span class="dot-height">.</span></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td class="text-center"><span class="dot-height">.</span></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td class="text-center"><span class="dot-height">.</span></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td class="text-center"><span class="dot-height">.</span></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td class="text-center"><span class="dot-height">.</span></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td class="text-center"><span class="dot-height">.</span></td><td></td><td></td><td></td><td></td></tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" style="border-right: none;">Obs:</td>
+                <td colspan="2" class="text-right" style="border-left: none;">Total Produtos</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- BLOCO 4: TABELA DE SERVIÇOS (COLUNAS TRAVADAS ATRAVÉS DE ATRIBUTO WIDTH E INLINE NO CABEÇALHO) -->
+    <table>
+        <colgroup>
+            <col width="10%">
+            <col width="50%">
+            <col width="10%">
+            <col width="15%">
+            <col width="15%">
+        </colgroup>
+        <thead>
+            <tr class="bg-gray text-center">
+                <td style="width: 10%;">Código</td>
+                <td class="text-left" style="width: 50%;">Serviço</td>
+                <td style="width: 10%;">Quant.</td>
+                <td style="width: 15%;">Unitário</td>
+                <td style="width: 15%;">Total</td>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 5 Linhas vazias forçadas pelo ponto invisível -->
+            <tr><td class="text-center"><span class="dot-height">.</span></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td class="text-center"><span class="dot-height">.</span></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td class="text-center"><span class="dot-height">.</span></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td class="text-center"><span class="dot-height">.</span></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td class="text-center"><span class="dot-height">.</span></td><td></td><td></td><td></td><td></td></tr>
+        </tbody>
+        <tfoot>
+            <!-- Linha de Total de Serviços -->
+            <tr>
+                <td colspan="3" style="border-right: none;"></td>
+                <td class="text-right" style="border-left: none;">Total Serviços:</td>
+                <td></td>
+            </tr>
+            <!-- Seção "Obs" fundida nativamente na tabela -->
+            <tr>
+                <td colspan="5" style="vertical-align: top; font-size: 11px; height: 18px;">Obs</td>
+            </tr>
+            <!-- Linhas em branco integradas para preenchimento manual -->
+            <tr>
+                <td colspan="5" style="height: 18px;"></td>
+            </tr>
+            <tr>
+                <td colspan="5" style="height: 18px;"></td>
+            </tr>
+            <tr>
+                <td colspan="5" style="height: 18px;"></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- BLOCO 5: TERMO DE GARANTIA E RESPONSABILIDADE -->
+    <table>
+        <tr>
+            <td style="font-size: 8.5px; text-align: justify; padding: 4px; line-height: 1.2;">
+                Obs: A TRIAX não se responsabiliza pela procedência dos equipamentos de seus clientes, bem como seu software e acessórios. Todos os dados ou informações contidas nos equipamentos são de responsabilidade do cliente, ficando o mesmo responsável por fazer cópia de segurança (backup). A garantia terá validade de 30(trinta) dias para serviços. Para produtos será de acordo com o fabricante, a contar da data de instalação. Fica coberto pela garantia todas as partes, peças e componentes que apresentarem defeito de fabricação. Perde-se a garantia defeitos causados por acidentes, sinistros e agentes da natureza (raios, descargas eletricas, insetos, etc.). Constatando o defeito, o senhor cliente deverá comunicar imediatamente o técnico responsável pela instalação. Esse termo perderá seu valor se o equipamento ou serviços for manuseado por terceiros sem prévia autorização.
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 6: FECHAMENTO FINANCEIRO E ASSINATURAS (GRID IDÊNTICO AO PDF) -->
+    <table>
+        <colgroup>
+            <col width="70%">
+            <col width="30%">
+        </colgroup>
+        <tr>
+            <td style="border-right: 1px solid #000; border-bottom: none; padding-top: 4px; width: 70%;">
+                Forma de Pagamento: À vista(___) À prazo(___) Parcelas(___) Vencimento(___/___/___)
+            </td>
+            <td style="border-left: none; border-bottom: none; padding-top: 4px; width: 30%;">
+                SUBTotal:______________
+            </td>
+        </tr>
+        <tr>
+            <td style="border-right: 1px solid #000; border-top: none; border-bottom: none; padding-top: 4px;">
+                Tipo de cobrança: Contrato(___) &nbsp;&nbsp; Boleto (___) &nbsp;&nbsp; Doc. (___) &nbsp;&nbsp; Pix. (___)
+            </td>
+            <td style="border-left: none; border-top: none; border-bottom: none; padding-top: 4px;">
+                Desconto:______________
+            </td>
+        </tr>
+        <tr>
+            <td style="border-right: 1px solid #000; border-top: none; padding-top: 4px; padding-bottom: 6px;">
+                Entrada: __/__/____ ___:___ &nbsp;&nbsp;&nbsp;&nbsp; Saída: __/__/____ ___:___ &nbsp;&nbsp;&nbsp;&nbsp; Assistente:___________
+            </td>
+            <td style="border-left: none; border-top: none; padding-top: 4px; padding-bottom: 6px;">
+                Total:__________________
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding-top: 10px; padding-bottom: 10px;">
+                Técnico(p/extenso): _______________________________ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cliente(p/extenso): _______________________________
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

@@ -1,0 +1,451 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Ordem de Serviço</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL NO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DO SEU PRINT (A4 PORTRAIT) */
+        @page {
+            size: 21.00cm 29.70cm; /* Tamanho físico A4 retrato */
+            margin: 1.00cm 1.00cm 2.00cm 1.00cm; /* Margem inferior maior de 2.0cm para caber o disclaimer jurídico */
+        }
+
+        /* RESET E FONTES PADRONIZADAS EM 11PX (REDUÇÃO DE 1PX) */
+        body {
+            font-size: 10px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* TEXTO JURÍDICO FIXO E REPETÍVEL NO FINAL FÍSICO DA FOLHA (ESTILO LIBREOFFICE) */
+        .footer {
+            position: fixed;
+            bottom: -1.60cm; /* Senta exatamente dentro da margem de 2.0cm */
+            left: 0px;
+            right: 0px;
+            height: 1.20cm;
+            text-align: justify;
+            font-size: 8.5px; /* Reduzido de 9.5px para 8.5px */
+            color: #555555;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 4px;
+            line-height: 1.25;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-prod- { display: none !important; }
+        .linha-serv- { display: none !important; }
+        .linha-parc- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; /* Força o alinhamento perfeito das colunas */
+            margin-bottom: 6px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 3px 4px;
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) */
+        .grid-table {
+            margin-bottom: 6px;
+        }
+        .grid-table td, .grid-table th {
+            border: 1px solid #dce4ec;
+        }
+        
+        /* CABEÇALHOS EM 11PX */
+        .section-header {
+            background-color: #f4f6f8;
+            color: #2c3e50;
+            font-size: 10px; /* Reduzido de 12px para 11px */
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 5px;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-size: 9px; /* Reduzido de 11px para 10px */
+            font-weight: bold;
+            white-space: nowrap; /* Evita quebra de linha nos rótulos */
+        }
+        .val {
+            color: #111111;
+        }
+
+        /* AJUSTE EXCLUSIVO PARA O BLOCO 1 DO CLIENTE */
+        .client-info-table td {
+            font-size: 10px; /* Reduzido de 11px para 10px */
+        }
+        .client-info-table .lbl {
+            font-size: 9px; /* Reduzido de 10px para 9px */
+        }
+
+        /* TABELAS DE ITENS (PRODUTOS / SERVIÇOS / PARCELAS) EM 11PX */
+        .items-table th {
+            background-color: #2c3e50;
+            color: #ffffff;
+            font-size: 10px; /* Reduzido de 12px para 11px */
+            text-transform: uppercase;
+            border: 1px solid #2c3e50;
+            padding: 3px 4px;
+        }
+        .items-table td {
+            border: 1px solid #dce4ec;
+            border-bottom: 1px solid #eeeeee;
+            padding: 3px 4px;
+            font-size: 10px; /* Reduzido de 12px para 11px */
+        }
+        .items-table tfoot td {
+            background-color: #f4f6f8;
+            font-weight: bold;
+            border: 1px solid #dce4ec;
+            padding: 3px 4px;
+            font-size: 10px; /* Reduzido de 12px para 11px */
+        }
+
+        /* ESTILO DO TOTAL GERAL DA NOTA EM DESTAQUE E CENTRALIZADO */
+        .total-lbl {
+            background-color: #2c3e50 !important;
+            color: #ffffff !important;
+            font-size: 11px; /* Reduzido de 13px para 12px */
+            font-weight: bold;
+            border-color: #2c3e50 !important;
+            text-align: center !important;
+        }
+        .total-val {
+            background-color: #2c3e50 !important;
+            color: #ffffff !important;
+            font-size: 13px; /* Reduzido de 15px para 14px */
+            font-weight: bold;
+            border-color: #2c3e50 !important;
+            text-align: right !important;
+        }
+
+        /* CORREÇÃO PARA INTERPRETAR QUEBRAS DE LINHA DO TEXTAREA NO DOMPDF */
+        .preservar-linhas {
+            white-space: pre-wrap !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TEXTO JURÍDICO REPETÍVEL NO RODAPÉ DA PÁGINA -->
+    <div class="footer">
+        Após o orçamento passado para o cliente ou a manutenção/conserto concluído o cliente terá o prazo de 90 dias para retirada do mesmo, caso não retire o equipamento será destinado à venda, reutilização, destinação do bem à sucata para restituição do valores de peças utilizadas e serviços prestados.
+    </div>
+
+    <!-- CABEÇALHO DO DOCUMENTO (INALTERADO) -->
+    <table style="margin-bottom: 8px; border-bottom: 2px solid #2c3e50; padding-bottom: 4px; border-top: none; border-left: none;">
+        <tr>
+            <td style="width: 25%; vertical-align: middle; border: none;">
+                <img src="{$unidade_image}" style="max-width: 120px; max-height: 45px;" alt="Logo da Empresa">
+            </td>
+            <td style="width: 75%; text-align: right; vertical-align: middle; border: none;">
+                <div style="font-size: 13px; font-weight: bold; color: #2c3e50;">{$pessoa_unidade_descricao}</div>
+                <div style="color: #666666; font-size: 9px; margin-top: 2px;">
+                    CNPJ: {$pessoa_unidade_cpf_cnpj}
+                </div>
+                <div style="color: #666666; font-size: 9px; margin-top: 2px;">
+                    Endereço: {$pessoa_unidade_logradouro} {$pessoa_unidade_numero} {$pessoa_unidade_complemento} &bull; CEP: {$pessoa_unidade_cep} &bull; {$pessoa_unidade_local_municipio_descricao}/{$pessoa_unidade_local_uf_sigla}
+                </div>
+                <div style="color: #666666; font-size: 9px; margin-top: 1px;">
+                    Fone: {$p_unidade_fone1} &bull; Email: {$p_unidade_email}
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- TÍTULO CENTRALIZADO DA O.S. -->
+    <div style="text-align: center; font-size: 17px; font-weight: bold; color: #2c3e50; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;"> <!-- Reduzido de 18px para 17px -->
+        Ordem de Serviço Nº {$id}
+    </div>
+
+    <!-- BLOCO 1: INFORMAÇÕES DO CLIENTE -->
+    <table class="grid-table client-info-table">
+        <tr>
+            <td colspan="4" class="section-header">Informações do Cliente</td>
+        </tr>
+        <tr>
+            <!-- Larguras exatas definidas na primeira linha de colunas físicas para evitar divisão igualitária -->
+            <td class="lbl" style="width: 11%;">Cliente:</td>
+            <td class="val bold" style="width: 39%;">{$pessoa_id} &ndash; {$pessoa_descricao}</td>
+            <td class="lbl" style="width: 15%;">Data Abertura:</td>
+            <td class="val" style="width: 35%;">{$cadastro}</td>
+        </tr>
+        <tr>
+            <td class="lbl">E-mail:</td>
+            <td class="val">{$pessoa_email}</td>
+            <td class="lbl">Insc. Estadual:</td>
+            <td class="val">{$pessoa_pj_inscricao_estadual}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Cnpj/Cpf:</td>
+            <td class="val">{$pessoa_cpf_cnpj}</td>
+            <td class="lbl">Vendedor:</td>
+            <td class="val">{$pessoa_responsavel_id} - {$pessoa_responsavel_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Telefone:</td>
+            <td class="val">{$pessoa_fone1} {$pessoa_fone2}</td>
+            <td class="lbl">Status Atual:</td>
+            <td class="val">{$global_status_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Endereço:</td>
+            <td class="val">{$logradouro} &ndash; {$numero} {$complemento} {$bairro}</td>
+            <td class="lbl">Técnico Resp.:</td>
+            <td class="val">_____________________________________</td>
+        </tr>
+    </table>
+
+    <!-- INÍCIO DO LAÇO DE EQUIPAMENTOS -->
+    <!--[equipamentos]-->
+
+    <!-- BLOCO 2: DADOS DO EQUIPAMENTO -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 38%;">
+            <col style="width: 14%;">
+            <col style="width: 12%;">
+            <col style="width: 12%;">
+        </colgroup>
+        <tr class="bg-gray-light bold">
+            <td style="padding-left: 4px;" class="section-header">Equipamento</td>
+            <td class="section-header">Série</td>
+            <td class="section-header">Patrimônio</td>
+            <td class="section-header">Nf. de Entrada</td>
+        </tr>  
+        <tr>
+            <td style="padding-left: 4px;" class="bold">{$descricao}</td>
+            <td>{$numero_serie}</td>
+            <td>{$patrimonio}</td>
+            <td>{$codigo_nf}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 3: DEFEITO E DIAGNÓSTICO -->
+    <table class="grid-table" style="margin-bottom: 8px;">
+        <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+        </colgroup>
+        <tr>
+            <td class="section-header">Defeito Relatado</td>
+            <td class="section-header">Diagnóstico Técnico</td>
+        </tr>
+        <tr>
+            <td class="preservar-linhas" style="vertical-align: top !important; padding: 6px 6px 50px 6px !important;">{$defeito}</td>
+            <td class="preservar-linhas" style="vertical-align: top !important; padding: 6px 6px 50px 6px !important;">{$diagnostico}</td>
+        </tr>
+    </table>
+
+    <!-- FIM DO LAÇO DE EQUIPAMENTOS -->
+    <!--[/equipamentos]-->
+
+    <!-- BLOCO 4: OBSERVAÇÕES COMPLEMENTARES -->
+    <table class="grid-table" style="margin-bottom: 8px;">
+        <tr>
+            <td class="section-header">Observação</td>
+        </tr>
+        <tr>
+            <td class="preservar-linhas" style="min-height: 25px; vertical-align: top; font-size: 10px; line-height: 1.3; padding: 4px 6px;">{$obs2}</td> <!-- Reduzido de 11px para 10px -->
+        </tr>
+    </table>
+
+    <!-- BLOCO 5: ITENS DA PROPOSTA (PRODUTOS / PEÇAS UTILIZADAS) -->
+    <table class="items-table" style="margin-bottom: 6px;">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 8%;">Cód</th>
+                <th style="text-align: left; width: 41%;">Produto</th>
+                <th style="text-align: left; width: 15%;">Série / Lote</th>
+                <th class="text-center" style="width: 6%;">Qtd</th>
+                <th class="text-center" style="width: 6%;">Und</th>
+                <th class="text-right nowrap" style="width: 12%;">Unitário</th>
+                <th class="text-right nowrap" style="width: 13%;">Total Bruto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[produtos]-->
+            <tr class="linha-prod-{$produto_id}">
+                <td class="text-center">{$produto_id}</td>
+                <td><span class="bold">{$produto_descricao}</span> <span style="color: #7f8c8d; font-size: 9px;">{$produto_referencia_descricao}</span></td> <!-- Reduzido de 10px para 9px -->
+                <td>{$estoque_lote_serie_descricao}</td>
+                <td class="text-center">{$qtde}</td>
+                <td class="text-center">{$sigla}</td>
+                <td class="text-right nowrap">{$preco}</td>
+                <td class="text-right bold nowrap">{$total_bruto}</td>
+            </tr>
+            <!--[/produtos]-->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-right">TOTAL DE ITENS:</td>
+                <td class="text-center">{$qtde_sum}</td>
+                <td colspan="2" class="text-right nowrap">TOTAL:</td>
+                <td class="text-right bold nowrap">{$subtotal_produto}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- BLOCO 6: ITENS DA PROPOSTA (SERVIÇOS EXECUTADOS) -->
+    <table class="items-table" style="margin-bottom: 8px;">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 8%;">Cód</th>
+                <th style="text-align: left; width: 55%;">Serviço</th>
+                <th class="text-center" style="width: 12%;">Qtde</th>
+                <th class="text-right nowrap" style="width: 12%;">Unitário</th>
+                <th class="text-right nowrap" style="width: 13%;">Total Bruto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[servicos]-->
+            <tr class="linha-serv-{$servico_id}">
+                <td class="text-center">{$servico_id}</td>
+                <td class="bold">{$servico_descricao}</td>
+                <td class="text-center">{$qtde}</td>
+                <td class="text-right nowrap">{$preco}</td>
+                <td class="text-right bold nowrap">{$total_bruto}</td>
+            </tr>
+            <!--[/servicos]-->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-right nowrap">TOTAL:</td>
+                <td class="text-right bold nowrap">{$subtotal_servico}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- BLOCO 7: RESUMO FINANCEIRO SINO -->
+    <table class="grid-table" style="margin-bottom: 8px;">
+        <colgroup>
+            <col style="width: 29%;">
+            <col style="width: 21%;">
+            <col style="width: 29%;">
+            <col style="width: 21%;">
+        </colgroup>
+        <tr>
+            <td class="lbl">Produto: Total Bruto:</td>
+            <td class="val">{$subtotal_produto}</td>
+            <td class="lbl">Serviço: Total Bruto:</td>
+            <td class="val">{$subtotal_servico}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Produto: Descontos:</td>
+            <td class="val">{$desconto_produto} &ndash; {$desc_perc_produto}%</td>
+            <td class="lbl">Serviço: Desconto:</td>
+            <td class="val">{$desconto_servico} &ndash; {$desc_perc_servico}%</td>
+        </tr>
+        <tr>
+            <td class="lbl">Produto: Total Líquido:</td>
+            <td class="val">{$total_produto}</td>
+            <td class="lbl">Serviço: Total Líquido:</td>
+            <td class="val">{$total_servico}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Forma Pagamento:</td>
+            <td class="val">{$financ_forma_pgto_descricao}</td>
+            <td class="lbl">Frete:</td>
+            <td class="val text-left text-primary">{$total_frete}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Prazo Pagamento:</td>
+            <td class="val">{$financ_prazo_pgto_descricao}</td>
+            <td class="total-lbl">Total Geral:</td>
+            <td class="total-val text-right">{$total_pedido}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 8: TABELA DE PARCELAS -->
+    <table class="items-table" style="margin-bottom: 12px;">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 15%;">Parcela</th>
+                <th class="text-center" style="width: 25%;">Vencimento</th>
+                <th class="text-right" style="width: 25%;">Valor</th>
+                <th style="text-align: left; padding-left: 10px; width: 35%;">Tipo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[parcelas]-->
+            <tr class="linha-parc-{$parcela}">
+                <td class="text-center">{$parcela}</td>
+                <td class="text-center bold">{$vencimento}</td>
+                <td class="text-right bold">{$valor}</td>
+                <td style="padding-left: 10px;">{$financ_forma_pgto_descricao_parcela}</td>
+            </tr>
+            <!--[/parcelas]-->
+        </tbody>
+    </table>
+
+    <!-- BLOCO 9: CHECKLIST, TIPO E SAÍDA DO LABORATÓRIO -->
+    <table class="grid-table" style="margin-bottom: 40px;">
+        <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+        </colgroup>
+        <tr>
+            <td class="section-header">Checklist (Periféricos/Acessórios)</td>
+            <td class="section-header">Tipo de Atendimento</td>
+        </tr>
+        <tr>
+            <td style="min-height: 25px; vertical-align: top; padding: 4px 6px; line-height: 1.4;">
+                <!--[perifericos]-->
+                &bull; {$equipamento_periferico_descricao}<br>
+                <!--[/perifericos]-->
+            </td>
+            <td style="min-height: 25px; vertical-align: top; padding: 4px 6px;">
+                <!--[perifericos]-->
+                &bull; {$equipamento_tipo_descricao}
+                <!--[/perifericos]-->
+            </td>
+        </tr>
+    </table>
+
+    <!-- DATA DE SAÍDA E ASSINATURA -->
+    <table style="width: 100%; margin-top: 45px; border: none; table-layout: fixed;">
+        <tr>
+            <td style="width: 48%; vertical-align: bottom; font-size: 10px; padding: 0;"> <!-- Reduzido de 11px para 10px -->
+                Data de Saída do Laboratório: _____/_____/______
+            </td>
+            <td style="width: 4%; padding: 0;"></td>
+            <td style="width: 48%; text-align: center; vertical-align: bottom; padding: 0;">
+                ___________________________________________
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 0;"></td>
+            <td style="padding: 0;"></td>
+            <td style="text-align: center; vertical-align: top; padding: 4px 0 0 0;">
+                <span class="bold" style="font-size: 10px;">{$pessoa_descricao}</span> <!-- Reduzido de 11px para 10px -->
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

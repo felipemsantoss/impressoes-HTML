@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Ficha de Órtese/Prótese - O.S.</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* DIMENSÕES FÍSICAS EXATAS DA FOLHA A4 PAISAGEM (LANDSCAPE) */
+        @page {
+            size: A4 landscape;
+            margin: 1.00cm !important;
+        }
+
+        body {
+            font-size: 12px; /* Reduzido 1px */
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            background-color: #ffffff;
+        }
+
+        /* dompdf não suporta flexbox/grid: a distribuição do espaço da página
+           precisa ser feita com tabelas de altura fixa (em cm), não com
+           display:flex/height:100%. O.: a tabela abaixo tem a altura exata da
+           área útil da página (A4 paisagem 29,7x21cm - 1cm de margem cada lado
+           = 27,7 x 19cm) e cada linha tem uma altura fixa em cm, de forma que
+           a soma preencha a página inteira - inclusive as linhas de OBS. */
+        .main-table {
+            height: 19cm;
+        }
+
+        .form-table {
+            width: 100%;
+            height: 100%;
+            border-collapse: collapse !important;
+        }
+
+        /* Aplicada apenas na célula direta de cada linha do form-table
+           (via classe, não por descendência, para não vazar padding/borda
+           para as tabelas aninhadas como .grid-table e .no-border) */
+        .row-cell {
+            padding: 2px 0 !important;
+            vertical-align: top;
+            border: none !important;
+        }
+
+        .obs-table td {
+            border: none !important;
+            border-bottom: 1px solid #111111 !important;
+            padding: 0 !important;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        /* ESTRUTURA DE TABELAS */
+        table {
+            width: 100%;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            table-layout: fixed !important;
+        }
+
+        td, th {
+            padding: 6px 8px;
+            vertical-align: middle;
+            word-wrap: break-word;
+        }
+
+        /* TABELA DE CABEÇALHO DO LAUDO (COM CONTORNO) */
+        .grid-table {
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+        }
+        .grid-table td {
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+        }
+
+        /* CLASSE PARA TABELAS INTERNAS SEM BORDAS */
+        .no-border td {
+            border: none !important;
+            padding: 0 !important;
+        }
+
+        /* CONFIGURAÇÃO DO CHECKBOX MANUAL ( ) */
+        .checkbox-parenteses {
+            font-family: monospace !important;
+            font-size: 13px; /* Reduzido para alinhar com o texto */
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Estrutura Principal de 2 Colunas para o Layout de Ficha Paisagem -->
+    <table class="main-table" style="border: none; width: 100%;">
+        <colgroup>
+            <col width="55%"> <!-- Coluna Esquerda: Formulário de Dados -->
+            <col width="45%"> <!-- Coluna Direita: Diagrama Clínico -->
+        </colgroup>
+        <tr>
+            <!-- COLUNA ESQUERDA: FORMULÁRIO -->
+            <td style="border: none; padding: 0; vertical-align: top; padding-right: 25px;">
+            <table class="form-table">
+                <tr style="height: 1.3cm;">
+                    <td class="row-cell">
+                        <!-- Cabeçalho: O.S, Cadastro e Início -->
+                        <table class="grid-table" style="width: 100%;">
+                            <colgroup>
+                                <col width="30%">
+                                <col width="35%">
+                                <col width="35%">
+                            </colgroup>
+                            <tr>
+                                <td class="bold">O.S: {$id}</td>
+                                <td class="bold">Cadastro: {$cadastro}</td>
+                                <td class="bold">Início: ____/____/______</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="height: 0.75cm;">
+                    <td class="row-cell" style="font-size: 13px;"><span class="bold">PACIENTE:</span> {$pessoa_id} - {$pessoa_descricao}</td>
+                </tr>
+                <!--[produtos]-->
+                <tr style="height: 0.75cm;">
+                    <td class="row-cell" style="font-size: 13px;"><span class="bold">CÓDIGO:</span> {$cod_outro}</td>
+                </tr>
+                <!--[/produtos]-->
+                <tr style="height: 0.85cm;">
+                    <td class="row-cell"><span class="bold">MOLDE</span> <span class="checkbox-parenteses">( )</span> &nbsp;&nbsp; <span class="bold">MOLDE PADRÃO</span> <span class="checkbox-parenteses">( )</span> &nbsp;&nbsp; <span class="bold">MOLDE FEITO POR:</span>______________________</td>
+                </tr>
+                <tr style="height: 0.85cm;">
+                    <td class="row-cell">
+                        <table class="no-border" style="width: 100%;">
+                            <tr>
+                                <td style="width: 50%;"><span class="bold">ENTRADA DO GESSO</span> ____/____/____</td>
+                                <td style="width: 50%;"><span class="bold">SAÍDA DO GESSO</span> ____/____/____</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="height: 0.85cm;">
+                    <td class="row-cell">
+                        <table class="no-border" style="width: 100%;">
+                            <tr>
+                                <td style="width: 50%;"><span class="bold">DATA SAÍDA P/ PROVA</span> ____/____/____</td>
+                                <td style="width: 50%;"><span class="bold">DATA DA PROVA:</span> ____/____/____</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="height: 0.85cm;">
+                    <td class="row-cell">
+                        <table class="no-border" style="width: 100%;">
+                            <tr>
+                                <td style="width: 50%;"><span class="bold">ENTRADA ACABAMENTO</span> ____/____/____</td>
+                                <td style="width: 50%;"><span class="bold">SAÍDA ACABAMENTO</span> ____/____/____</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="height: 0.85cm;">
+                    <td class="row-cell"><span class="bold">TALA ACABADA POR</span> ______________________________________</td>
+                </tr>
+                <tr style="height: 0.85cm;">
+                    <td class="row-cell" style="font-size: 13px;">
+                        <span class="bold">ESQUERDO</span> <span class="checkbox-parenteses">( )</span> &nbsp;&nbsp;
+                        <span class="bold">DIREITO</span> <span class="checkbox-parenteses">( )</span> &nbsp;&nbsp;
+                        <span class="bold">ART</span> <span class="checkbox-parenteses">( )</span> &nbsp;&nbsp;
+                        <span class="bold">FIXA</span> <span class="checkbox-parenteses">( )</span>
+                    </td>
+                </tr>
+                <tr style="height: 0.8cm;">
+                    <td class="row-cell"><span class="bold">COLETE:</span>_______________________________________</td>
+                </tr>
+                <tr style="height: 0.8cm;">
+                    <td class="row-cell"><span class="bold">PRÓTESE:</span>______________________________________</td>
+                </tr>
+                <tr style="height: 0.8cm;">
+                    <td class="row-cell"><span class="bold">ORTESE:</span>_______________________________________</td>
+                </tr>
+                <tr style="height: 0.8cm;">
+                    <td class="row-cell"><span class="bold">CALÇADO:</span>______________________________________</td>
+                </tr>
+                <tr style="height: 0.8cm;">
+                    <td class="row-cell"><span class="bold">PALMILHA:</span> _____________________________________</td>
+                </tr>
+                <tr style="height: 0.85cm;">
+                    <td class="row-cell">
+                        <table class="no-border" style="width: 100%;">
+                            <tr>
+                                <td style="width: 50%;"><span class="bold">COR DO FORRO:</span> _________________</td>
+                                <td style="width: 50%;"><span class="bold">COR POLIO:</span> ____________________</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="height: 0.65cm;">
+                    <td class="row-cell bold">OBS:</td>
+                </tr>
+                <!-- Linhas de escrita: ocupam todo o restante da página -->
+                <tr>
+                    <td class="row-cell" style="padding: 0 !important;">
+                        <table class="obs-table">
+                            <tr style="height: 0.9cm;"><td>&nbsp;</td></tr>
+                            <tr style="height: 0.9cm;"><td>&nbsp;</td></tr>
+                            <tr style="height: 0.9cm;"><td>&nbsp;</td></tr>
+                            <tr style="height: 0.9cm;"><td>&nbsp;</td></tr>
+                            <tr style="height: 0.9cm;"><td>&nbsp;</td></tr>
+                            <tr style="height: 0.9cm;"><td>&nbsp;</td></tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            </td>
+
+            <!-- COLUNA DIREITA: DIAGRAMA CLÍNICO DO ESQUELETO -->
+            <td style="border: none; padding: 0; vertical-align: middle; text-align: center;">
+                <img src="{$site_cabecalho_01}" style="max-height: 14cm; max-width: 100%; object-fit: contain; display: block; margin: 0 auto;" alt="Esqueleto Clínico">
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

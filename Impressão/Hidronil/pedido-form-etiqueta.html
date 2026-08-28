@@ -1,0 +1,75 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiqueta OS</title>
+    <style>
+        /* RESET GLOBAL PARA O DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* DIMENSÕES EXATAS DA PÁGINA (15cm x 10cm) */
+        @page {
+            size: 15cm 10cm;
+            margin: 0.50cm 0.00cm 0.50cm 0.00cm; /* Margens físicas conforme o painel do LibreOffice */
+        }
+
+        /* ALINHAMENTO GERAL DO CONTEÚDO */
+        body {
+            margin: 0;
+            padding: 0 0.80cm; /* Margem interna de segurança para evitar corte na impressão */
+            color: #000000;
+            line-height: 1.4;
+        }
+
+        /* LOGO COM TAMANHO REDUZIDO CONFORME SOLICITADO */
+        .logo {
+            max-width: 110px; /* Reduzido de 300px para 160px */
+            max-height: 25px; /* Reduzido de 70px para 40px */
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* LINHAS DE TEXTO DA ETIQUETA COM FONTE AMPLIADA SUTILMENTE */
+        .linha-texto {
+            font-size: 14px; /* Aumentado sutilmente de 11px para 13px */
+            font-weight: normal !important; /* Mantido totalmente sem negrito */
+            margin-bottom: 6px;
+            word-wrap: break-word;
+        }
+
+        /* CORREÇÃO PARA INTERPRETAR QUEBRAS DE LINHA DO TEXTAREA NO DOMPDF */
+        .preservar-linhas {
+            white-space: pre-wrap !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Logo da Unidade -->
+    <img src="{$unidade_image}" class="logo" alt="Logo">
+
+    <!-- Fantasia -->
+    <div class="linha-texto">
+        {$pessoa_descricao}
+    </div>
+
+    <!-- Equipamento -->
+    <div class="linha-texto">
+        {$equipamento_descricao}
+    </div>
+
+    <!-- Ordem de Serviço -->
+    <div class="linha-texto">
+        Ordem de Serviço Nº {$id}
+    </div>
+
+    <!-- Observações (Escrito encostado na tag para eliminar recuos fantasmas) -->
+    <div class="linha-texto preservar-linhas">{$obs1}</div>
+
+</body>
+</html>
+<!--[/main]-->

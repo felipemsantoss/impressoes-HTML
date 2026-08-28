@@ -1,0 +1,476 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrato de Locação de Veículos</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 2.00cm 1.50cm;
+        }
+
+        body {
+            font-size: 10px; /* Tamanho de fonte ideal para leitura confortável de contratos */
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.45;
+            background-color: #ffffff;
+        }
+
+        /* CABEÇALHO FIXO COM PAGINAÇÃO E ID DO CONTRATO COMPATÍVEL COM DOMPDF */
+        .header-fixed {
+            position: fixed;
+            top: -1.00cm; /* Senta dentro da margem superior de 2.00cm */
+            right: 0px;
+            text-align: right;
+            font-size: 8px;
+            color: #7f8c8d;
+            line-height: 1;
+        }
+
+        .page-number:before {
+            content: counter(page);
+        }
+        .page-count:before {
+            content: counter(pages);
+        }
+
+        /* TEXTO JURÍDICO */
+        .text-justify {
+            text-align: justify;
+        }
+        
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        p {
+            margin: 0 0 10px 0;
+        }
+
+        .clause-title {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        /* ESTRUTURA GERAL DAS TABELAS - CORREÇÃO DE COLAPSO DO DOMPDF */
+        table {
+            width: 100%;
+            border-collapse: separate !important; /* CORREÇÃO DOMPDF */
+            border-spacing: 0 !important; /* CORREÇÃO DOMPDF */
+            table-layout: fixed;
+            margin-bottom: 8px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 3px 4px;
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) - TRATAMENTO DE BORDAS SEPARATE */
+        .grid-table {
+            border-top: 1px solid #dce4ec;
+            border-left: 1px solid #dce4ec;
+        }
+        .grid-table td, .grid-table th {
+            border-right: 1px solid #dce4ec;
+            border-bottom: 1px solid #dce4ec;
+        }
+
+        /* CABEÇALHOS DE TABELAS */
+        .section-header {
+            background-color: #f4f6f8;
+            color: #2c3e50;
+            font-size: 8.5px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 5px;
+            text-align: center;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-size: 8px;
+            font-weight: bold;
+            width: 25%;
+        }
+        .val {
+            color: #111111;
+        }
+
+        /* ESTRUTURA SEM BORDAS PARA CABEÇALHOS DO CONTRATO */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse !important;
+            table-layout: fixed;
+            margin-bottom: 20px;
+        }
+        .header-table td {
+            border: none !important;
+            padding: 0;
+            vertical-align: top;
+        }
+
+        /* TABELA de ASSINATURAS EVITA QUEBRAS INTERNAS */
+        .signatures-table {
+            width: 100%;
+            border: none;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-top: 40px;
+            page-break-inside: avoid;
+        }
+        .signatures-table td {
+            border: none !important;
+            padding: 0;
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO REPETÍVEL EM TODAS AS PÁGINAS (PAGINAÇÃO + ID DO CONTRATO) -->
+    <div class="header-fixed">
+        Contrato: <span class="bold">{$id}</span> &bull; Pág: <span class="bold page-number"></span>
+    </div>
+
+    <!-- Cabeçalho Alinhado Especial (35% esquerda com imagem de logo, 65% direita com título) -->
+    <table class="header-table">
+        <colgroup>
+            <col style="width: 35%;">
+            <col style="width: 65%;">
+        </colgroup>
+        <tr>
+            <td style="vertical-align: middle;">
+                <img src="{$pessoa_unidade_logo}" style="max-width: 120px; max-height: 45px;" alt="Logo ELO">
+            </td>
+            <td style="text-align: right; vertical-align: middle; line-height: 1.4;">
+                <div style="font-size: 10px; color: #7f8c8d; text-transform: uppercase; font-weight: bold;">CONTRATO Nº {$id}</div>
+                <div class="bold" style="font-size: 14px; text-transform: uppercase; margin-top: 2px; color: #2c3e50;">ELO</div>
+                <div style="font-size: 8px; color: #555555;">LOCAÇÕES E COMÉRCIO DE VEÍCULOS</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Corpo do Contrato em Fluxo Contínuo -->
+    <div class="text-justify">
+        
+        <div class="bold" style="margin-bottom: 8px;">1. DAS PARTES CONTRATANTES:</div>
+        <p>1.1 <span class="bold">{$pessoa_unidade_descricao}</span>, com sede na {$pes_un_logradouro}, {$pes_un_numero} {$pes_un_complemento}, {$pes_un_bairro} {$pes_un_end_cep} inscrita no C.N.P.J. sob o nº {$pes_un_cpf_cnpj} na cidade de {$pes_un_local_municipio_descricao} - {$pes_un_local_uf_sigla}, doravante denominado LOCADORA.</p>
+        <p><span class="bold">Vigência:</span> {$inicio} a {$termino}</p>
+        <p>1.2 <span class="bold">{$pessoa_descricao}</span>, CNPJ/CPF sob o n. {$pes_cpf_cnpj}, endereço na Av. {$pes_logradouro} {$pes_numero} {$pes_bairro}, CEP {$pes_end_cep} na cidade de {$pes_local_municipio_descricao} – {$pes_local_uf_sigla} , {$pes_fone1} doravante denominado LOCATÁRIO “CLIENTE”.</p>
+
+        <!-- Seção Usuário / Condutor com laço dinâmico de PESSOAS ativo -->
+        <table class="grid-table" style="margin-top: 10px; margin-bottom: 10px;">
+            <colgroup>
+                <col style="width: 50%;">
+                <col style="width: 25%;">
+                <col style="width: 25%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th colspan="3" class="section-header">1.3 Usuário / Condutor</th>
+                </tr>
+                <tr style="background-color: #fbfcfd; font-weight: bold; text-align: left; font-size: 8px;">
+                    <td style="width: 50%; padding-left: 4px;">CONDUTOR</td>
+                    <td style="width: 25%;">MULTA</td>
+                    <td style="width: 25%; text-align: right; padding-right: 4px;">VALOR</td>
+                </tr>
+            </thead>
+            <tbody>
+                <!--[pessoas]-->
+                <tr>
+                    <td style="padding-left: 4px;">{$pessoa_descricao}</td>
+                    <td>{$veic_condutor}</td>
+                    <td style="text-align: right; padding-right: 4px;">{$veic_condutor_multa}</td>
+                </tr>
+                <!--[/pessoas]-->
+            </tbody>
+        </table>
+
+        <p><span class="bold">1.4 Responsável Financeiro (avalista):</span> {$representante_legal} - {$representante_cpf}</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">2 – DEFINIÇÕES</div>
+        <div class="bold" style="margin-bottom: 8px; text-transform: uppercase;">CONDIÇÕES ESPECÍFICAS DO CONTRATO DE ALUGUEL DE CARROS E SEGURO APP DRIVER</div>
+        <p>Ao contrato de Aluguel de Carros formatado para cliente App Driver aplicam-se as disposições gerais do contrato de aluguel de carros e seguro (condições gerais), salvo no que contrariem estas condições específicas do contrato de aluguel de carros e seguro para o cliente App Driver (condições específicas) prevalecendo, em caso de contradição, as disposições deste instrumento.</p>
+        <p>2.1 Contrato de Aluguel de Carros “Contrato”: É o documento impresso a cada locação e que define as condições específicas de cada negociação, identificando as partes contratantes, o carro alugado, o período da locação, bem como os preços e demais custos envolvidos. São partes integrantes do Contrato: (a) as Condições Gerais; (b) o Tarifário; (c) as Propostas Comerciais; e (d) as Condições Especiais para Aluguel Mensal, pessoas jurídicas e outros segmentos se houver.</p>
+        <p>2.2 Condições Gerais do Contrato de Aluguel de carros e seguro: São os dispositivos deste instrumento que regem as condições comuns a todos os Contratos celebrados pela LOCADORA.</p>
+        <p>2.3 Tarifário: É a relação que contém informações sobre a frota de carros, opcionais/adicionais e preços praticados, disponível na LOCADORA.</p>
+        <p>2.4 Locadora: É a empresa devidamente identificada no cabeçalho do Contrato e que será, sempre a única responsável pela operação dos contratos que celebrar.</p>
+        <p>2.5 Locatário (“cliente App Driver” ou “Cliente”): É a pessoa que presta serviço de transporte sob demanda para usuários de Aplicativos de transporte, identificada no Contrato e principal responsável pelo seu cumprimento, inclusive pela observância do Contrato pelo Usuário e Condutor Adicional.</p>
+        <p>2.6 Usuário: É o preposto autorizado prévia e formalmente pelo CLIENTE pessoa jurídica e responsável solidário pelo recebimento e devolução do carro, contratação de adicionais, assinatura do contrato e eventual prorrogação do prazo de aluguel.</p>
+        <p>2.7 Condutor Adicional: É o indivíduo indicado pelo CLIENTE e aprovado pela LOCADORA, que também poderá dirigir o carro alugado; entretanto sem poderes para alterar qualquer condição contratada.</p>
+        <p>2.8 Pré-requisitos: O cliente, o usuário e o condutor adicional deverão sempre: a) ter mais de 21 anos; b) possuir carteira de habilitação válida há mais de 2 anos; c) estar apto a conduzir o carro, segundo as leis de trânsito; d) comprovar renda compatível perante a LOCADORA e terceiros; e) comprovar status ativo em base de algum dos aplicativos, em forma aceita pela LOCADORA; e f) o CLIENTE, quando estrangeiro, poderá dirigir e ter seu Contrato de locação firmado, desde que possua CPF ou situação regular no Brasil para este fim apresentando passaporte e documento de habilitação válido no território nacional, de acordo com a legislação brasileira e demais pactos e/ou acordos internacionais em que o Brasil é signatário, pelo período máximo de 180 (cento e oitenta) dias, contados da data de ingresso no país. Ultrapassando este período, o CLIENTE deverá devolver o veículo à LOCADORA, evitando a apreensão do bem e as cobranças decorrentes deste evento.</p>
+        <p>2.9 Culpa Grave: É caracterizada pelo cometimento de qualquer infração gravíssima prevista no Código de Trânsito, sendo comprovada por descrição em Boletim de Ocorrência.</p>
+        <p>2.10 Uso Inadequado: É a ocorrência de qualquer das situações abaixo envolvendo o carro alugado:</p>
+        <div style="padding-left: 15px; margin-bottom: 15px;">
+            <p>a) Desvinculação da base de motoristas ativos de aplicativos;</p>
+            <p>b) Deixar de comparecer com o carro à LOCADORA ou a outro qualquer local indicado pela mesma a cada 10.000 (dez mil) quilômetros rodados ou em qualquer outra data e horário, conforme solicitado pela LOCADORA;</p>
+            <p>c) Adulteração ou violação do odômetro ou de qualquer outro equipamento capaz de medir quilometragem;</p>
+            <p>d) Transporte de pessoas e/ou bens além da capacidade informada pelo fabricante;</p>
+            <p>e) Guincho e/ou reboque do carro alugado, efetuado por veículo não apropriado a esse fim;</p>
+            <p>f) Participar de corridas, testes, competições, “rally”, reconhecimento de trecho para “rally” e outras modalidades de competições, gincanas, “rachas” e /ou “pegas”;</p>
+            <p>g) Treinamento e/ou instrução de pessoas não habilitadas para qualquer situação;</p>
+            <p>h) Transporte de explosivos, combustíveis e/ou materiais químicos ou inflamáveis;</p>
+            <p>i) Tráfego em dunas, praias, estradas ou caminhos impedidos, não abertos ao tráfego, ou em areias fofas ou movediças;</p>
+            <p>j) Submersão total ou parcial do veículo em água;</p>
+            <p>k) Circular com as luzes de advertência de óleo ou de temperatura acesas no painel de instrumentos, hipótese em que, caso o CLIENTE persista com o carro em funcionamento nessas circunstâncias, mesmo que por curto espaço de tempo, ocorrerão danos ao motor os quais serão identificados por meio de laudo técnico de concessionária, sob acompanhamento do cliente, quando este manifestar interesse;</p>
+            <p>l) Acidente causado por condutor sob ação de álcool/entorpecentes ou se o condutor não fizer o teste de embriaguez requerido pela autoridade;</p>
+            <p>m) Transporte de criança sem o uso dos dispositivos de retenção apropriados;</p>
+            <p>n) Cessão do carro alugado a terceiros sem prévia autorização formal da LOCADORA;</p>
+            <p>o) Circulação fora do território nacional, sendo expressamente proibido adentrar em país e cidade fronterista;</p>
+            <p>p) Manifestar negligência na guarda do carro, tal como deixá-lo abandonado/estacionado em local ermo ou com as portas/vidros abertos/destravados, chave na ignição ou situação equivalente;</p>
+            <p>q) Quaisquer finalidades ilegais;</p>
+        </div>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">3. OBJETO E PAGAMENTO</div>
+        <p>3.1 Constitui objeto do Contrato o aluguel de carros de propriedade, posse, uso ou gozo da LOCADORA, pelo cliente, nos termos pactuados e conforme demais disposições aplicáveis.</p>
+        <p>3.2 A LOCADORA se reserva o direito de promover a análise cadastral do CLIENTE e, em determinadas situações, necessitará de tempo hábil para a referida análise e aprovação de crédito.</p>
+        <p>3.3 A LOCADORA poderá, a seu crédito, dispensar a análise cadastral mediante apresentação de cartão de credito válido em nome do CLIENTE, com disponibilidade de limite mínimo definido pela LOCADORA.</p>
+        <p>3.4 O CLIENTE autoriza a LOCADORA, se esta assim optar, a reservar uma quantia em seu cartão de crédito (pré-autorização), no mínimo igual à estimativa das despesas previstas para a locação, como condição para contratação.</p>
+        <p>3.5 Como condição para abertura do Contrato, a LOCADORA poderá exigir do CLIENTE o pagamento de um Depósito de Segurança, conforme valor indicado no instrumento. Independentemente da adoção dos procedimentos padrão de cobrança por parte da LOCADORA, está poderá utilizar o valor do depósito para abater débitos em aberto vinculados exclusivamente ao contrato, abrangendo valores relativos à indenização, multas e penalidades e devolverá o valor total ou remanescente após encerramento do contrato, em 20 (vinte) dias, acrescido do período necessário a título de trâmites bancários.</p>
+        <p>3.6 A LOCADORA poderá exigir que os pagamentos sejam feitos semanalmente, conforme modelo de contratação.</p>
+        <p>3.7 Fica autorizado pelo CLIENTE o pagamento dos valores referentes à locação através de transferência direta destes valores, do Aplicativo para a LOCADORA, caso o Aplicativo ofereça este formato.</p>
+        <p>3.8 O contrato poderá prever quilometragem controlada. Caso a quilometragem controlada seja excedida, o km excedente será cobrado conforme tarifa praticada, au final de cada semana de duração do contrato ou ao final de cada mês de duração do contrato, seguindo o fluxo de pagamentos, semanal ou mensal.</p>
+        <p>3.8.1 A quilometragem contratada deverá seguir o ciclo de cobrança e não será cumulativa de uma semana para outra, ou de um mês para outro.</p>
+        <p>3.8.2 Ocorrendo a quebra ou violação do odômetro, será considerada para efeito de cobrança a média de 200 quilômetros por dia, desde abertura até o efetivo encerramento do Contrato.</p>
+        <p>3.9 A LOCADORA poderá alterar os preços praticados e as condições de contratações a qualquer tempo, mediante a comunicação ao cliente que tenha contrato vigente com antecedência mínima de 30 (trinta) dias.</p>
+        <p>3.9.1 Acima de 4 mil Km Será cobrado excesso, com valor de 0,59 por Km.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">4. PRAZO</div>
+        <p>4.1 O Contrato é firmado por prazo indeterminado, sendo 30 (trinta) dias o período mínimo de contratação.</p>
+        <p>4.1.1 Em caso de devolução antes de completado o 30º (trigésimo) dia da locação, será cobrada Multa por Devolução Antecipada, proporcional ao período restante para o cumprimento do período mínimo do Contrato.</p>
+        <p>4.2 O contrato apenas será considerado rescindido quando o cliente devolver o carro na LOCADORA.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">5. PREÇO</div>
+        <p>5.1 O preço final do aluguel será apurado no fechamento ou na rescisão do Contrato e compreenderá o somatório dos valores dos seguintes itens, descritos no tarifário:</p>
+        <p><span class="bold">5.1.1 LOCAÇÃO</span></p>
+        <div style="padding-left: 15px; margin-bottom: 15px;">
+            <p>a) Diárias: O Período mínimo para locação do carro, composto de 24 (vinte de quatro) horas a partir da hora de retirada do carro, com até 1 (uma) hora de tolerância para devolução do mesmo.</p>
+            <p>b) Horas Extras: As horas que excederem às diárias contratadas serão computadas a partir da 25ª hora da retirada do carro incidirá cobrança de hora extra, calculada na proporção de 1/5 do valor da diária para cada hora excedente, sendo cobrada, inclusive a hora de tolerância.</p>
+            <p>c) Tarifa de Quilometragem Controlada: Será cobrada quando a locação for contratada nesta condição. Nessa tarifa, ocorrendo a quebra ou violação do odômetro, será considerada para efeito de cobrança a média de 200 (duzentos) quilômetros por dia, desde a retirada até a efetiva devolução do carro.</p>
+            <p>d) Retorno do Carro Alugado: É devida a cobrança sempre que o carro for devolvido em local diferente de onde ocorreu a locação.</p>
+            <p>e) Taxa de Aluguel: Percentual previsto no Tarifário aplicado sobre o valor total do contrato.</p>
+            <p>f) Condutor Adicional: É devido sempre que o CLIENTE nomear outra pessoa para dirigir o carro. O CLIENTE poderá nomear quantos condutores desejar e poderá contratar Seguro para cada condutor.</p>
+            <p>g) Dispositivo de Retenção: O CLIENTE poderá contratar o fornecimento de cadeira de bebê, assento de elevação e bebê conforto, responsabilizando-se pelo seu correto uso, conservação e devolução no estado em que lhe foi entregue, sob pena de ter que reembolsar eventuais prejuízos.</p>
+            <p>h) Guia Navegador (GPS): O CLIENTE poderá contratar o aluguel do GPS, acompanhado de seus acessórios para suporte e recarga, para instalação apenas no carro alugado, responsabilizando-se pelo seu correto uso, conservação e devolução no estado em que lhe foi entregue, sob pena de ter que reembolsar eventuais prejuízos. Caso o GPS contratado contenha chip de dados, com funcionalidades de compartilhamento de internet e outros aplicativos, em caso de perda, furto ou roubo deste aparelho, o CLIENTE deverá providenciar o registro do Boletim de Ocorrência, relatando os fatos, e comunicar imediatamente a ocorrência à LOCADORA, para que esta solicite o bloco do chip de dados contido no aparelho. Na ausência de devolução desse equipamento, sem apresentação do registro do Boletim de Ocorrência pelo CLIENTE, a LOCADORA se reserva o direito de tomar as medidas cíveis/ou criminais cabíveis, bem como solicitar o imediato bloqueio do aparelho e chip. A responsabilidade da LOCADORA restringe-se ao funcionamento dos aparelhos, inexistindo responsabilidade sobre roteiros, mapas e/ou base de informações fornecidas por estes.</p>
+            <p>i) Dispositivo para Abertura Automática de Cancelas: O carro alugado poderá conter dispositivo afixado no para-brisas, para acionamento automático para abertura de cancelas, composto por um chip emissor de frequência para o uso durante a locação, responsabilizando-se o CLIENTE pelo seu correto uso, conservação e devolução do equipamento no estado em que lhe foi entregue, sob pena de ter que reembolsar eventuais prejuízos. O CLIENTE reconhece que, havendo o dispositivo no carro alugado, poderá optar pela utilização deste, devendo, para tanto, contratar a diária específica de utilização no ato da locação, assumindo que o uso sem a contratação prévia não será autorizado e o sujeita a todas as cobranças decorrentes da utilização, inclusive diárias de uso de equipamento, conforme tarifário vigente. A responsabilidade da LOCADORA não atinge defeitos ou falhas no funcionamento do equipamento que impeçam a abertura das cancelas. O CLIENTE/USUÁRIO reconhece que a LOCADORA, após ser notificada do uso do equipamento durante o período da locação, cobrará imediatamente do CLIENTE/USUÁRIO o reembolso dos valores pagos, constituindo-se desde já dúvida líquida e certa. O CLIENTE/USUÁRIO obriga-se a ressarcir à LOCADORA qualquer valor pago relativo ao uso do equipamento durante o período que este esteve no carro, independentemente da data em que for dada a ciência do uso do equipamento à LOCADORA, conforme Tarifário vigente.</p>
+            <p>j) Rastreador: O CLIENTE aceita e declara ter conhecimento de que o carro alugado poderá possuir dispositivo de rastreamento, para permitir sua localização via sinais GSM, GPRS e GPS, onde houver rede ativa em funcionamento desses sinais. Se caso for removido ou parar de funcionar a LOCADORA poderá informar o CLIENTE onde este deverá devolver o veículo imediatamente a LOCADORA sob possibilidade de busca e apreensão do veículo.</p>
+            <p>k) Seguro: A LOCADORA oferece somente seguro contra terceiros, com cobertura de danos materiais e corporais para cobrir o risco de indenização por eventuais danos causados no carro decorrentes da locação.</p>
+        </div>
+
+        <p><span class="bold">5.1.2 Reembolso de Despesas</span></p>
+        <div style="padding-left: 15px; margin-bottom: 15px;">
+            <p>a) Combustível: Caso o carro não seja devolvido totalmente abastecido, será cobrado o reembolso referente à despesa de abastecimento, com base na tabela da LOCADORA disponível no tarifário, a qual estipula leitura do marcador em oitavos. Por se tratar de leitura com valores aproximados, a cobrança do combustível poderá sofrer variações em relação ao posto de abastecimento de até 30% para mais ou para menos. Na hipótese de carro ter percorrido distância inferior a 100 (cem) quilômetros e o marcador não sofrer alteração, o combustível será cobrado por estimativa.</p>
+            <p>b) Lavagem do Carro: Caso o carro seja devolvido sujo, será cobrado a lavagem simples ou especial, dependendo do seu estado. Na hipótese de lavagem especial será cobrado também 1 diária de locação “tarifa km livre” ou quantas forem necessárias até a disponibilização do carro, limitadas a 10 diárias do carro alugado.</p>
+            <p>c) Documento do Carro: CRLV (Certificado de Registro e Licenciamento de Veículos) quando não for devolvido à LOCADORA, independentemente do motivo, será cobrado do CLIENTE o valor de 1 (uma) diária de locação do carro utilizado, com base na Tarifa de Balcão vigente, além do reembolso das despesas para obtenção de segunda via do documento do veículo perante as autoridades de trânsito.</p>
+            <p>d) Chaves do Carro: A devolução das chaves é de reponsabilidade do cliente, caso não forem devolvidas à LOCADORA independentemente do motivo, será cobrado do mesmo o valor de 1 (uma) diária de locação do carro utilizado, com base na Tarifa de Balcão Vigente, além do reembolso das despesas para confecção das chaves inclusive as despesas de codificação da mesma.</p>
+            <p>e) Despachante: O CLIENTE poderá optar pela contratação dos serviços de despachante da LOCADORA nos casos de desembaraçar eventuais ocorrências com o carro e/ou na retirada do Boletim de Ocorrência em delegacias. Nesta hipótese o cliente reembolsará à LOCADORA o valor correspondente a 1 (uma) diária de locação do carro do grupo ao qual a mesma pertença, com base na Tarifa de Balcão Vigente, quando o evento ocorrer a uma distância de até 100 (cem) quilômetros da LOCADORA.</p>
+            <p>f) No-Show: Significa a ausência de retirada do carro na data/hora reservada. Para a reserva que não for cancelada com a antecedência mínima de 12 horas, será cobrada 1 (uma) diária de locação “tarifa km livre”. Será cobrado também uma diária de motorista quando for o caso. A reserva efetuada com antecedência inferior a 12 (doze) horas do horário de retirada do carro não será passível de cancelamento, sendo cobrado o ‘No-Show” em caso de não retirada do carro. Não comparecendo o CLIENTE para a retirada do carro na data reservada por motivos de força maior ou caso fortuito, devidamente comprovados, não será cobrada 1 (uma) diária de locação, conforme previsto acima.</p>
+            <p>g) Infração de Trânsito: O CLIENTE deverá reembolsar à LOCADORA o valor da infração acrescido do percentual previsto no tarifário vigente, a título de processamento administrativo.</p>
+            <p>h) Reboque/Guincho: O CLIENTE deverá ressarcir à LOCADORA todas as despesas de reboque ou guincho do carro, bem como as despesas de diárias e taxas em depósitos de órgãos de trânsito, quando o carro alugado, por qualquer motivo, for rebocado ou guinchado, salvo quando comprovada pane oriunda de defeito eletromecânico decorrente de uso normal do carro. Será cobrado 1 (uma) diária de locação do carro quando o evento ocorrer a uma distância de até 100 (cem) quilômetros da LOCADORA. Para distâncias superiores, o valor será equivalente ao valor do retorno de ida e volta entre o local do evento e a agência de origem.</p>
+            <p>i) Apreensão do Carro: Além do valor de despachantes, quando contratado o CLIENTE deverá reembolsar as despesas da LOCADORA com advogados para a liberação e recuperação do carro, além das taxas cobradas pelos órgãos competentes.</p>
+            <p>j) Acessórios e Pneumáticos: O CLIENTE deverá arcar com o valor integral dos acessórios e pneumáticos em casos de furto, roubo ou danos.</p>
+        </div>
+
+        <p><span class="bold">5.1.3 Indenizações</span></p>
+        <div style="padding-left: 15px; margin-bottom: 15px;">
+            <p>a) Sinistro com o Carro Alugado: Na ocorrência de furto, roubo, incêndio ou colisão do carro alugado, a LOCADORA irá cobrar todos os valores previsto na cláusula 7.3 (responsabilidades indenizatórias).</p>
+            <p>b) Prejuízo: Refere-se a qualquer despesa, encargo, custos, ônus ou do sofrido pela LOCADORA, desde que relacionados a um sinistro. Os prejuízos são compostos de: (I) danos ao carro alugado; (II) indenização a terceiros; e (III) indenização por custos operacionais da LOCADORA.</p>
+            <p>c) Custos Operacionais: Referem-se aos ônus suportados pela LOCADORA em virtude de sinistro, especialmente os decorrentes de indisponibilidade do carro, serviços relacionados, perda de valor de mercado do carro e outros custos incorridos na operação da LOCADORA para ressarcimento de todos os seus prejuízos. O valor mínimo da Indenização por Custos Operacionais será limitado ao menor valor dos prejuízos da LOCADORA e o valor máximo será limitado ao valor descrito no Tarifário. A adesão ao Seguro do Carro e/ou para Terceiros NÃO isentará o CLIENTE do pagamento da Indenização por Custos Operacionais.</p>
+        </div>
+
+        <p><span class="bold">5.1.4 Outros</span></p>
+        <p>Além dos itens anteriores, fazem parte da base de cálculo do preço, quando for o caso: entregas e devoluções, motoristas, taxas e/ou impostos, encargos financeiros por atraso no pagamento e demais valores constantes no Tarifário.</p>
+        <p>5.2 Os descontos negociados não são cumulativos com tarifas promocionais ou outras promoções.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">6. RESPONSABILIDADES DA LOCADORA</div>
+        <p>6.1 Entregar ao CLIENTE o carro limpo, abastecido, em perfeitas condições de funcionamento e segurança, com todos os equipamentos e documentos exigidos pelo Código de Trânsito Brasileiro.</p>
+        <p>6.2 Garantir a reserva pelo prazo de até 1 (uma) hora após o horário previsto para retirada do carro, condicionada ao horário de funcionamento da LOCADORA.</p>
+        <p>6.3 Garantir o atendimento com o carro na categoria reservada.</p>
+        <p>6.3.1 A LOCADORA não garante o modelo do carro dentro da categoria reservada, podendo disponibilizar qualquer um dos modelos contemplados na categoria, a seu critério.</p>
+        <p>6.3.2 Se o CLIENTE for atendido com carro de categoria superior, o valor da locação será igual ao do carro reservado até o momento em que este for disponibilizado. Caso o CLIENTE não substitua o carro na data/hora estabelecida pela LOCADORA, estará aderindo ao aluguel do carro superior, pagando sua tarifa desde o início da locação.</p>
+        <p>6.3.3 Se o CLIENTE for atendido com carro de categoria inferior, a locação ficará como cortesia até o momento em que for disponibilizado o modelo reservado ou de categoria superior. Caso o CLIENTE não substitua o carro na data/hora estabelecida pela LOCADORA, estará aderindo ao aluguel do carro inferior e pagando sua tarifa desde a retirada do carro.</p>
+        <p>6.4 Substituir o carro alugado por outro disponível, sem nenhum ônus para o CLIENTE, em caso de pane por defeito eletromecânico, oriundo de seu uso normal, respeitando-se o tempo necessário para deslocamento da LOCADORA até o local em que se encontrar o veículo, em horário comercial.</p>
+        <p>6.4.1 Quando o defeito apresentado permitir a locação do carro sem risco, o CLIENTE deverá fazer a respectiva substituição na própria LOCADORA.</p>
+        <p>6.4.2 Se for apurado que a pane foi causada por acidente, originado por culpa ou dolo do CLIENTE, por uso inadequado ou, ainda, se o pedido de remoção tiver sido desnecessário (ex. falta de combustível), o CLIENTE deverá arcar com o valor do reboque mais o valor de 1 (uma) diária de locação.</p>
+        <p>6.4.3 A LOCADORA, no entanto, não efetuará a substituição do carro alugado em caso de furto, roubo, incêndio, colisão, apropriação indébita, apreensão pelas autoridades competentes, perda, furto ou roubo de chaves/documentos e pane provocada por uso inadequado do carro. Nestas situações a LOCADORA, por sua mera liberalidade, poderá fornecer outro carro ao CLIENTE, mediante a abertura de um novo contrato, momento no qual poderão ser acordadas condições contratuais diversas das originais, não ficando, em hipótese alguma, caracterizada novação, ou renúncia a qualquer direito decorrente do contrato anterior.</p>
+        <p>6.4.4 A LOCADORA não substituirá o carro em revisões periódicas, a não ser que seja identificada a necessidade de substituição.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">7. RESPONSABILIDADES DO CLIENTE</div>
+        <p><span class="bold">7.1 Recebimento, guarda e uso do carro</span></p>
+        <p>7.1.1 O CLIENTE/ USUÁRIO/CONDUTOR deverá apresentar, na retirada do carro, a sua carteira de habilitação original, CPF, carteira de identidade e comprovação formal de sua vinculação a alguns dos Aplicativos, em formato aceito pela LOCADORA, para fins de identificação, cópia e arquivo.</p>
+        <p>7.1.2 O CLIENTE é responsável pelo recebimento, guarda e uso do carro, conforme o Contrato.</p>
+        <p>7.1.3 O CLIENTE é responsável por comparecer à LOCADORA ou o local por ela indicado a cada 10.000 (dez mil) quilômetro rodados, e em qualquer outra data e horário, conforme solicitado pela LOCADORA.</p>
+        <p>7.1.4 O CLIENTE assume a posse autônoma do carro, para todos os fins de direito.</p>
+        <p>7.1.5 O CLIENTE se compromete a utilizar o carro somente em território nacional e a não devolver em quaisquer das situações enquadradas como Uso Inadequado.</p>
+        <p>7.1.6 O CLIENTE se obriga a não efetuar quaisquer reparo ou serviço no carro sem a expressa e prévia anuência da LOCADORA, sob pena não ser reembolsado por tais serviços e ainda arcar com eventuais danos ao carro.</p>
+        <p>7.1.7 O CLIENTE deverá comunicar imediatamente à LOCADORA qualquer acidente com o carro, bem como a ocorrência de roubo ou furto, e providenciar, no prazo máximo de 48 horas:</p>
+        <div style="padding-left: 15px; margin-bottom: 15px;">
+            <p>a) Preenchendo o aviso de acidente/sinistro da LOCADORA;</p>
+            <p>b) Entrega do Boletim de Ocorrência ou comprovante do seu protocolo; e</p>
+            <p>c) Laudo pericial ou seu protocolo quando houver capotamento do carro ou vítima fatal.</p>
+        </div>
+
+        <p><span class="bold">7.2 Devolução do carro</span></p>
+        <p>7.2.1 O CLIENTE será responsável pela devolução do carro: (I) na data/ hora e agência definidas no Contrato; (II) por requisição da Locadora, conforme item “b” da Cláusula 2.10; (III) no caso de substituição; e (IV) em caso de rescisão do Contrato, conforme Cláusula 10.</p>
+        <p>7.2.2 Em quaisquer das hipóteses de devolução acarretará na cobrança de valores decorrentes da locação, incluindo, mas não se limitando a: km excedente, avaria, lavagem e combustível.</p>
+        <p>7.2.3 Na hipótese de acidente, incêndio, apropriação indébita, apreensão ou reboque do carro, o encerramento da locação só ocorrerá quando a LOCADORA estiver na posse deste. Se o CLIENTE não for culpado pelo acidente ou incêndio, a LOCADORA reconhecerá o encerramento da locação na data do acidente ou incêndio indicados no Boletim de Ocorrência.</p>
+        <p>7.2.4 Ocorrendo furto ou roubo do carro, a data de encerramento da locação será a data/hora da lavratura do Boletim de Ocorrência.</p>
+        <p>7.2.5 O atraso na devolução do carro por período superior a 24 horas caracterizará, automaticamente, apropriação indébita.</p>
+        <p>7.2.5.1 Nessa hipótese, o CLIENTE ficara sujeito às responsabilidades penais e civis, arcando ainda com todas as despesas da LOCADORA para sua reintegração na posse do carro.</p>
+        <p>7.2.5.2 A data encerramento da locação será a data/hora da lavratura do Boletim de Ocorrência.</p>
+
+        <p><span class="bold">7.3 Responsabilidades Indenizatórias</span></p>
+        <p>7.3.1 O CLIENTE reconhece que as responsabilidades da LOCADORA se limitam àquelas previstas na legislação brasileira, cabendo ao CLIENTE arcar com o ônus da sua conduta dolosa ou culposa, inclusive perante terceiros.</p>
+        <p>7.3.2 O CLIENTE deverá suportar as seguintes responsabilidades indenizatórias:</p>
+        <div style="padding-left: 15px; margin-bottom: 15px;">
+            <p>a) Em caso de furto, roubo ou apropriação indébita: Ressarcir à LOCADORA o valor de mercado do modelo do carro, taxas de licenciamento, IPVA, um tanque de combustível e Indenização por Custos Operacionais, conforme limites expressos no Tarifário. Caso a LOCADORA recupere o carro após o pagamento integral das indenizações, ela transferirá ao CLIENTE o carro recuperado, no estado em que se encontrar. No caso de carro recuperado de apropriação indébita, o CLIENTE deverá suportar, também, as diárias de locação, desde a retirada até a efetiva devolução do carro à LOCADORA</p>
+            <p>b) Em caso de acidente com perda total ou incêndio: Ressarcir à LOCADORA o valor de mercado do modelo do carro, taxas de licenciamento, IPVA, um tanque de combustível e Indenização por Custos Operacionais. O CLIENTE ainda deverá arcar com todos os prejuízos que venha causar a terceiros. Uma vez efetuado o pagamento pelo CLIENTE de todas as indenizações cabíveis ou satisfeitas, a sucata será transferida ao CLIENTE. Considere-se perda total quando o valor para recuperação do carro superar em 50% seu valor de mercado.</p>
+            <p>c) Em caso de acidente sem perda total: Ressarcir à LOCADORA o valor de recuperação do carro alugado e Indenização por Custos Operacionais. O CLIENTE ainda deverá arcar com todos os prejuízos que venha causar a terceiros.</p>
+        </div>
+        <p>7.3.3 O CLIENTE deverá arcar com la Indenização por Custos Operacionais independentemente de sua culpa, do reparo do carro ou de adesão ao seguro do carro.</p>
+        <p>7.3.4 Em caso de perda de cobertura do seguro do carro e/ou do seguro para terceiros, o CLIENTE se obriga a ressarcir a locadora todos os prejuízos causados ao carro e a terceiros.</p>
+        <p>7.3.5 O CLIENTE aceita que a locadora promova o seu chamamento aos processos judiciais movidos por terceiros, cabendo-lhe assumir isoladamente todos os ônus dessas demandas.</p>
+        <p>7.3.6 O recebimento de qualquer valor pela locadora não presume a quitação total de seus prejuízos.</p>
+
+        <p><span class="bold">7.4 Multas por infração de Trânsito</span></p>
+        <p>7.4.1 O CLIENTE concorda que a LOCADORA irá indicá-lo como condutor/infrator responsável pelas infrações de trânsito apuradas durante a locação, nos termos do artigo 257, parágrafos 1º, 3º, 7º e 8º do Código de Trânsito. A partir da indicação, o CLIENTE terá legitimidade para se defender perante o órgão autuador.</p>
+        <p>7.4.2 Qualquer questionamento sobre eventual improcedência de multas de trânsito deverá ser feito pelo CLIENTE exclusivamente perante o órgão autuador.</p>
+        <p>7.4.3 O CLIENTE reconhece que a LOCADORA, na condição de proprietária do carro alugado, é responsável por quitar a multa junto ao Órgão de Trânsito após ser notificada, e cobrará o reembolso do CLIENTE, acrescido dos encargos previstos nas condições gerais, constituindo-se dívida líquida e certa, mesmo em casos de recursos em julgamento.</p>
+        <p>7.4.4 Na hipótese de o CLIENTE ser abordado por agente de trânsito e receber o Auto de infração/Notificação, deverá avisar a LOCADORA e lhe entregar a cópia da notificação.</p>
+        <p>7.4.5 Se o CLIENTE optar por recorrer da autuação e, sendo o recurso vitorioso, a locadora lhe fornecerá cópia da guia de pagamento para que ele solicite ao órgão o reembolso.</p>
+        <p>7.4.6 O CLIENTE se obriga a ressarcir a LOCADORA todos os valores relativos às multas de trânsito ocorridas durante a locação, mesmo que a LOCADORA não seja notificada dentro do prazo legal. Nesses casos, a LOCADORA poderá recorrer, e, sendo o recurso provido, repassará ao CLIENTE cópia da guia de pagamento para que ele solicite o reembolso ao órgão autuador.</p>
+
+        <p><span class="bold">7.5 Responsabilidade por pagamentos</span></p>
+        <p>7.5.1 O CLIENTE é responsável pelo pagamento de todos os débitos decorrentes da locação, incluindo aqueles relacionados à indenização e a multas.</p>
+        <p>7.5.2 Os itens previstos na cláusula 5.1.2, (Reembolso de Despesas) exceto alínea “g”, terão seus valores constantes na tabela da LOCADORA, disponível para o CLIENTE, onde este declara ter conhecimento prévio à assinatura do Contrato.</p>
+        <p>7.5.3 Todos os valores, despesas e encargos decorrentes da locação, inclusive aqueles relacionados à indenização e as multas, constituem-se dívidas líquidas e certas para pagamento à vista, passíveis de cobrança executiva.</p>
+        <p>7.5.4 A LOCADORA fica desde já autorizada a cobrar os débitos e encargos decorrentes da locação, inclusive aqueles relacionados a indenização e a multas, diretamente, via bancos, ou debitar automaticamente esses valores no cartão de crédito do CLIENTE, por meio do sistema de assinatura em arquivo, mesmo que as despesas tenham sido apuradas após o encerramento do contrato. O envio dos documentos de cobrança poderá ser feito por meio impresso ou eletrônico, a critério exclusivo da LOCADORA. É de responsabilidade exclusiva do CLIENTE informar e atualizar os dados do responsável pelo recebimento das faturas por meio eletrônico (e-mail, WhatsApp) e/ou físico, sob pena dos mesmos serem considerados entregues.</p>
+        <p>7.6 Com base na Lei nº 13.709/2018 – Lei Geral de Proteção de Dados Pessoais (LGPD) – o CIENTE, declara sob todos os termos da legislação que, de forma livre, consente em informar os dados pessoais necessários para a execução do Contrato de aluguel de carros, nos termos do art. 7º, inciso V, da referida Lei, com a finalidade de que se realize os cadastros necessários para emissão de Certidões junto aos Órgãos Públicos Fiscais, Judiciário, Notarial, Registral, entre outros que eventualmente se façam necessários, observada a finalidade ora descrita e a confecção do presente Contrato de aluguel de carros, respeitados os princípios da boa fé e quaisquer outros princípios previstos no artigo 6º da LGPD.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">8. SEGURO DISPONIBILIZADO PELA LOCADORA</div>
+        <p>8.1 A LOCADORA, na condição de estipulante de seguro, disponibiliza ao CLIENTE, o seguro contra terceiros com cobertura de danos materiais e corporais em decorrência de acidente de trânsito envolvendo o carro alugado/segurado, mediante adesão a apólice de seguro emitida pela Porto Seguro Companhia de Seguros Gerais Processo SUSEP nº 15414.100233/2004-59, disponível para consulta na LOCADORA.</p>
+        <p><span class="bold">8.2 Condições do seguro</span></p>
+        <p>8.2.1 A cobrança do prêmio de seguro é feita com base em 24 horas contadas a partir da hora de retirada do carro, com uma hora de tolerância. A partir da 25ª hora, incidirá cobrança de uma diária do seguro contratado.</p>
+        <p>8.2.2 O não pagamento do prêmio ocasionará o cancelamento imediato da cobertura securitária.</p>
+        <p>8.2.3 O valor do prêmio será destacado nos instrumentos de cobrança e faturas enviadas ao CLIENTE.</p>
+        <p>8.2.4 O Seguro para Terceiros oferece cobertura exclusivamente para danos materiais, e corporais à terceiros, nos limites especificados no Tarifário.</p>
+        <p>8.2.5 A aceitação do seguro estará sujeita à análise de risco.</p>
+        <p>8.2.6 O registro na apólice de seguro coletivo perante a SUSEP não implica, por parte da Autarquia, incentivo ou recomendação a sua comercialização;</p>
+        <p>8.2.7 O CLIENTE poderá consultar a situação cadastral de seu corretor de seguros no site www.susep.gov.br por meio do número de seu registro na SUSEP, nome completo, CNPJ ou CPF.</p>
+        <p><span class="bold">8.3. A Apólice não oferecerá cobertura para</span></p>
+        <div style="padding-left: 15px; margin-bottom: 15px;">
+            <p>8.3.1 Agravar intencionalmente o risco.</p>
+            <p>8.3.2 Provocar ou simular sinistro.</p>
+            <p>8.3.3 Sinistro causado por pessoa sob ação de álcool/entorpecentes ou se o condutor não fizer o teste de embriaguez requerido pela autoridade.</p>
+            <p>8.3.4 Deixar de apresentar Boletim de Ocorrência em caso de Sinistro com o Carro Alugado, conforme conceituado nas Condições Gerais.</p>
+            <p>8.3.5 Procurar obter benefícios ilícitos do Seguro.</p>
+            <p>8.3.6 Deixar de comunicar a ocorrência de Sinistro com o Carro Alugado, logo que o saiba.</p>
+            <p>8.3.7 Deixar de preencher o aviso do sinistro.</p>
+            <p>8.3.8 Deixar de pagar integralmente o valor do prêmio do Seguro.</p>
+            <p>8.3.9 Deixar de comunicar, por escrito, à LOCADORA ou a Seguradora sua pretensão de obter novo Seguro sobre o mesmo interesse a risco em outra Seguradora.</p>
+            <p>8.3.10 Fizer declarações inverídicas e/ou incompletas ou omitir circunstâncias capazes de influir na aceitação da proposta, na análise do risco, na estipulação do prêmio e/ou na análise das circunstâncias do sinistro.</p>
+            <p>8.3.11 Houver condução/manobra do carro por pessoa não autorizada e/ou não habilitada.</p>
+            <p>8.3.12 Acidentes ocorridos fora do território nacional.</p>
+            <p>8.3.13 Danos ou prejuízos sofridos pelo condutor e/ou ocupantes do carro alugado.</p>
+            <p>8.3.14 Indenização por Custos Operacionais devidos à LOCADORA.</p>
+            <p>8.3.15 Lucros cessantes sofridos por terceiros.</p>
+            <p>8.3.16 Acidentes decorrentes da inobservância das disposições legais, por exemplo, aqueles causados por lotação de passageiros, peso, acondicionamento ou transporte de carga ou objetivo transportado.</p>
+            <p>8.3.17 Despesas com reboque para distância superior a 100 quilômetros da agência de origem.</p>
+            <p>8.3.18 Despesas com reboque ou guincho, exceto na situação descrita no item 6.4.</p>
+            <p>8.3.19 Despesas decorrentes de apreensão do carro alugado.</p>
+            <p>8.3.20 Despesas decorrentes da Apropriação Indébita do carro alugado.</p>
+            <p>8.3.21 Serviços profissionais de advogados e/ou despachantes.</p>
+            <p>8.3.22 Extravio ou perda das chaves e documentos do carro.</p>
+        </div>
+        <p><span class="bold">8.4. Além dos casos previstos na Apólice, o CLIENTE não terá direito a cobertura securitária se:</span></p>
+        <div style="padding-left: 15px; margin-bottom: 15px;">
+            <p>8.4.1 Agir com Culpa Grave ou uso Inadequado do carro, conforme definido nestas Condições Específicas.</p>
+            <p>8.4.2 Utilizar o carro para fim diverso do indicado na Apólice ou Contrato.</p>
+            <p>8.4.3 Deixar de cumprir as Condições Gerais do Seguro de Responsabilidade Civil.</p>
+            <p>8.4.4 Deixar de comunicar imediatamente a LOCADORA ou a Seguradora a existência de reclamação ou ação judicial que envolva qualquer risco coberto pela Apólice.</p>
+            <p>8.4.5 Realizar acordo com terceiros sem anuência formal da LOCADORA/Seguradora.</p>
+            <p>8.4.6 Deixar de comparecer às audiências em que for convocado, não elaborar sua defesa nos prazos legais e/ou não se fizer representar em processo judicial.</p>
+            <p>8.4.7 O sinistro ocorrer após furto do carro alugado, quando não forem devolvidos à LOCADORA as chaves e os documentos do carro.</p>
+        </div>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">9. COMPARTILHAMENTO DE DADOS COM OS APLICATIVOS</div>
+        <p>9.1 Para a consecução dos objetivos do Contrato, a LOCADORA poderá compartilhar com os Aplicativos as informações fornecidas pelo CLIENTE, incluindo, mas não se limitando a, informações gerais de reserva e do contrato, dados e documentos dos carros alugados, dados de multa de trânsito e de eventuais sinistros ou incidentes ocorridos durante a vigência do contrato.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">10. RESCISÃO</div>
+        <p>10.1 O Contrato poderá ser rescindido pela LOCADORA a qualquer tempo, em casos de não pagamento da locação no prazo de até 48 h após seu vencimento, conforme condição contratada, sem ônus, ou mediante aviso prévio com no mínimo 30 (trinta) dias de antecedência.</p>
+        <p>10.2 Na eventualidade da ocorrência de quaisquer situações expresas nas alíneas a seguir, o CLIENTE será considerado em situação de irregularidade junto à LOCADORA, acarretando na perda da sua autorização para a utilização do veículo locado, bem como na possibilidade de solicitação de descadastramento junto à plataforma do Aplicativo parceiro, até que haja efetiva regularização da pendência. Na manutenção da situação irregular, a LOCADORA poderá rescindir o Contrato celebrado com o CLIENTE, bem como realizar todos os procedimentos de retomada do veículo.</p>
+        <div style="padding-left: 15px; margin-bottom: 15px;">
+            <p>a) O carro não for devolvido na data, hora e lugar previamente ajustados;</p>
+            <p>b) Ocorrer qualquer acidente ou dano envolvendo o carro alugado, causando dolosa ou culposamente pelo CLIENTE;</p>
+            <p>c) Ocorrer o uso inadequado do carro;</p>
+            <p>d) Ocorrer apreensão do carro alugado por autoridades competentes;</p>
+            <p>e) O CLIENTE não quitar seus débitos nos respectivos vencimentos.</p>
+        </div>
+        <p>10.3 Havendo necessidade de adoção de procedimentos para a retomada do veículo, em razão da ocorrência de situação irregular, será configurada infração ao Contrato, ensejando ao CLIENTE a obrigatoriedade de pagamento de multa não compensatória no montante de ate 20% (vinte por cento) do valor do veículo à LOCADORA, sem prejuízo das demais penalidades específicas estabelecidas neste documento, observadas as disposições constantes no art. 416, parágrafo único do Código Civil.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">11. DISPOSIÇÕES GERAIS</div>
+        <p>11.1 O CLIENTE concorda que sua assinatura no contrato implica ciência e adesão por si, seus herdeiros/sucessores a estas Condições Específicas e às Condições Gerais.</p>
+        <p>11.2 Eventual omissão ou atraso de qualquer das partes em exigir o cumprimento de qualquer condição do contrato ou em exercer qualquer direito não constituirá novação, nem implicará renúncia da possibilidade futura de exigir seu cumprimento.</p>
+        <p>Art. 416. Para exigir a pena convencional, não é necessário que o credor alegue prejuízo.</p>
+        <p>Parágrafo único. Ainda que o prejuízo exceda ao previsto na cláusula penal, não pode o credor exigir indenização suplementar se assim não foi convencionado. Se o tiver sido, a pena vale como mínimo da indenização, competindo ao credor provar o prejuízo excedente.</p>
+        <p>11.3 O contrato formalizado entre as partes substitui quaisquer acordos anteriores.</p>
+        <p>11.4 A LOCADORA não se responsabiliza por objetos/valores deixados no carro ou em suas dependências.</p>
+
+        <div class="bold" style="margin-top: 15px; margin-bottom: 8px;">12. FORO</div>
+        <p>12.1 O foro competente para dirimir quaisquer pendências relativas ao contrato será o do local da sede da LOCADORA.</p>
+
+        <p class="text-right" style="margin-top: 20px; margin-bottom: 50px;">
+            {$pes_un_local_municipio_descricao}, {$cadastro}
+        </p>
+
+        <!-- Seção de Assinaturas (Tabela sem bordas com page-break-inside) -->
+        <table class="signatures-table">
+            <colgroup>
+                <col style="width: 45%;">
+                <col style="width: 10%;">
+                <col style="width: 45%;">
+            </colgroup>
+            <!-- Linha 1 de Assinatura -->
+            <tr>
+                <td style="border: none !important; border-top: 1px solid #111111 !important; padding-top: 5px; font-size: 10px; vertical-align: top;">
+                    <span class="bold">LOCADORA</span><br>
+                    {$pessoa_unidade_descricao}
+                </td>
+                <td style="border: none !important;">&nbsp;</td>
+                <td style="border: none !important; border-top: 1px solid #111111 !important; padding-top: 5px; font-size: 10px; vertical-align: top;">
+                    <span class="bold">LOCATÁRIO/CLIENTE</span><br>
+                    {$pes_cpf_cnpj}<br>
+                    {$pessoa_descricao}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>
+<!--[/main]-->

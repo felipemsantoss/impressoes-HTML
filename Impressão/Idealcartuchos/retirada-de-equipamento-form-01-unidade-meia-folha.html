@@ -1,0 +1,251 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Retirada de Equipamento</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL NO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO (MICRO-MARGENS) */
+        @page {
+            size: A4 portrait;
+            margin: 25px 20px 35px 20px; /* Margem inferior compactada para o rodapé respirar */
+        }
+
+        /* RESET E FONTES DE ALTA DENSIDADE PADRONIZADAS EM 11PX (REDUÇÃO DE 1PX) */
+        body {
+            font-size: 10px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* RODAPÉ REAL E REPETÍVEL (ESTILO LIBREOFFICE) */
+        .footer {
+            position: fixed;
+            bottom: -22px; /* Posicionado no limite da margem inferior */
+            left: 0px;
+            right: 0px;
+            height: 12px;
+            text-align: right;
+            font-size: 9px; /* Reduzido de 10px para 9px */
+            color: #7f8c8d;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 3px;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-prod- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS ULTRA-COMPACTAS */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; /* Força o alinhamento perfeito das colunas */
+            margin-bottom: 4px; /* Margem mínima entre tabelas */
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 3px 4px;
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) */
+        .grid-table {
+            margin-bottom: 4px;
+        }
+        .grid-table td, .grid-table th {
+            border: 1px solid #dce4ec;
+        }
+        
+        /* CABEÇALHOS EM 11PX */
+        .section-header {
+            background-color: #f4f6f8;
+            color: #2c3e50;
+            font-size: 10px; /* Reduzido de 12px para 11px */
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 5px;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-size: 9px; /* Reduzido de 11px para 10px */
+            font-weight: bold;
+            white-space: nowrap; /* Impede a quebra de linha nos rótulos */
+        }
+        .val {
+            color: #111111;
+        }
+
+        /* AJUSTE EXCLUSIVO PARA O BLOCO 1 DO CLIENTE */
+        .client-info-table td {
+            font-size: 10px; /* Reduzido de 11px para 10px */
+        }
+        .client-info-table .lbl {
+            font-size: 9px; /* Reduzido de 10px para 9px */
+        }
+
+        /* TABELAS DE ITENS (SEM PREÇO) EM 11PX */
+        .items-table th {
+            background-color: #2c3e50;
+            color: #ffffff;
+            font-size: 10px; /* Reduzido de 12px para 11px */
+            text-transform: uppercase;
+            border: 1px solid #2c3e50;
+            padding: 3px 4px;
+        }
+        .items-table td {
+            border: 1px solid #dce4ec;
+            border-bottom: 1px solid #eeeeee;
+            padding: 3px 4px;
+            font-size: 10px; /* Reduzido de 12px para 11px */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- RODAPÉ FIXO -->
+    <div class="footer">
+        Impresso em: <span class="bold">{$data_hoje}</span>
+    </div>
+
+    <!-- CABEÇALHO DO DOCUMENTO (INALTERADO) -->
+    <table style="margin-bottom: 8px; border-bottom: 2px solid #2c3e50; padding-bottom: 4px; border-top: none; border-left: none;">
+        <tr>
+            <td style="width: 25%; vertical-align: middle; border: none;">
+                <img src="{$unidade_image}" style="max-width: 120px; max-height: 45px;" alt="Logo da Empresa">
+            </td>
+            <td style="width: 75%; text-align: right; vertical-align: middle; border: none;">
+                <div style="font-size: 13px; font-weight: bold; color: #2c3e50;">{$pessoa_unidade_descricao}</div>
+                <div style="color: #666666; font-size: 9px; margin-top: 2px;">
+                    CNPJ: {$pessoa_unidade_cpf_cnpj}
+                </div>
+                <div style="color: #666666; font-size: 9px; margin-top: 2px;">
+                    Endereço: {$pessoa_unidade_logradouro} {$pessoa_unidade_numero} {$pessoa_unidade_complemento} &bull; CEP: {$pessoa_unidade_cep} &bull; {$pessoa_unidade_local_municipio_descricao}/{$pessoa_unidade_local_uf_sigla}
+                </div>
+                <div style="color: #666666; font-size: 9px; margin-top: 1px;">
+                    Fone: {$p_unidade_fone1} &bull; Email: {$p_unidade_email}
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- TÍTULO CENTRALIZADO -->
+    <div style="text-align: center; font-size: 17px; font-weight: bold; color: #2c3e50; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;"> <!-- Reduzido de 18px para 17px -->
+        Retirada de Equipamento Nº {$id}
+    </div>
+
+    <!-- BLOCO 1: DADOS CLIENTE E VEÍCULO (Larguras fixadas contra o bug de Colspan) -->
+    <table class="grid-table client-info-table">
+        <tr>
+            <td class="lbl" style="width: 16%;">Cliente:</td>
+            <td class="val" style="width: 34%;"><span class="bold">{$pessoa_id} &ndash; {$pessoa_descricao} &bull; {$pessoa_pj_fantasia}</span></td>
+            <td class="lbl" style="width: 16%;">Cadastro:</td>
+            <td class="val bold" style="width: 34%;">{$cadastro}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Cnpj/Cpf:</td>
+            <td class="val">{$pessoa_cpf_cnpj}</td>
+            <td class="lbl">Telefone:</td>
+            <td class="val">{$pessoa_fone1} {$pessoa_fone2}</td>
+        </tr>
+        <tr>
+            <td class="lbl">IE:</td>
+            <td class="val">{$pessoa_pj_inscricao_estadual}</td>
+            <td class="lbl">E-mail:</td>
+            <td class="val">{$pessoa_email}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: ENDEREÇOS (Corrigido para suportar múltiplos endereços via laço dinâmico) -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 60%;">
+            <col style="width: 40%;">
+        </colgroup>
+        <thead>
+            <tr class="bg-gray-light bold">
+                <th class="section-header" style="width: 60%; padding-left: 4px; text-align: left;">Endereço</th>
+                <th class="section-header" style="width: 40%; text-align: left;">Cidade / Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[enderecos]-->
+            <tr>
+                <td style="padding-left: 4px;">{$logradouro} – {$numero} {$complemento} {$bairro}</td>
+                <td>{$local_municipio_descricao} – {$local_uf_descricao} {$cep}</td>
+            </tr>
+            <!--[/enderecos]-->
+        </tbody>
+    </table>
+
+    <!-- BLOCO 3: ITENS DO EQUIPAMENTO (CORRIGIDO COM LAÇO DYNAMIC) -->
+    <table class="items-table" style="margin-bottom: 4px;">
+        <thead>
+            <tr>
+                <th style="text-align: left; width: 45%; padding-left: 4px;">Produto</th>
+                <th style="text-align: left; width: 15%;">Série</th>
+                <th style="text-align: left; width: 13%;">Patrimônio</th>
+                <th style="text-align: left; width: 13%;">Unitário</th>
+                <th style="text-align: left; width: 14%;">Pedido</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[equipamentos]-->
+            <tr class="linha-prod-{$pedido_id}">
+                <td style="padding-left: 4px;"><span class="bold">{$descricao}</span></td>
+                <td>{$numero_serie}</td>
+                <td>{$patrimonio}</td>
+                <td>{$codigo_nf}</td>
+                <td>{$pedido_id}</td>
+            </tr>
+            <!--[/equipamentos]-->
+        </tbody>
+    </table>
+
+    <!-- BLOCO 4: OBSERVAÇÕES COMPACTADO -->
+    <table class="grid-table" style="margin-bottom: 4px;">
+        <tr>
+            <td class="section-header">Observação</td>
+        </tr>
+        <tr>
+            <td style="min-height: 15px; vertical-align: top; font-size: 10px; line-height: 1.2; padding: 2px 4px;"> <!-- Reduzido de 11px para 10px -->
+                {$obs1}
+            </td>
+        </tr>
+    </table>
+
+    <!-- DECLARAÇÃO LEGAL DE RETIRADA -->
+    <p style="font-size: 10px; font-weight: bold; margin-top: 8px; margin-bottom: 25px; text-align: justify; line-height: 1.3;"> <!-- Reduzido de 11px para 10px -->
+        Declaro que retirei, nesta data, o equipamento vinculado a Ordem de Serviço acima especificados.
+    </p>
+
+    <!-- ASSINATURA CENTRALIZADA COMPACTA -->
+    <table style="width: 100%; margin-top: 30px; border: none; table-layout: fixed;">
+        <tr>
+            <td style="width: 25%;"></td>
+            <td style="width: 50%; text-align: center; vertical-align: bottom; padding: 0;">
+                __________________________________________________<br>
+                <span class="bold" style="font-size: 10px; display: block; margin-top: 3px; color: #555555;">{$pessoa_descricao}</span> <!-- Reduzido de 11px para 10px -->
+            </td>
+            <td style="width: 25%;"></td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

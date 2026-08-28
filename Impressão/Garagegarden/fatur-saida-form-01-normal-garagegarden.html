@@ -1,0 +1,246 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrato de Compra e Venda de Veículo Usado à Prazo</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 2.50cm 1.50cm 2.00cm 1.50cm; /* Margem superior aumentada para acomodar a logo fixa */
+        }
+
+        body {
+            font-size: 10px; /* Tamanho ideal para leitura confortável de contratos */
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.45;
+        }
+
+        /* LOGO FIXA EM TODAS AS PÁGINAS */
+        .header-fixed {
+            position: fixed;
+            top: -1.70cm;
+            left: 0;
+            right: 0;
+            text-align: center;
+            height: 50px;
+        }
+
+        /* TEXTO JURÍDICO */
+        .text-justify {
+            text-align: justify;
+        }
+        
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        p {
+            margin: 0 0 10px 0;
+            text-indent: 15px; /* Recuo padrão de parágrafos em contratos */
+        }
+        
+        .no-indent {
+            text-indent: 0 !important;
+        }
+
+        .clause-title {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        /* ESTRUTURA GERAL DAS TABELAS - CORREÇÃO DE COLAPSO DO DOMPDF */
+        table {
+            width: 100%;
+            border-collapse: separate !important; /* CORREÇÃO DOMPDF */
+            border-spacing: 0 !important; /* CORREÇÃO DOMPDF */
+            table-layout: fixed !important; /* CORREÇÃO CRÍTICA DOMPDF */
+            margin-bottom: 12px;
+            page-break-inside: avoid;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 4px 6px;
+            word-wrap: break-word;
+            line-height: 1.2;
+        }
+
+        /* GRADE ESTRUTURADA PARA PARCELAS DO CONTRATO */
+        .grid-table {
+            border-top: 1px solid #cbd5e0;
+            border-left: 1px solid #cbd5e0;
+            margin-top: 5px;
+            margin-bottom: 12px;
+        }
+        .grid-table td, .grid-table th {
+            border-right: 1px solid #cbd5e0;
+            border-bottom: 1px solid #cbd5e0;
+        }
+
+        /* EVITA QUEBRA INDEVIDA DE ASSINATURAS */
+        .signatures-container {
+            page-break-inside: avoid;
+            margin-top: 30px;
+        }
+
+        .signature-line-box {
+            width: 50%;
+            margin: 25px auto 0 auto;
+            text-align: center;
+            page-break-inside: avoid;
+        }
+
+        .linha-parc- { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO REPETÍVEL EM TODAS AS PÁGINAS -->
+    <div class="header-fixed">
+        <img src="{$unidade_image}" style="max-height: 45px; object-fit: contain;" alt="Logo Garage Garden">
+    </div>
+
+    <div class="text-justify">
+
+        <!-- TÍTULOS PRINCIPAIS -->
+        <div class="bold text-center" style="font-size: 11px; margin-top: 10px; margin-bottom: 2px;">CONTRATO DE COMPRA E VENDA DE VEÍCULO USADO À PRAZO</div>
+        <div class="text-center" style="margin-bottom: 20px;">CONTRATO {$codigo}</div>
+
+        <div class="bold text-center" style="margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">IDENTIFICAÇÃO DAS PARTES CONTRATANTES</div>
+
+        <!-- QUALIFICAÇÃO DAS PARTES -->
+        <p class="no-indent"><strong>VENDEDOR:</strong> <span class="bold">{$pessoa_unidade_descricao}</span>, CNPJ. nº {$pessoa_unidade_cpf_cnpj}, residente e domiciliado na Rua Cantor Raul Seixas, nº 588, bairro Jardim Ipanema, Cep 87.053-240, Cidade Maringá, no estado Paraná.</p>
+        
+        <p class="no-indent" style="margin-bottom: 15px;"><strong>COMPRADOR:</strong> <span class="bold">{$pessoa_descricao}</span>, CPF n° {$pessoa_cpf_cnpj}, residente e domiciliado na {$logradouro} {$numero} {$complemento} {$bairro}, Cidade {$local_municipio_descricao} / {$local_uf_descricao}.</p>
+
+        <p class="bold" style="font-style: italic; text-indent: 0; margin-bottom: 20px;">As partes acima identificadas têm, entre si, justo e acertado o presente Contrato de Compra e Venda de Veículo Usado à Prazo, que se regerá pelas cláusulas seguintes e pelas condições descritas no presente.</p>
+
+        <!-- SEÇÃO: DO OBJETO DO CONTRATO -->
+        <div class="bold text-center" style="margin-top: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">DO OBJETO DO CONTRATO</div>
+
+        <p class="no-indent"><strong>Cláusula 1ª.</strong> O presente contrato tem como OBJETO, o veículo</p>
+        <p class="no-indent bold" style="font-size: 11px; margin-left: 15px; margin-bottom: 10px;">{$produto_descricao}</p>
+        <p class="no-indent" style="margin-bottom: 15px;">de propriedade do <strong>VENDEDOR</strong>, livre de qualquer ônus ou encargo, apresentando as seguintes características: {$complementar}</p>
+
+        <p class="no-indent" style="margin-bottom: 20px;"><strong>Cláusula 2ª.</strong> O veículo, objeto deste contrato é usado, apresentando um desgaste natural decorrente do tempo, já visto e inspecionado pelo <strong>COMPRADOR</strong>, o qual tomou ciência de suas condições e estado de conservação.</p>
+
+        <!-- SEÇÃO: DAS RESPONSABILIDADES -->
+        <div class="bold text-center" style="margin-top: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">DAS RESPONSABILIDADES</div>
+
+        <p class="no-indent" style="margin-bottom: 25px;"><strong>Cláusula 3ª.</strong> O <strong>VENDEDOR</strong> está isento da relação de garantia de motor de veículo estabelecido pela lei.</p>
+
+        <!-- FORÇA QUEBRA DE PÁGINA (PÁGINA 2) -->
+        <div style="page-break-before: always;"></div>
+
+        <p class="no-indent" style="margin-top: 10px; margin-bottom: 20px;"><strong>Cláusula 4ª.</strong> O <strong>VENDEDOR</strong> se responsabiliza pela entrega do veículo no local indicado pelo <strong>COMPRADOR</strong>, nas mesmas condições de que quando foi inspecionado pelo <strong>COMPRADOR</strong>.</p>
+
+        <!-- SEÇÃO: DA TRANSFERÊNCIA DA PROPRIEDADE -->
+        <div class="bold text-center" style="margin-top: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">DA TRANSFERÊNCIA DA PROPRIEDADE DO VEÍCULO</div>
+
+        <p class="no-indent" style="margin-bottom: 20px;"><strong>Cláusula 5ª.</strong> A transferência da propriedade do veículo será feita de maneira imediata.</p>
+
+        <!-- SEÇÃO: DO PREÇO -->
+        <div class="bold text-center" style="margin-top: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">DO PREÇO</div>
+
+        <p class="no-indent"><strong>Cláusula 6ª.</strong> O <strong>COMPRADOR</strong> pagará ao <strong>VENDEDOR</strong>, pela compra do veículo objeto deste contrato, a quantia de R$ {$total_nf}, em parcelas conforme abaixo:</p>
+
+        <!-- TABELA DE PARCELAS DO CONTRATO -->
+        <table class="grid-table">
+            <colgroup>
+                <col width="40%">
+                <col width="30%">
+                <col width="30%">
+            </colgroup>
+            <thead>
+                <tr style="background-color: #f7fafc; font-weight: bold;">
+                    <th style="width: 40%;">Forma de Pagamento</th>
+                    <th style="width: 30%;">Vencimento</th>
+                    <th style="width: 30%; text-align: right;">Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--[parcelas]-->
+                <tr class="linha-parc-{$parcela}">
+                    <td>{$financ_forma_pgto_descricao}</td>
+                    <td>{$vencimento}</td>
+                    <td style="text-align: right; font-weight: bold;">R$ {$valor}</td>
+                </tr>
+                <!--[/parcelas]-->
+            </tbody>
+        </table>
+
+        <!-- SEÇÃO: CONDIÇÕES GERAIS -->
+        <div class="bold text-center" style="margin-top: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">CONDIÇÕES GERAIS</div>
+
+        <p class="no-indent" style="margin-bottom: 12px;"><strong>Cláusula 7ª.</strong> Qualquer problema verificado no funcionamento ou na estrutura do veículo, dentro do prazo estabelecido na Cláusula 3ª, deverá ser comunicado pelo <strong>COMPRADOR</strong> ao <strong>VENDEDOR</strong> no prazo de 5 dias após aquele vir a tomar conhecimento do problema.</p>
+
+        <p class="no-indent" style="margin-bottom: 12px;"><strong>Cláusula 8ª.</strong> O <strong>VENDEDOR</strong> não se responsabilizará pelos danos causados no veículo por negligência e mau uso do <strong>COMPRADOR</strong>, e por problemas decorrentes da não realização das revisões acertadas.</p>
+
+        <p class="no-indent" style="margin-bottom: 20px;"><strong>Cláusula 9ª.</strong> O presente contrato passa a valer a partir da assinatura pelas partes, obrigando-se a ele os herdeiros ou sucessores das mesmas.</p>
+
+        <!-- SEÇÃO: DO FORO -->
+        <div class="bold text-center" style="margin-top: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">DO FORO</div>
+
+        <p class="no-indent" style="margin-bottom: 20px;"><strong>Cláusula 10ª.</strong> Para dirimir quaisquer controvérsias oriundas do CONTRATO, as partes elegem o foro da comarca de (Maringá).</p>
+
+        <p class="no-indent" style="margin-top: 25px;">Por estarem assim justos e contratados, firmam o presente instrumento, em duas vias de igual teor, juntamente com 2 (duas) testemunhas.</p>
+
+        <!-- FORÇA QUEBRA DE PÁGINA (PÁGINA 3 - ASSINATURAS) -->
+        <div style="page-break-before: always;"></div>
+
+        <!-- DATA E ASSINATURAS DO CONTRATO -->
+        <p class="no-indent" style="margin-top: 20px; margin-bottom: 30px;">Assinatura na presente data: {$cadastro}.</p>
+
+        <div class="signatures-container">
+            
+            <div class="signature-line-box">
+                <div style="border-top: 1px solid #111111; padding-top: 4px;">
+                    <span class="bold">{$pessoa_descricao}</span><br>
+                    C.P.F. nº {$pessoa_cpf_cnpj}
+                </div>
+            </div>
+
+            <div class="signature-line-box" style="margin-top: 35px;">
+                <div style="border-top: 1px solid #111111; padding-top: 4px;">
+                    <span class="bold">{$pessoa_unidade_descricao}</span><br>
+                    CNPJ. nº {$pessoa_unidade_cpf_cnpj}
+                </div>
+            </div>
+
+            <div class="signature-line-box" style="margin-top: 35px;">
+                <div style="border-top: 1px solid #111111; padding-top: 4px;">
+                    <span class="bold">Testemunha 1</span><br>
+                    C.P.F. nº
+                </div>
+            </div>
+
+            <div class="signature-line-box" style="margin-top: 35px;">
+                <div style="border-top: 1px solid #111111; padding-top: 4px;">
+                    <span class="bold">Testemunha 2</span><br>
+                    C.P.F. nº
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
+<!--[/main]-->

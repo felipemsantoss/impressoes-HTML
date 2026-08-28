@@ -1,0 +1,75 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiqueta de Produto</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* TRAVA CRÍTICA DAS DIMENSÕES FÍSICAS DA ETIQUETA (6.00cm x 4.00cm) */
+        @page {
+            size: 6.00cm 4.00cm;
+            margin: 0px !important;
+        }
+
+        /* LIMITAÇÃO DO CANVAS DO CORPO (LARGURA: 6cm / ALTURA: 4cm) */
+        html, body {
+            width: 6.00cm;
+            height: 4.00cm;
+            margin: 0 !important;
+            padding: 0.35cm 0.40cm; /* Recuo interno sutil para não colar nos cantos da bobina */
+            background-color: #ffffff;
+            overflow: hidden; /* Elimina quebras e rolagens verticais */
+            color: #000000;
+            line-height: 1.2;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        /* HIERARQUIA VISUAL DA ETIQUETA */
+        .product-description {
+            font-size: 11px;
+            font-weight: normal;
+            margin-bottom: 4px;
+            word-wrap: break-word;
+            padding-right: 0.60cm; /* ALTERAÇÃO AQUI: Força a descrição a quebrar um pouco antes da borda direita */
+        }
+
+        .product-price {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .product-code {
+            font-size: 11px;
+            font-weight: normal;
+        }
+
+        /* TRUQUE DE MÁGICA CSS: SE A VARIÁVEL DE VALOR VIER VAZIA DO BANCO (COMO VALOR ZERO), FORÇA EXIBIÇÃO DE "0,00" */
+        .price-value:empty::before {
+            content: "0,00";
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Descrição do Produto -->
+    <div class="product-description">{$descricao}</div>
+
+    <!-- Preço de Venda em Destaque Negrito com Fallback para Valor Zero -->
+    <div class="product-price">R$ <span class="price-value">{$preco_venda}</span></div>
+
+    <!-- Código do Produto -->
+    <div class="product-code">Cod Prod: {$id}</div>
+
+</body>
+</html>
+<!--[/main]-->

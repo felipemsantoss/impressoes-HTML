@@ -1,0 +1,176 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cupom Pedido</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL E CORREÇÃO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important; /* CORREÇÃO DOMPDF */
+        }
+
+        /* DIMENSÕES EXATAS DO DIÁLOGO DE CONFIGURAÇÃO DE IMPRESSORA TÉRMICA */
+        @page {
+            size: 8.00cm 12.10cm; /* Largura: 8,00 cm | Altura: 12,10 cm */
+            margin: 0.00cm 0.60cm 0.40cm 0.30cm; /* Cima: 0,00cm | Direita: 0,60cm | Baixo: 0,40cm | Esquerda: 0,30cm */
+        }
+
+        /* RESET E FONTES ESCALADAS PARA LARGURA REDUZIDA DE 8CM */
+        body {
+            font-size: 8px; /* Fonte reduzida para garantir leitura no papel térmico */
+            color: #000000;
+            background-color: #ffffff;
+            margin: 0;
+            padding-top: 4px; /* Pequeno espaçamento superior para evitar corte na margem física */
+            line-height: 1.25;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-prod- { display: none !important; }
+
+        /* ALINHAMENTOS */
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .bold { font-weight: bold; }
+
+        /* LINHA DIVISÓRIA SÓLIDA TÉRMICA */
+        .divider {
+            border-top: 1px solid #000000;
+            margin: 5px 0;
+            width: 100%;
+        }
+
+        /* CONFIGURAÇÕES GERAIS DE TABELAS */
+        table {
+            width: 100%;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            table-layout: fixed;
+        }
+
+        td, th {
+            vertical-align: middle;
+            word-wrap: break-word;
+            padding: 1px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO DO EMISSOR -->
+    <div class="text-center" style="font-size: 7px; margin-bottom: 2px;">
+        Emissão: {$cadastro} - Pedido - {$id}
+    </div>
+    <div class="text-center bold" style="font-size: 9.5px; margin-bottom: 2px; text-transform: uppercase;">
+        {$pessoa_unidade_descricao}
+    </div>
+    <div class="text-center" style="font-size: 7.5px; margin-bottom: 1px;">
+        {$p_unidade_fone1}
+    </div>
+    <div class="text-center" style="font-size: 7.5px; margin-bottom: 2px;">
+        {$p_unidade_email}
+    </div>
+
+    <!-- LINHA DIVISÓRIA -->
+    <div class="divider"></div>
+
+    <!-- DADOS DO CLIENTE -->
+    <table style="width: 100%; border: none;">
+        <colgroup>
+            <col style="width: 25%;">
+            <col style="width: 75%;">
+        </colgroup>
+        <tr>
+            <td class="bold" style="width: 25%;">Cliente:</td>
+            <td style="width: 75%;">{$pessoa_id} – {$pessoa_descricao}</td>
+        </tr>
+        <tr>
+            <td class="bold">Cnpj/Cpf:</td>
+            <td>{$pessoa_cpf_cnpj}</td>
+        </tr>
+        <tr>
+            <td class="bold">Telefone:</td>
+            <td>{$pessoa_fone1}</td>
+        </tr>
+        <tr>
+            <td class="bold">Cidade/UF:</td>
+            <td>{$local_municipio_descricao} / {$local_uf_descricao}</td>
+        </tr>
+    </table>
+
+    <!-- TABELA DE ITENS (PRODUTOS) COM DIVISORES TÉRMICOS -->
+    <table style="width: 100%; border-top: 1px solid #000000; border-bottom: 1px solid #000000; margin-top: 4px; margin-bottom: 4px;">
+        <colgroup>
+            <col style="width: 10%;">
+            <col style="width: 40%;">
+            <col style="width: 12%;">
+            <col style="width: 10%;">
+            <col style="width: 14%;">
+            <col style="width: 14%;">
+        </colgroup>
+        <thead>
+            <tr style="font-weight: bold;">
+                <th class="text-left" style="width: 10%; padding: 3px 0;">Cód</th>
+                <th class="text-left" style="width: 40%; padding: 3px 0;">Produto</th>
+                <th class="text-center" style="width: 12%; padding: 3px 0;">Qtd</th>
+                <th class="text-center" style="width: 10%; padding: 3px 0;">Un</th>
+                <th class="text-right" style="width: 14%; padding: 3px 0;">Preço</th>
+                <th class="text-right" style="width: 14%; padding: 3px 0;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[produtos]-->
+            <tr class="linha-prod-{$produto_id}">
+                <td class="text-left" style="padding: 2px 0;">{$produto_id}</td>
+                <td class="text-left" style="padding: 2px 0;">{$produto_descricao}</td>
+                <td class="text-center" style="padding: 2px 0;">{$qtde}</td>
+                <td class="text-center" style="padding: 2px 0;">{$sigla}</td>
+                <td class="text-right" style="padding: 2px 0;">{$preco}</td>
+                <td class="text-right bold" style="padding: 2px 0;">{$total}</td>
+            </tr>
+            <!--[/produtos]-->
+        </tbody>
+    </table>
+
+    <!-- RESUMO FINANCEIRO (Grade compacta de 4 colunas em simetria horizontal) -->
+    <table style="width: 100%; border: none;">
+        <colgroup>
+            <col style="width: 18%;">
+            <col style="width: 32%;">
+            <col style="width: 18%;">
+            <col style="width: 32%;">
+        </colgroup>
+        <tr>
+            <td class="bold" style="width: 18%;">Desconto</td>
+            <td style="width: 32%;">{$desconto_produto}</td>
+            <td class="bold" style="width: 18%;">Produtos</td>
+            <td class="text-right bold" style="width: 32%;">{$total_produto}</td>
+        </tr>
+        <tr>
+            <td class="bold">Pgto</td>
+            <td style="font-size: 7.5px;">{$financ_forma_pgto_descricao}</td>
+            <td class="bold">Frete</td>
+            <td class="text-right">{$total_frete}</td>
+        </tr>
+        <tr>
+            <td class="bold">Prazo</td>
+            <td style="font-size: 7.5px;">{$financ_prazo_pgto_descricao}</td>
+            <td class="bold" style="font-size: 9px;">Total</td>
+            <td class="text-right bold" style="font-size: 9px;">{$total_pedido}</td>
+        </tr>
+    </table>
+
+    <!-- MENSAGEM FINAL E IDENTIFICAÇÃO DO VENDEDOR -->
+    <div class="text-center bold" style="font-size: 9px; margin-top: 8px; margin-bottom: 6px; letter-spacing: 0.5px;">
+        DOCUMENTO SEM VALOR FISCAL
+    </div>
+    <div style="font-size: 8px;">
+        <span class="bold">Vendedor:</span> {$pessoa_responsavel_descricao}
+    </div>
+
+</body>
+</html>
+<!--[/main]-->

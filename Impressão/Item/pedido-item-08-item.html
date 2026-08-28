@@ -1,0 +1,389 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Orçamento de Assistência Técnica</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 1.00cm 1.20cm 1.20cm 1.20cm;
+        }
+
+        body {
+            font-size: 12px;
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.3;
+            background-color: #ffffff;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* TABELAS E GRIDS DO DOCUMENTO - AJUSTADO PARA ZERO ESPAÇO ENTRE BLOCOS */
+        table {
+            width: 100%;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            table-layout: fixed !important; /* CORREÇÃO CRÍTICA DOMPDF */
+            margin-bottom: 0px !important; /* COLADO SEM ESPAÇO */
+        }
+
+        td, th {
+            padding: 2.5px 4px;
+            vertical-align: middle;
+            word-wrap: break-word;
+        }
+
+        /* CLASSE DE BORDAS EM AZUL CORPORATIVO #2a6099 */
+        .grid-table {
+            border-top: 1px solid #2a6099;
+            border-left: 1px solid #2a6099;
+            margin-bottom: 0px !important;
+        }
+        .grid-table td, .grid-table th {
+            border-right: 1px solid #2a6099;
+            border-bottom: 1px solid #2a6099;
+        }
+
+        /* SEÇÃO HEADER DE COR #2a6099 COM TEXTO EM BRANCO */
+        .section-header {
+            background-color: #2a6099 !important;
+            color: #ffffff !important;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 3px 5px;
+        }
+        .section-header td, .section-header th {
+            color: #ffffff !important;
+            font-weight: bold;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            font-weight: bold;
+            color: #2a6099;
+        }
+
+        .preservar-linhas {
+            white-space: pre-wrap !important;
+        }
+
+        /* FOOTER ESTÁTICO DO ENDEREÇO */
+        .footer-address {
+            position: fixed;
+            bottom: -0.90cm;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+            color: #111111;
+        }
+
+        /* TRUQUES DE ADIANTI: OCULTA ELEMENTOS SE ESTIVEREM EM BRANCO NO BANCO DE DADOS */
+        .linha-equip- { display: none !important; }
+        .linha-serv- { display: none !important; }
+        .linha-prod- { display: none !important; }
+        .linha-perif- { display: none !important; }
+        .linha-laudo- { display: none !important; }
+        .linha-defeito- { display: none !important; }
+        .linha-obs2- { display: none !important; }
+
+        /* OCULTA AS TABELAS DE LAÇO POR PADRÃO (SÓ ATIVA SE EXECUTADO O LAÇO INTERNO) */
+        .tabela-servicos { display: none !important; }
+        .tabela-perifericos { display: none !important; }
+        .tabela-produtos { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- ENDEREÇO ESTÁTICO DO RODAPÉ -->
+    <div class="footer-address">
+        RUA MACHADO DE ASSIS, 733 – ZONA 06, CEP 87015-580 – MARINGÁ – PR
+    </div>
+
+    <!-- CABEÇALHO DO ORÇAMENTO (Ocupando toda a largura superior) -->
+    <table style="border: none; margin-bottom: 5px !important;">
+        <tr>
+            <td style="padding: 0; border: none; vertical-align: middle; text-align: center;">
+                <!-- ALTERAÇÃO AQUI: height: auto e max-height aumentado para 140px -->
+                <img src="{$unidade_image}" style="width: 100%; height: auto; max-height: 140px; display: block;" alt="Header">
+            </td>
+        </tr>
+    </table>
+
+    <!-- LINHA DE METADADOS POSICIONADA LOGO ABAIXO DO CABEÇALHO (Dividida em duas colunas de 50% com textos centralizados) -->
+    <table style="border: none; margin-bottom: 10px !important; width: 100%;">
+        <colgroup>
+            <col width="40%">
+            <col width="60%">
+        </colgroup>
+        <tr>
+            <td style="font-size: 20px; color: #2a6099; padding: 2px 0; border: none; text-align: center; vertical-align: middle;" bold><span class="bold">DATA {$cadastro}</span></td>
+            <td style="font-size: 26px ; color: #2a6099; padding: 2px 0; border: none; text-align: center; vertical-align: middle;"bold><span class="bold">ORÇAMENTO OM-{$cod_interno}</span></td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 1: DADOS DO CLIENTE (Campos de metadados removidos conforme solicitado) -->
+    <table class="grid-table">
+        <colgroup>
+            <col width="50%">
+            <col width="50%">
+        </colgroup>
+        <tr>
+            <td><span class="bold">CLIENTE:</span> {$pessoa_id} – {$pessoa_descricao}</td>
+            <td><span class="bold">TELEFONE:</span> {$pessoa_fone1} {$pessoa_fone2} {$contato_fone}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">RESPONSÁVEL:</span> {$contato}</td>
+            <td><span class="bold">EMAIL:</span> {$pessoa_email} {$contato_email}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">CNPJ:</span> {$pessoa_cpf_cnpj}</td>
+            <td><span class="bold">UNIDADE / SETOR:</span> {$pessoa_pj_fantasia}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: EQUIPAMENTOS (Mapeado com o loop padrão correto [equipamentos]) -->
+    <!--[equipamentos]-->
+    <div class="linha-equip-{$descricao}" style="page-break-inside: avoid;">
+        <table class="grid-table" style="border-top: none !important;">
+            <colgroup>
+                <col width="20%">
+                <col width="16%">
+                <col width="16%">
+                <col width="16%">
+                <col width="16%">
+                <col width="16%">
+            </colgroup>
+            <thead>
+                <tr class="section-header">
+                    <th style="width: 20%; color: #ffffff; text-align: left;">EQUIPAMENTO:</th>
+                    <th style="width: 16%; color: #ffffff; text-align: left;">MARCA:</th>
+                    <th style="width: 16%; color: #ffffff; text-align: left;">MODELO:</th>
+                    <th style="width: 16%; color: #ffffff; text-align: left;">SERIAL:</th>
+                    <th style="width: 16%; color: #ffffff; text-align: left;">TENSÃO:</th>
+                    <th style="width: 16%; color: #ffffff; text-align: left;">CORRENTE:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{$descricao}</td>
+                    <td>{$marca}</td>
+                    <td>{$modelo}</td>
+                    <td>{$numero_serie}</td>
+                    <td>{$tensao}</td>
+                    <td>{$corrente}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- SITUAÇÃO VERIFICADA NOS TESTES (Oculta se laudo estiver vazio) -->
+        <table class="grid-table linha-laudo-{$laudo}" style="border-top: none !important;">
+            <thead>
+                <tr class="section-header">
+                    <th style="color: #ffffff;">SITUAÇÃO VERIFICADA NOS TESTES:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="preservar-linhas">{$laudo}</td>
+                </tr>
+            </tbody>
+        </table>
+    <!--[/equipamentos]-->
+
+    <!-- BLOCO 3: PROCEDIMENTOS A REALIZAR (SERVIÇOS) (Oculta tabela se laço de serviços vier vazio) -->
+    <table class="grid-table tabela-servicos" style="page-break-inside: avoid; border-top: none !important;">
+        <colgroup>
+            <col width="85%">
+            <col width="15%">
+        </colgroup>
+        <thead>
+            <tr class="section-header">
+                <th style="width: 85%; color: #ffffff; text-align: left;">PROCEDIMENTOS A REALIZAR:</th>
+                <th style="width: 15%; text-align: right; color: #ffffff;">TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[servicos]-->
+            <style>.tabela-servicos { display: table !important; }</style>
+            <tr class="linha-serv-{$servico_id}">
+                <td>{$servico_descricao}</td>
+                <td style="text-align: right; font-weight: bold;">{$total}</td>
+            </tr>
+            <!--[/servicos]-->
+            <tr style="font-weight: bold;">
+                <td style="text-align: right;">TOTAL GERAL</td>
+                <td style="text-align: right;">{$total_servico}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- BLOCO 3.5: PARTES / PEÇAS (PRODUTOS) (Oculta se laço de produtos vier vazio) -->
+    <table class="grid-table tabela-produtos" style="page-break-inside: avoid; border-top: none !important;">
+        <colgroup>
+            <col width="10%">
+            <col width="50%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+            <col width="10%">
+        </colgroup>
+        <thead>
+            <tr class="section-header">
+                <th style="width: 10%; color: #ffffff;">ID</th>
+                <th style="width: 50%; color: #ffffff;">PARTES / PEÇAS</th>
+                <th style="width: 10%; text-align: center; color: #ffffff;">SIGLA</th>
+                <th style="width: 10%; text-align: center; color: #ffffff;">QTDE</th>
+                <th style="width: 10%; text-align: right; color: #ffffff;">PREÇO</th>
+                <th style="width: 10%; text-align: right; color: #ffffff;">TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[produtos]-->
+            <style>.tabela-produtos { display: table !important; }</style>
+            <tr class="linha-prod-{$produto_id}">
+                <td style="text-align: center;">{$produto_id}</td>
+                <td>{$produto_descricao} {$produto_referencia_descricao}</td>
+                <td style="text-align: center;">{$sigla}</td>
+                <td style="text-align: center;">{$qtde}</td>
+                <td style="text-align: right;">{$preco}</td>
+                <td style="text-align: right; font-weight: bold;">{$total}</td>
+            </tr>
+            <!--[/produtos]-->
+            <tr style="font-weight: bold;">
+                <td colspan="5" style="text-align: right;">TOTAL GERAL</td>
+                <td style="text-align: right;">{$produtos_total_sum}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!--[equipamentos_asc]-->
+    <!-- DEFEITO DECLARADO (Oculta se defeito estiver vazio) -->
+        <table class="grid-table linha-defeito-{$defeito}" style="border-top: none !important;">
+            <thead>
+                <tr class="section-header">
+                    <th style="color: #ffffff;">DEFEITO DECLARADO:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="preservar-linhas">{$defeito}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!--[/equipamentos_asc]-->
+
+    <!-- BLOCO 5: ACESSÓRIOS DO EQUIPAMENTO (Oculta tabela se laço de periféricos vier vazio) -->
+    <table class="grid-table tabela-perifericos" style="page-break-inside: avoid; border-top: none !important;">
+        <thead>
+            <tr class="section-header">
+                <th style="color: #ffffff;">ACESSÓRIOS DO EQUIPAMENTO:</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[perifericos]-->
+            <style>.tabela-perifericos { display: table !important; }</style>
+            <tr class="linha-perif-{$equipamento_periferico_descricao}">
+                <td>{$equipamento_periferico_descricao}</td>
+            </tr>
+            <!--[/perifericos]-->
+        </tbody>
+    </table>
+
+    <!-- BLOCO 6: OBSERVAÇÃO EXTERNA (Oculta se obs2 estiver vazio) -->
+    <table class="grid-table linha-obs2-{$obs2}" style="page-break-inside: avoid; border-top: none !important;">
+        <thead>
+            <tr class="section-header">
+                <th style="color: #ffffff;">OBSERVAÇÃO EXTERNA:</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="preservar-linhas">{$obs2}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- BLOCO 7: OBSERVACÕES FIXAS DO CONTRATO (Contém todos os 6 itens conforme PDF) -->
+    <div style="border-left: 1px solid #2a6099; border-right: 1px solid #2a6099; border-bottom: 1px solid #2a6099; padding: 5px; margin-bottom: 0px !important; page-break-inside: avoid;">
+        <div class="bold" style="text-decoration: underline; margin-bottom: 3px;">Observações:</div>
+        <div class="bold" style="font-size: 11px; line-height: 1.3;">
+            (1) O ITEM-TEC não se responsabiliza por perdas de programação do equipamento, já que defeitos podem acarretar perdas de programação.<br>
+            (2) A GARANTIA de três meses do conserto se refere apenas pelo serviço realizado e componentes utilizados no reparo, em caso de defeito ocasionado por outros motivos, realizaremos um novo orçamento.<br>
+            (3) Sugerimos assim que o cliente receber o equipamento consertado, faça os testes com o mesmo, pois a garantia começa a contar na emissão da nota de prestação de serviços.<br>
+            (4) CASO O ORÇAMENTO SEJA APROVADO OU O EQUIPAMENTO SEJA DECLARADO COMO “SEM POSSIBILIDADE DE CONSERTO”, O PRESENTE ORÇAMENTO NÃO TERA CUSTO. CASO O EQUIPAMENTO VENHA A TER POSSIBILIDADE DE REPARO E O ORÇAMENTO NÃO FOR APROVADO, SERÁ COBRADA UMA TAXA DE 10% DO VALOR TOTAL DO MESMO ORÇAMENTO.<br>
+            (5) <span style="background-color: #ffff00; color: #000000 !important; padding: 0 2px;">VALIDADE DO ORÇAMENTO 30 DIAS.</span><br>
+            (6) Informamos que, caso haja inclusão de PEÇAS no orçamento, estas serão faturadas em nota de produto, de forma separada da nota de serviços. Logo serão emitidas duas notas.
+        </div>
+    </div>
+
+     <!-- SEÇÃO DE FECHAMENTO (SÓ ENVIADA PARA A PRÓXIMA PÁGINA SE NÃO COUBER COMPLETA) -->
+    <div style="page-break-inside: avoid; width: 100%;">
+        <!-- Linha azul final de fechamento da seção de observações -->
+        <div style="background-color: #2a6099; height: 14px; border-left: 1px solid #2a6099; border-right: 1px solid #2a6099; color: #2a6099; font-size: 11px; padding: 2px 5px;">.</div>
+
+        <!-- BLOCO 8: FECHAMENTO / METADADOS (Ocupa a página atual se houver espaço) -->
+        <table class="grid-table" style="border-top: none !important;">
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <tr>
+                <td style="line-height: 1.45;">
+                    <span class="bold">ENVIADO ORÇAMENTO EM:</span> {$envio}<br>
+                    <span class="bold">NOTA DE REMESSA:</span> {$codigo_nf}<br>
+                    <span class="bold">ENTRADA DIA:</span> {$cadastro}
+                </td>
+                <td style="line-height: 1.45; border-left: 1px solid #2a6099;">
+                    <span class="bold">VALOR:</span> {$total_pedido}<br>
+                    <span class="bold">PRAZO DE ENTREGA:</span> {$prazo_entrega_dia} ÚTEIS APÓS A APROVAÇÃO
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- SEÇÃO DA IMAGEM INDEPENDENTE (Borda de união de página corrigida e tratada com page-break-inside: avoid para o bloco inteiro) -->
+    <div style="page-break-inside: avoid !important; width: 100%;">
+        <table class="grid-table" style="border-top: none !important;">
+            <!-- Linha divisória horizontal azul estilizada como cabeçalho de seção para a Imagem -->
+            <tr>
+                <td class="section-header" style="color: #ffffff; font-weight: bold; border-bottom: 1px solid #2a6099;">IMAGEM</td>
+            </tr>
+            <!--[pedido_image]-->
+            <!-- Cada imagem é renderizada em sua própria linha evitando quebra prematura de blocos gigantes -->
+            <tr style="page-break-inside: avoid !important;">
+                <td style="padding: 10px; text-align: center;">
+                    <!-- Altura reduzida de 480px para 280px para permitir que múltiplas fotos caibam na folha sem quebra de página vazia -->
+                    <img src="{$image}" style="max-height: 280px; max-width: 100%; height: auto; display: block; margin: 0 auto;" alt="Imagem do Equipamento">
+                </td>
+            </tr>
+            <!--[/pedido_image]-->
+        </table>
+    </div>
+
+
+</body>
+</html>
+<!--[/main]-->

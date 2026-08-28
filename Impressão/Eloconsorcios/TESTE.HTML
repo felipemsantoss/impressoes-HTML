@@ -1,0 +1,334 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrato de Locação</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL E CORREÇÃO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important; /* CORREÇÃO DOMPDF */
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO (PORTRAIT) */
+        @page {
+            size: A4 portrait;
+            margin: 20px 20px 25px 20px; /* Margens compactadas para manter o fluxo em folha única */
+        }
+
+        /* RESET E FONTES PADRONIZADAS EM 8PX (ALTA DENSIDADE) */
+        body {
+            font-size: 10px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.25;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-serv- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS - CORREÇÃO DE COLAPSO DO DOMPDF */
+        table {
+            width: 100%;
+            border-collapse: separate !important; /* CORREÇÃO DOMPDF */
+            border-spacing: 0 !important; /* CORREÇÃO DOMPDF */
+            table-layout: fixed;
+            margin-bottom: 4px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 2.5px 3px;
+            word-wrap: break-word;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) - TRATAMENTO DE BORDAS SEPARATE */
+        .grid-table, .items-table {
+            border-top: 1px solid #c0c0c0;
+            border-left: 1px solid #c0c0c0;
+        }
+        .grid-table td, .grid-table th, .items-table td, .items-table th {
+            border-right: 1px solid #c0c0c0;
+            border-bottom: 1px solid #c0c0c0;
+        }
+        
+        /* CABEÇALHOS */
+        .section-header {
+            background-color: #f4f6f8;
+            color: #2c3e50;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 3px 4px;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        .val {
+            color: #111111;
+        }
+
+        /* TABELAS DE ITENS */
+        .items-table th {
+            background-color: #2c3e50;
+            color: #ffffff;
+            font-size: 10px;
+            text-transform: uppercase;
+            padding: 3px 4px;
+        }
+        .items-table td {
+            padding: 3px 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO DO EMISSOR -->
+    <table style="margin-bottom: 6px; border-bottom: 2px solid #2c3e50; padding-bottom: 3px; border-top: none; border-left: none;">
+        <tr>
+            <td style="width: 50%; vertical-align: middle; border: none; padding: 0;">
+                <img src="{$unidade_image}" style="max-width: 120px; max-height: 40px;" alt="Logo da Empresa">
+            </td>
+            <td style="width: 50%; text-align: right; vertical-align: middle; border: none; padding: 0; font-size: 7.5px; color: #7f8c8d;">
+                Página 1 de 1
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 1: IDENTIFICAÇÃO DO CLIENTE -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+        </colgroup>
+        <tr>
+            <td class="lbl" style="width: 15%;">Cliente:</td>
+            <td class="val bold" style="width: 35%;">{$pessoa_descricao}</td>
+            <td class="lbl" style="width: 15%;">Contato:</td>
+            <td class="val" style="width: 35%;">{$pes_fone1}</td>
+        </tr>
+        <tr>
+            <td class="lbl">CNH:</td>
+            <td class="val">{$pf_cnh_numero}</td>
+            <td class="lbl">CPF:</td>
+            <td class="val">{$pes_cpf_cnpj}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Endereço:</td>
+            <td class="val" colspan="3">{$pes_logradouro} &ndash; {$pes_numero} {$pes_complemento} {$pes_bairro} &bull; <span class="bold">Cidade / Estado:</span> {$pes_local_municipio_descricao} {$pes_local_uf_sigla}</td>
+        </tr>
+        <tr>
+            <td class="lbl">N° de Contrato:</td>
+            <td class="val bold">{$id}</td>
+            <td class="lbl">Status:</td>
+            <td class="val">{$global_status_descricao}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: DADOS DE RETIRADA E DEVOLUÇÃO (Sino bilateral de 4 colunas) -->
+    <table class="grid-table" style="margin-top: 4px;">
+        <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+        </colgroup>
+        <tr>
+            <td colspan="2" class="section-header" style="text-align: left;">Dados de Retirada</td>
+            <td colspan="2" class="section-header" style="text-align: left;">Dados de Devolução</td>
+        </tr>
+        <tr>
+            <td class="lbl" style="width: 15%;">Data:</td>
+            <td class="val bold" style="width: 35%;">{$inicio}</td>
+            <td class="lbl" style="width: 15%;">Data:</td>
+            <td class="val bold" style="width: 35%;">{$termino}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Loja:</td>
+            <td class="val">{$pessoa_unidade_descricao}</td>
+            <td class="lbl">Loja:</td>
+            <td class="val">{$pessoa_unidade_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Endereço da Loja:</td>
+            <td class="val" style="font-size: 7.5px;">{$pes_un_logradouro}, {$pes_un_numero}. {$pes_un_local_municipio_descricao} &ndash; {$pes_un_local_uf_sigla}. {$pes_un_end_cep}</td>
+            <td class="lbl">Endereço da Loja:</td>
+            <td class="val" style="font-size: 7.5px;">{$pes_un_logradouro}, {$pes_un_numero}. {$pes_un_local_municipio_descricao} &ndash; {$pes_un_local_uf_sigla}. {$pes_un_end_cep}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Responsável:</td>
+            <td class="val">{$pessoa_responsavel_descricao}</td>
+            <td class="lbl">Responsável:</td>
+            <td class="val">{$pessoa_responsavel_descricao}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 3: DADOS DO VEÍCULO (Laço dinâmico de veiculos ativo) -->
+    <table class="grid-table" style="margin-top: 4px;">
+        <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 85%;">
+        </colgroup>
+        <tr>
+            <td colspan="2" class="section-header" style="text-align: left;">Dados do Veículo</td>
+        </tr>
+        <!--[veiculos]-->
+        <tr>
+            <td class="lbl" style="width: 15%;">Veículo:</td>
+            <td class="val" style="width: 85%;">
+                <span class="bold">Placa:</span> {$veiculo_placa} &nbsp;&bull;&nbsp; 
+                <span class="bold">Modelo:</span> {$veiculo_modelo_descricao} &nbsp;&bull;&nbsp; 
+                <span class="bold">Marca:</span> {$veiculo_marca_descricao}
+            </td>
+        </tr>
+        <tr>
+            <td class="lbl">Kilometragem:</td>
+            <td class="val"><span class="bold">Km retirada:</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="bold">Km devolução:</span></td>
+        </tr>
+        <!--[/veiculos]-->
+    </table>
+
+    <!-- BLOCO 4: VALORES DO CONTRATO -->
+    <table class="items-table" style="margin-top: 4px; margin-bottom: 4px;">
+        <colgroup>
+            <col style="width: 45%;">
+            <col style="width: 15%;">
+            <col style="width: 12%;">
+            <col style="width: 13%;">
+            <col style="width: 15%;">
+        </colgroup>
+        <thead>
+            <tr>
+                <th colspan="5" style="text-align: left; background-color: #f4f6f8; color: #2c3e50; font-size: 8px; font-weight: bold; border: 1px solid #c0c0c0; border-bottom: none;">Valores do seu contrato</th>
+            </tr>
+            <tr style="text-align: left;">
+                <th style="width: 45%;" class="text-left">Descrição</th>
+                <th class="text-right" style="width: 15%;">Valor Unitário</th>
+                <th class="text-center" style="width: 12%;">Quantidade</th>
+                <th class="text-right" style="width: 13%;">Desconto</th>
+                <th class="text-right" style="width: 15%;">Valor Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[servicos]-->
+            <tr class="linha-serv-{$servico_id}">
+                <td class="text-left">{$servico_descricao}</td>
+                <td class="text-right">{$preco}</td>
+                <td class="text-center">{$qtde}</td>
+                <td class="text-right">{$desconto}</td>
+                <td class="text-right bold">{$total}</td>
+            </tr>
+            <!--[/servicos]-->
+        </tbody>
+    </table>
+
+    <!-- BLOCO 5: PAGAMENTO E PRÉ-AUTORIZAÇÃO -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+        </colgroup>
+        <tr style="font-weight: bold; background-color: #fbfcfd; color: #555555;">
+            <td style="width: 50%;">Forma de Pagamento:</td>
+            <td style="width: 50%;">Pré-autorização:</td>
+        </tr>
+        <tr>
+            <td>Antecipado {$financ_forma_pgto_descricao}:</td>
+            <td>
+                <span class="bold">Participação obrigatória:</span>
+                <div style="padding-left: 10px; margin-top: 2px;">
+                    &bull; Avarias e incêndio:<br>
+                    &bull; Roubo, furto e perda total:
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="preservar-linhas" style="font-size: 10px; line-height: 1.3; padding: 4px 6px;"><span class="bold">OBSERVAÇÃO:</span> Todos os custos são estimados e estão sujeitos a alterações caso o veículo não seja devolvido na data, horário e local especificados, ou se houver quilometragem excedente, respeitando o tarifário vigente.</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 6: TEXTO JURÍDICO LEGAL -->
+    <div class="text-justify" style="font-size: 10px; line-height: 1.3; margin-top: 6px; margin-bottom: 12px; border: 1px solid #c0c0c0; padding: 6px;">
+        <div class="bold" style="text-transform: uppercase; margin-bottom: 4px; font-size: 7.5px;">CLÁUSULA DE QUILOMETRAGEM, DEVOLUÇÃO E RESTRIÇÕES DE USO – GESTÃO FROTA LOCAÇÃO DE VEICULOS LTDA</div>
+        A GESTÃO FROTA LOCAÇÃO DE VEICULOS LTDA disponibiliza plano de locação com franquia de quilometragem mensal, conforme condições contratadas no momento da locação.<br>
+        <span class="bold">Quilometragem Mensal</span><br>
+        O plano mensal contempla franquia total de 2.000 km por período de 30 (trinta) dias.<br>
+        <span class="bold">Referência Diária</span><br>
+        Para fins de acompanhamento e controle interno, a franquia mensal corresponde à média referencial de 133,33 km por dia, sem configurar limite diário individual, prevalecendo sempre o total mensal contratado.<br>
+        <span class="bold">Quilometragem Excedente</span><br>
+        Ultrapassada a franquia total de 2.000 km no período contratado, será cobrado do CLIENTE o valor de R$ 0,60 (sessenta e seis centavos) por quilômetro excedente.<br>
+        <span class="bold">Condição de Devolução do Veículo</span><br>
+        O veículo deverá ser devolvido limpo, higienizado e em boas condições de uso, interna e externamente, nas mesmas condições em que foi entregue ao CLIENTE. Caso o veículo seja devolvido com sujeira excessiva, barro, resíduos, manchas, odor forte, pelos de animais ou qualquer condição que exija higienização especial, a GESTÃO FROTA LOCAÇÃO DE VEICULOS LTDA poderá cobrar taxa de lavagem no valor apartir de R$ 150,00 (cento e cinquenta reais).<br>
+        <span class="bold">Restrição Territorial</span><br>
+        O CLIENTE deverá manter distância mínima de 150 km das fronteiras internacionais. Ainda que as fronteiras estejam próximas, é expressamente proibido sair do território nacional com o veículo alugado, sob pena de descumprimento contratual, rescisão imediata e perda das proteções eventualmente contratadas.<br>
+        <span class="bold">Apuração</span><br>
+        A quilometragem utilizada será apurada pela diferença entre a marcação inicial e final do hodômetro do veículo, verificada no ato da devolução.<br>
+        <span class="bold">Disposições Gerais</span><br>
+        Em caso de rescisão antecipada do presente contrato por iniciativa do CLIENTE/LOCATÁRIO, sem justa causa, antes do término do prazo previamente contratado, ficará estabelecida multa rescisória equivalente a 10% (dez por cento) sobre o valor restante do contrato, calculada proporcionalmente ao período faltante para o término da vigência contratual, nos termos dos artigos 408 a 416 do Código Civil Brasileiro.
+    </div>
+
+   <!-- SEÇÃO DE ASSINATURA -->
+<table style="width: 100%; border: none; margin-top: 35px;">
+    <tr>
+        <td style="border: none; text-align: center;">
+            <div style="display: inline-block; width: 420px; text-align: center;">
+                <div style="border-top: 1px solid #111; padding-top: 5px;">
+                    <span style="font-size: 10px; color: #7f8c8d; display: block; margin-bottom: 4px;">
+                        Assinatura igual à da CNH
+                    </span>
+                    <span class="bold" style="font-size: 9px;">
+                        {$pessoa_descricao}
+                    </span>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<!-- SEÇÃO DE CONTATOS DE PLANTÃO -->
+<div style="margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 8px;">
+    <table style="width: 100%; border: none;">
+        <tr>
+            <td style="border: none !important; text-align: center;">
+
+                <div class="bold" style="font-size: 10px; color: #2c3e50; margin-bottom: 2px;">
+                    PLANTÃO:
+                </div>
+
+                <div style="font-size: 10px; font-weight: bold; color: #111111; line-height: 1.4; margin-bottom: 12px;">
+                    0800 042 0135<br>
+                    (48) 98837-8680<br>
+                    (48) 3700-6019<br>
+                    (48) 3632-9108
+                </div>
+
+                <div class="bold" style="font-size: 10px; color: #2c3e50; margin-bottom: 2px;">
+                    STAR
+                </div>
+
+                <div style="font-size: 8.5px; color: #555555;">
+                    Proteção veicular total
+                </div>
+
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
+<!--[/main]-->

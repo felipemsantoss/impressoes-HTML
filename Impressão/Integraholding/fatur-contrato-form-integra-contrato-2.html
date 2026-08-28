@@ -1,0 +1,201 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrato de Locação</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 2.00cm 1.50cm; /* Margens padrão confortáveis para fluxo contínuo */
+        }
+
+        body {
+            font-size: 11px; /* Tamanho de fonte ideal para leitura confortável de contratos */
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        /* TEXTO JURÍDICO */
+        .text-justify {
+            text-align: justify;
+        }
+        
+        .bold {
+            font-weight: bold;
+        }
+
+        p {
+            margin: 0 0 10px 0;
+            text-indent: 0px; /* Alinhamento reto padrão */
+        }
+
+        /* ESTRUTURA SEM BORDAS PARA CABEÇALHOS DO CONTRATO */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse !important;
+            table-layout: fixed;
+            margin-bottom: 20px;
+        }
+        .header-table td {
+            border: none !important;
+            padding: 0;
+            vertical-align: top;
+        }
+
+        /* TABELA DE ASSINATURAS EVITA QUEBRAS INTERNAS */
+        .signatures-table {
+            width: 100%;
+            border: none;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-top: 30px;
+            page-break-inside: avoid; /* Impede que as assinaturas se separem entre páginas */
+        }
+        .signatures-table td {
+            border: none !important;
+            padding: 0;
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho Alinhado Especial (35% esquerda em branco, 65% direita com título) -->
+    <table class="header-table">
+    <colgroup>
+        <col style="width: 35%;">
+        <col style="width: 65%;">
+    </colgroup>
+
+    <!-- TÍTULO CENTRALIZADO NA FOLHA -->
+    <tr>
+        <td colspan="2" style="text-align: center; padding-bottom: 8px;">
+            <div class="bold" style="font-size: 12px;">
+                CONTRATO DE LOCAÇÃO
+            </div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>&nbsp;</td>
+        <td style="text-align: justify; line-height: 1.4;">
+            <div class="bold" style="font-size: 9.5px;">
+                INSTRUMENTO PARTICULAR DE LOCAÇÃO DE IMÓVEL URBANO PARA FINS COMERCIAIS, SITUADO À RUA DISTRITO FEDERAL, 297, CHÁCARA PAULISTA, MARINGÁ – PR, CEP 87.005-100, QUE FAZEM AS PARTES NA SEGUINTE FORMA:
+            </div>
+        </td>
+    </tr>
+</table>
+
+    <!-- Corpo do Contrato em Fluxo Contínuo -->
+    <div class="text-justify">
+        <p><span class="bold">{$pessoa_unidade_descricao}</span>, CNPJ nº {$pes_un_cpf_cnpj}, {$pes_un_logradouro} {$pes_un_numero} {$pes_un_bairro}, {$pes_un_end_cep} {$pes_un_local_municipio_descricao} / {$pes_un_local_uf_sigla} doravante denominado <span class="bold">LOCADOR</span>, e <span class="bold">{$pessoa_descricao}</span>, {$obs1}, do CPF/CNPJ n.º{$pes_cpf_cnpj}, residente e domiciliado à {$pes_logradouro} {$pes_numero} {$pes_bairro}, na cidade de {$pes_local_municipio_descricao} – {$pes_local_uf_sigla}, CEP {$pes_end_cep}, doravante denominado <span class="bold">LOCATÁRIO</span>.</p>
+        
+        <p><span class="bold">FIADOR: {$representante_legal}, CPF {$representante_cpf} RG {$representante_rg}</span> que assina o presente instrumento qual concorda com os termos fixados, responsabilizando-se pelo fiel cumprimento do presente sem exceção de quaisquer cláusulas, renunciando, expressamente, os benefícios contidos nos artigos 827,828,829,830,831,832,833,834,835 e 836 do Código Civil Brasileiro e, não se eximindo de responsabilidade solidária, persistindo a fiança até a efetiva devolução das chaves do imóvel, nos termos do Art. 39 da Lei 8.245/91</p>
+        
+        <p><span class="bold">DO OBJETO DE LOCAÇÃO:</span> IMÓVEL URBANO PARA FINS COMERCIAIS - SITUADO À RUA DISTRITO FEDERAL, 297, SALA {$obs1}, CHACARÁ PAULISTA, MARINGÁ – PR, CEP 87.005-100</p>
+        
+        <p><span class="bold">CLAUSULA PRIMEIRA - DO PRAZO -</span> O presente contrato de locação vigorará pelo prazo começar do dia {$inicio} e a encerrar se em {$termino}, consoante o que dispõe o Art. 46 da Lei 8.245/1991.</p>
+        
+        <p><span class="bold">CLAUSULA SEGUNDA – DO PREÇO –</span> O valor do aluguel mensal firmado é de R$ {$total_servico}, com o primeiro pagamento para a data de {$cod_interno}, vencendo as demais parcelas todo dia {$cod_externo} dos meses subsequentes até o término do contrato, conforme clausula primeira. Caso haja renovação automática da locação, a mesma será reajustada pelos índices oficiais.</p>
+        
+        <p><span class="bold">CLAUSULA TERCEIRA – TAXAS E IMPOSTOS –</span> Correrão por conta do locador as taxas de: água e esgoto; energia elétrica; internet; segurança pública; condomínio; taxa de incêndio; IPTU; e, quaisquer outras incidentes ou que venham a incidir sobre o imóvel locado, durante a vigência deste contrato.</p>
+        
+        <p><span class="bold">CLAUSULA QUARTA – TOLERÂNCIA E MORA –</span> Se, na vigência do contrato de locação, tolerar o locador, direta ou indiretamente, qualquer atraso ou demora no pagamento das taxas, tributos ou outros que incidirem sobre a locação ou demais obrigações ora aqui assumidas, tal fato não poderá ser alegado ou considerado como alteração das cláusulas do contrato, que permanecerão de pelo vigor, para todos os efeitos jurídicos, como se nenhum favor houvesse sido concedido e não dará direito a qualquer invocação de precedentes, não cabendo, pois, às partes e seus coobrigados, a invocação dos Artigos 329,330 e 838 do Código Civil Brasileiro.</p>
+        
+        <p><span class="bold">CLAUSULA QUINTA – DESTINAÇÃO –</span> O Imóvel ora locado se destina à fins comerciais, vedada a transformação, direta ou indireta, em imóvel: residencial; lazer; república; ou, demais fins que não se enquadrem na espécie de apoio administrativo, escritórios e ou consultórios clínicos, salvo, se houver prévio consentimento por escrito do locador, consoante o Art. 23 Inciso II da Lei 8.245/91 e Art. 570 do Código Civil Brasileiro.</p>
+        
+        <p><span class="bold">CLAUSULA SEXTA – CESSÃO, TRANSFERÊNCIA E SUBLOCAÇÃO –</span> O Locatário poderá ceder ou transferir a locação objeto deste contrato, seja ao todo, ou em partes, desde que, o locador, dê para isso, prévio consentimento por escrito, ficando esclarecido que esse consentimento ficará sujeito à juízo exclusivo e discricionário do Locador, consoante o Art. 13 e seguintes, da Lei 8.245/1991.</p>
+        
+        <p><span class="bold">CLAUSULA SÉTIMA – DA CONSERVAÇÃO DO IMÓVEL –</span> O Locatário confessa que recebeu a sala comercial ora locado, em estado de novo, limpo, com funcionamento de suas instalações de água, esgoto, instalações elétricas, portas, fechaduras, trincos, tomadas, interruptores, pintura nova, piso novo, se comprometendo a zelar e restituir à sala ao locador em exatas configurações do momento da locação, sob pena de multa prevista na Clausula Décima.</p>
+        
+        <p><span class="bold">CLAUSULA OITAVA – MODIFICAÇÕES E BENFEITORIAS –</span> Todas as obras ou modificações, sejam elas úteis, necessárias ou voluptuárias, assim como, instalações, deverão ser feitas no imóvel, estando, desde já, o locatário, autorizado pelo Locador, quando na devolução da sala quando finda ou rescindida a locação.</p>
+        
+        <p><span class="bold">CLAUSULA NONA – NORMAS E REGULAMENTOS –</span> Obriga-se o Locatário, por si, seus pressupostos, empregados e visitantes, a respeitar as normas expressas ou costumeiras, estabelecidas pelos órgãos públicos Municipais, Estaduais e Federais, constituindo motivo de rescisão da presente locação a inobservância a este, caso em que o Locatário fica sujeito a multa estipulada na Cláusula Décima Primeira.</p>
+        
+        <p><span class="bold">CLAUSULA DÉCIMA – RESCISÃO E MULTA –</span> No caso de rescisão contratual em período inferior a 50% (cinquenta por cento) do prazo pactuado na clausula primeira, fica o <span class="bold">LOCATÁRIO</span> obrigado à pagar multa contratual na importância de dois alugueis anteriormente pactuados, além de, multa de 30% (trinta por cento) das parcelas vincendas. Ficam dispensadas as multas contratuais, quando houver o <span class="bold">LOCATÁRIO</span> cumprido prazo superior a 50% (cinquenta por cento) de todo período firmado na clausula primeira, sem prejuízo da composição de perdas e danos se necessária à execução judicial deste contrato, e quaisquer outros cabíveis e aplicáveis à espécie. A desapropriação, dação, permuta, doação e venda do imóvel não se enquadram nas hipóteses de rescisão ou quebra de contrato, inexistindo multa a ser paga por parte do Locador, respeitado o direito de preferência, nos termos do Art. 30 da Lei 8.245/1991.</p>
+        
+        <p><span class="bold">Parágrafo Primeiro –</span> Considera-se rescindido, igualmente, o presente contrato no caso de incêndio, desapropriação, esboroamento ou impedimento do imóvel, que impossibilite seu uso normal, sem responsabilidade contratual, neste caso, para as partes contratantes, desde que não ocorra culpa de qualquer delas, portanto, o Locatário expressamente se responsabiliza por quaisquer prejuízos resultantes de caso fortuito e força maior, inclusive, é de responsabilidade do locatário a contratação de seguro residencial para fins comerciais devendo tais coberturas cobrir os prejuízos resultantes de furto e roubo, afastando qualquer responsabilidade por parte do Locador, conforme determina o Art. 393 e § Único do Novo Código Civil.</p>
+        
+        <p><span class="bold">Parágrafo Segundo –</span> No caso de desapropriação do imóvel objeto desse contrato, o Locador e seus administradores ficam exonerados de toda e qualquer responsabilidade, ressalvando-se ao Locatário a faculdade de agir tão somente contra o poder expropriante.</p>
+        
+        <p><span class="bold">CLAUSULA DÉCIMA PRIMEIRA – VISTORIA –</span> o Locador poderá promover periódicas vistorias no imóvel para verificar o estado geral de conservação do mesmo. As visitas acima descritas serão feitas mediante prévia comunicação ao Locatário. No caso de venda, fica estabelecido que o imóvel será vistoriado pelos interessados. Fica pactuado, desde já entre as partes, que o adquirente, se terceiro, não lhe convindo fica desobrigado a manter o presente contrato, mediante a devolução dos valores antecipados de locação consoantes na Cláusula Segunda, §§ 1° e 2° da Clausula Decima Primeira, em moeda corrente diretamente ao Locatário.</p>
+        
+        <p><span class="bold">CLAUSULA DÉCIMA SEGUNDA – HONORÁRIOS DE ADVOGADO –</span> Havendo necessidade de ajuizamento de qualquer ação judicial contra o Locatário, além dos honorários advocatícios, também, correrão por contra Locatário todas as despesas judiciais. Ajuizada ação de despejo por falta de pagamento, ou qualquer outro tipo de ação judicial, pagará o Locatário os honorários de advogado da Autora, fixados em 20% (vinte por cento), sobre o valor total do contrato, sejam sobre os alugueis vencidos e os vincendos.</p>
+        
+        <p><span class="bold">CLAUSULA DÉCIMA TERCEIRA– CITAÇÕES, NOTIFICAÇÕES E INTIMAÇÕES –</span> Havendo necessidade de qualquer procedimento judicial envolvendo a locação ora ajustada, as citações, notificações e intimações serão feitas “mediante correspondência com aviso de recebimento, ou, tratando-se pessoa jurídica ou firma individual, também mediante telex ou fac-símile, ou, ainda, sendo necessário pelas demais formas previstas no Código de Processo Civil” (Art. 58, Inciso IV da Lei n° 8.245/91).</p>
+        
+        <p><span class="bold">CLAUSULA DÉCIMA QUARTA – PROIBIÇÕES –</span> É vedado ao Locatário, instalar no imóvel locado, máquinas que possam afetar ou colocar em perigo a estrutura do prédio, assim como, é vedada à instalação de inflamáveis, explosivos, ou quaisquer outras substâncias que possam ameaçar a segurança do imóvel locado, sob pena de responder pelos danos materiais e morais a que vier a dar causa.</p>
+        
+        <p><span class="bold">CLAUSULA DÉCIMA QUINTA – FORO –</span> Para todas as ações e processos atinentes ao presente contrato, fica eleito o foro da Comarca de Maringá/PR, com renúncia expressa a qualquer outro que tenham ou venham a ter as partes contratantes. E, por estarem assim justas e contratadas, assinam, o presente contrato, em duas vias de igual teor, para um só efeito, as quais, lidas e achadas conforme, vão também assinadas pelas testemunhas abaixo.</p>
+        
+        <p class="bold" style="margin-top: 20px; margin-bottom: 50px;">
+            {$pes_un_local_municipio_descricao}, {$cadastro}
+        </p>
+
+        <!-- Seção de Assinaturas (Tabela sem bordas com page-break-inside para evitar separações feias) -->
+        <table class="signatures-table">
+            <colgroup>
+                <col style="width: 45%;">
+                <col style="width: 10%;">
+                <col style="width: 45%;">
+            </colgroup>
+            <!-- Linha 1 de Assinatura -->
+            <tr>
+                <td style="border: none !important; border-top: 1px solid #111111 !important; padding-top: 5px; font-size: 10px; vertical-align: top;">
+                    <span class="bold">LOCADORA</span><br>
+                    {$pessoa_unidade_descricao}
+                </td>
+                <td style="border: none !important;">&nbsp;</td>
+                <td style="border: none !important; border-top: 1px solid #111111 !important; padding-top: 5px; font-size: 10px; vertical-align: top;">
+                    <span class="bold">LOCATÁRIO/CLIENTE</span><br>
+                    {$pessoa_descricao}
+                </td>
+            </tr>
+            <!-- Espaçador vertical para Fiador -->
+            <tr>
+                <td colspan="3" style="border: none !important; height: 35px;">&nbsp;</td>
+            </tr>
+            <!-- Linha 2 de Assinatura -->
+            <tr>
+                <td style="border: none !important; border-top: 1px solid #111111 !important; padding-top: 5px; font-size: 10px; vertical-align: top;">
+                    <span class="bold">Fiador</span><br>
+                    Nome:<br>
+                    Cpf:
+                </td>
+                <td style="border: none !important;">&nbsp;</td>
+                <td style="border: none !important; vertical-align: top;">&nbsp;</td>
+            </tr>
+            <!-- Espaçador vertical para Testemunhas -->
+            <tr>
+                <td colspan="3" style="border: none !important; height: 35px;">&nbsp;</td>
+            </tr>
+            <!-- Linha 3 de Assinatura -->
+            <tr>
+                <td style="border: none !important; border-top: 1px solid #111111 !important; padding-top: 5px; font-size: 10px; vertical-align: top;">
+                    <span class="bold">Testemunhas 1</span><br>
+                    Nome:<br>
+                    Cpf:
+                </td>
+                <td style="border: none !important;">&nbsp;</td>
+                <td style="border: none !important; border-top: 1px solid #111111 !important; padding-top: 5px; font-size: 10px; vertical-align: top;">
+                    <span class="bold">Testemunhas 2</span><br>
+                    Nome:<br>
+                    Cpf:
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>
+<!--[/main]-->

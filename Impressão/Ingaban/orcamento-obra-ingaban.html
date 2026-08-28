@@ -1,0 +1,282 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Proposta de Prestação de Serviço de Locação</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 1.20cm 1.50cm 1.80cm 1.50cm; /* Margem inferior para o rodapé fixo */
+        }
+
+        body {
+            font-size: 11px; /* Todo o documento configurado estritamente com font-size: 11px */
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.45;
+            background-color: transparent;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-justify {
+            text-align: justify;
+        }
+
+        /* ESTRUTURA GERAL DAS TABELAS - CORREÇÃO DE COLAPSO DO DOMPDF */
+        table {
+            width: 100%;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            table-layout: fixed !important;
+            margin-bottom: 12px;
+        }
+
+        td, th {
+            padding: 4px 6px;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) */
+        .grid-table {
+            border-top: 1px solid #111111;
+            border-left: 1px solid #111111;
+        }
+        .grid-table td, .grid-table th {
+            border-right: 1px solid #111111;
+            border-bottom: 1px solid #111111;
+        }
+
+        /* REGRAS DAS LISTAS E BULLETS */
+        ul {
+            margin: 0 0 10px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 4px;
+        }
+
+        /* RODAPÉ FIXO REPETÍVEL (ESTILO CENTRALIZADO SEM LINHA) */
+        .fixed-footer {
+            position: fixed;
+            bottom: -45px;
+            left: 0px;
+            right: 0px;
+            height: 50px;
+            font-size: 10px;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .linha-serv- { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- REPETIÇÃO DA IMAGEM DE FUNDO EM TODAS AS PÁGINAS (MAIS VISÍVEL E ATRÁS DE TUDO) -->
+    <div style="position: fixed; top: 25%; left: 10%; width: 80%; z-index: -2000; text-align: center;">
+        <img src="{$site_cabecalho_01}" style="max-width: 600px; height: auto; opacity: 10; display: inline-block;" alt="Background">
+    </div>
+
+    <!-- RODAPÉ FIXO EM TODAS AS PÁGINAS (ALINHAMENTO CENTRALIZADO SEM BORDA) -->
+    <div class="fixed-footer">
+        <div style="margin-bottom: 2px; text-align: right">
+            {$pessoa_unidade_local_municipio_descricao}/{$pessoa_unidade_local_uf_sigla}, {$cadastro}
+        </div>
+        <div class="bold" style="font-size: 11px;">Fernando Lugli</div>
+        <div class="bold" style="font-size: 11px;">INGABAN LOCAÇÃO DE ESTRUTURA PARA EVENTOS LTDA</div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- CONTEÚDO PRINCIPAL                         -->
+    <!-- ========================================== -->
+
+    <!-- CABEÇALHO DO EMITENTE -->
+    <table style="border: none; margin-bottom: 15px; table-layout: fixed; width: 100%;">
+        <tr>
+            <td style="padding: 0; border: none; vertical-align: middle; width: 30%;">
+                <img src="{$unidade_image}" style="max-width: 100%; max-height: 75px; object-fit: contain;" alt="Logo Unidade">
+            </td>
+            <td style="padding: 0; border: none; text-align: right; line-height: 1.35; padding-left: 15px; width: 70%;">
+                <div class="bold" style="font-size: 11px;">{$pessoa_unidade_descricao}</div>
+                <div>CNPJ: {$pessoa_unidade_cpf_cnpj}</div>
+                <div>Endereço: {$pessoa_unidade_logradouro}, {$pessoa_unidade_numero} – CEP {$pessoa_unidade_cep}</div>
+                <div>{$pessoa_unidade_local_municipio_descricao}/{$pessoa_unidade_local_uf_sigla}</div>
+                <div>Fone: {$p_unidade_fone1} &bull; Email: {$p_unidade_email}</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- TÍTULO DA PROPOSTA -->
+    <div class="bold text-center" style="font-size: 11px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px;">
+        PROPOSTA DE PRESTAÇÃO DE SERVIÇO DE LOCAÇÃO
+    </div>
+
+    <!-- DADOS DO CLIENTE (Larguras definidas diretamente nas TDs para compatibilidade estrita com DOMPDF) -->
+    <table style="border: none; margin-bottom: 15px; line-height: 1.4; table-layout: fixed; width: 100%;">
+        <tr>
+            <td class="bold" style="width: 11%; border: none;">Cliente:</td>
+            <td style="width: 62%; border: none;">{$pessoa_id} – {$pessoa_descricao}</td>
+            <td class="bold" style="width: 9%; border: none;">Status:</td>
+            <td style="width: 18%; border: none;">{$global_status_descricao}</td>
+        </tr>
+        <tr>
+            <td style="border: none;">&nbsp;</td>
+            <td style="font-size: 11px; border: none;">{$pessoa_pj_fantasia}</td>
+            <td colspan="2" style="border: none;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="bold" style="border: none;">Cnpj/Cpf:</td>
+            <td style="border: none;">{$pessoa_cpf_cnpj}</td>
+            <td class="bold" style="border: none;">Ie:</td>
+            <td style="border: none;">{$pessoa_pj_inscricao_estadual}</td>
+        </tr>
+        <tr>
+            <td class="bold" style="border: none;">Telefone:</td>
+            <td style="border: none;">{$pessoa_fone1} {$pessoa_fone2}</td>
+            <td class="bold" style="border: none;">E-mail:</td>
+            <td style="border: none;">{$pessoa_email}</td>
+        </tr>
+        <tr>
+            <td class="bold" style="border: none;">Endereço:</td>
+            <td colspan="3" style="border: none;">{$logradouro} – {$numero} {$complemento} {$bairro}</td>
+        </tr>
+    </table>
+
+    <!-- INTRODUÇÃO TEXTUAL -->
+    <div class="text-justify" style="margin-bottom: 15px; font-size: 11px; line-height: 1.45;">
+        A <span class="bold">Ingaban – Locação de Estruturas para Eventos Ltda - ME</span>, localizada na cidade de Maringá – PR, é uma empresa voltada para a locação de sanitários químicos portáteis e lavatório de estação de limpeza e higienização, utilizados em eventos diversificados, tais como: Shows, Festas, Feiras Agropecuárias, Exposições, Leilões, Rodeios, Aniversários de cidades, carnaval. Nossas cabines sanitárias são individuais e estão disponíveis nas cores: Azul (masculinos) e Vermelho (feminino), podendo removê-las de acordo com a necessidade.
+    </div>
+
+    <!-- ESPECIFICAÇÕES DO SANITÁRIO E RESPONSABILIDADE AMBIENTAL -->
+    <table style="border: none; margin-bottom: 15px;">
+        <colgroup>
+            <col width="50%">
+            <col width="50%">
+        </colgroup>
+        <tr>
+            <td style="padding: 0; border: none; padding-right: 15px;">
+                <div class="bold" style="font-size: 11px; margin-bottom: 6px; text-transform: uppercase;">SANITÁRIO</div>
+                <ul style="font-size: 11px; line-height: 1.4;">
+                    <li>Espaço suficiente para troca de roupa.</li>
+                    <li>Fechadura com sinalização de Livre/Ocupado.</li>
+                    <li>Grades de ventilação nas laterais e portas traseiras.</li>
+                    <li>Mictório no sanitário masculino.</li>
+                    <li>Letreiros refletivos para melhor visualização a noite.</li>
+                    <li>Piso Antiderrapante.</li>
+                    <li>Porta papel higiênico</li>
+                    <li>Teto translúcido.</li>
+                    <li>Vaso sanitário com tanque de objetos.</li>
+                    <li>Sistema de mola para manter a porta fechada.</li>
+                </ul>
+            </td>
+            <td style="padding: 0; border: none; vertical-align: top;">
+                <div class="bold" style="font-size: 11px; margin-bottom: 6px; text-transform: uppercase;">RESPONSABILIDADE AMBIENTAL</div>
+                <ul style="font-size: 11px; line-height: 1.4;">
+                    <li>Empresa devidamente habilitada e portadora of todas as certidões ambientais/sanitária.</li>
+                    <li>Coleta com descarte dos dejetos em Estação de Tratamento da SANEPAR.</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    <!-- ESPECIFICAÇÕES DO SANITÁRIO E RESPONSABILIDADE AMBIENTAL -->
+    <table style="border: none; margin-bottom: 15px;">
+        <colgroup>
+            <col width="100%">
+        </colgroup>
+        <tr>
+            <td style="padding: 0; border: none; padding-right: 15px;">
+                <div class="bold" style="font-size: 11px; margin-bottom: 6px; text-transform: uppercase;text-align: center;">LOCAÇÃO DE SANITÁRIO OBRA</div>
+                <ul style="font-size: 11px; line-height: 1.4;">
+                    <li>Locação de: 1(um) Sanitário R$650,00 (sesicentos e cinquenta reais) por mês com 1(uma) limpeza semanais.</li>
+                    <li>Locação de: 1(um) Sanitário R$800,00 (oitocentos reais) por mês com 2(duas) limpeza semanais.</li>
+                    <li>Locação de: 1(um) Sanitário R$950,00 (novecentos e cinquenta reais) por mês com 3(tres) limpeza semanais.</li>
+                    <li>Obs.: Sanitário com manutenção, aplicação de produtos químico e aromatizantes, limpos e reposição de papel
+                    higiênico.</li>
+                    <li>Sanitário possúi caixa coletora, NÃO é despejado em solo, é feito a sucção e depositado na ETE da SANEPAR</li>
+                    <li>Equipamentos locados em condição ideal de uso. Em caso de avaria nos itens locados, será cobrado na
+                    devolução, valor referente ao conserto.</li>
+                    <li>A manutneção inclui: limpeza, higienização banheiro, aplicação de produto químico e essência e reposição
+                    papel higiênico</li>
+                </ul>
+            </td>
+    <div class="bold text-center" style="font-size: 11px; margin-bottom: 6px; text-transform: uppercase;">ORÇAMENTO</div>
+    </table>
+
+
+    <!-- PAGAMENTO -->
+    
+    <div class="bold" style="font-size: 11px; margin-bottom: 5px; text-transform: uppercase; text-align: center;">PAGAMENTO</div>
+    <ul style="font-size: 11px; margin-bottom: 15px;">
+        <li class="bold">Transferência bancária / PIX / Boleto 7 dias</li>
+    </ul>
+    
+
+    <!-- TERMOS E CONDIÇÕES DO CONTRATO -->
+    <div class="text-justify" style="font-size: 11px; line-height: 1.45; margin-bottom: 25px;">
+        Os Valores acima, estão de acordo com a quantidade solicitada. Caso haja mudança para quantidade menor de sanitários, o preço por unidade sofrerá aumento, em virtude dos custos fixos serem repassados há menor quantidade.
+        <br><br>
+        <span style="font-weight: bold;">
+        Em caso de uso período menor, após primeiro mes de locação, o valor será cobrado proporcionalmente aos
+        dias utilizados. </span>
+        <br><br>
+        A contratante deverá pagar 100% do valor do contrato de compromisso a CONTRATADA, caso ocorra desistência da mesma por qualquer motivo.
+        <br><br>
+        Para podermos reservar a data e a quantidade de cabines sanitárias para evento/obra, solicitamos a gentileza de nos enviarem resposta com o seu DE ACORDO via e-mail ou WHATSSAP, o mais breve possível.
+        <br><br>
+        Após o ato de entrega das cabines sanitárias no local do evento, responsabilidade pela segurança e guarda dos sanitários portáteis INGABAN, será da CONTRATANTE a após recebemos o DE ACORDO, o mesmo passara a ter validade de Contrato Particular, assinado entre as partes, ficando o foro de MARINGÁ-PR responsável pelas dúvidas e omissões para dirimir, renunciando-se a outro por mais privilegiados que seja.
+    </div>
+
+    <!-- ANEXOS E APRESENTAÇÃO FOTOGRÁFICA (Apresentados continuamente) -->
+    <div style="margin-top: 30px; page-break-inside: avoid;">
+        
+        <!-- Primeira Imagem: Banheiros Químicos (Centralizada) -->
+        <div style="text-align: center; margin-bottom: 25px;">
+            <img src="{$site_cabecalho_02}" style="max-height: 220px; max-width: 100%; object-fit: contain; display: block; margin: 0 auto;" alt="Banheiros Químicos">
+        </div>
+
+        <!-- Segunda e Terceira Imagens: Estação de Limpeza e Logo (Lado a Lado) -->
+        <table style="border: none; margin-top: 15px; margin-bottom: 15px;">
+            <colgroup>
+                <col width="48%">
+                <col width="4%">
+                <col width="48%">
+            </colgroup>
+            <tr>
+                <!-- Esquerda: Estação de Limpeza -->
+                <td style="border: none; padding: 0; text-align: center; vertical-align: middle;">
+                    <img src="{$site_cabecalho_03}" style="max-height: 220px; max-width: 100%; object-fit: contain; display: block; margin: 0 auto;" alt="Estação de Limpeza">
+                </td>
+                <td style="border: none;">&nbsp;</td>
+                <!-- Direita: Logo/Foto Exemplo -->
+                <td style="border: none; padding: 0; text-align: center; vertical-align: middle;">
+                    <img src="{$site_logo}" style="max-height: 220px; max-width: 100%; object-fit: contain; display: block; margin: 0 auto;" alt="Logo Item">
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>
+<!--[/main]-->

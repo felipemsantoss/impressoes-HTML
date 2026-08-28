@@ -1,0 +1,479 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Pedido de Venda</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL E CORREÇÃO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important; /* CORREÇÃO DOMPDF */
+            color: #000000 !important; /* Garante todas as variáveis e textos em preto absoluto */
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO (PORTRAIT) */
+        @page {
+            size: A4 portrait;
+            margin: 35px 25px 45px 25px; /* Deixa margem de 45px abaixo para o rodapé respirar */
+        }
+
+        body {
+            font-size: 9px;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* RODAPÉ REAL E REPETÍVEL (ESTILO LIBREOFFICE) */
+        .footer {
+            position: fixed;
+            bottom: -30px;
+            left: 0px;
+            right: 0px;
+            height: 15px;
+            text-align: right;
+            font-size: 8px;
+            border-top: 1px dashed #000000;
+            padding-top: 4px;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-prod- { display: none !important; }
+        .linha-prod-cli- { display: none !important; }
+        .linha-serv- { display: none !important; }
+
+        /* OCULTA AS TABELAS POR PADRÃO (SÓ EXIBE SE HOUVEREM ITENS GERADOS NO SEU LAÇO EXCLUSIVO) */
+        .tabela-produtos { display: none !important; }
+        .tabela-produtos-cliente { display: none !important; }
+        .tabela-servicos { display: none !important; }
+
+        /* OCULTA A TABELA DE PARTICIPANTES E OBSERVAÇÕES SE AS VARIÁVEIS ESTIVEREM VAZIAS */
+        .tabela-participantes- { display: none !important; }
+        .tabela-obs- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS - CORREÇÃO DE COLAPSO DO DOMPDF */
+        table {
+            width: 100%;
+            border-collapse: separate !important; /* CORREÇÃO DOMPDF */
+            border-spacing: 0 !important; /* CORREÇÃO DOMPDF */
+            table-layout: fixed;
+            margin-bottom: 6px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 3px 4px;
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) - TRATAMENTO DE BORDAS SEPARATE */
+        .grid-table {
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+        }
+        .grid-table td, .grid-table th {
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+        }
+        
+        /* CABEÇALHOS */
+        .section-header {
+            background-color: #ffffff;
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 5px;
+        }
+
+        .lbl {
+            background-color: #ffffff;
+            font-size: 8px;
+        }
+
+        /* AUXILIARES DE LARGURA PARA O GRID SIMPLES */
+        .lbl-grid {
+            background-color: #ffffff;
+            font-size: 8px;
+            font-weight: bold;
+        }
+
+        /* ===== TABELAS DE ITENS COM BORDA EXTERNA APENAS (SEM LINHAS INTERNAS) ===== */
+        .items-table {
+            border: 2px solid #000000 !important;
+            border-collapse: collapse !important;
+        }
+        
+        .items-table th {
+            background-color: #ffffff;
+            font-size: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none !important;
+            padding: 4px 5px;
+            text-align: left;
+        }
+        
+        .items-table td {
+            border: none !important;
+            padding: 4px 5px;
+            font-size: 8px;
+        }
+        
+        .items-table tbody tr {
+            border: none !important;
+        }
+        
+        .items-table tfoot td {
+            background-color: #ffffff;
+            font-weight: bold;
+            border: none !important;
+            padding: 4px 5px;
+            font-size: 9px;
+        }
+
+        /* ===== TABELA DE RESUMO FINANCEIRO - BORDA EXTERNA APENAS (SEM LINHAS INTERNAS) ===== */
+        .resumo-table {
+            border: 2px solid #000000 !important;
+            border-collapse: collapse !important;
+        }
+        .resumo-table td, .resumo-table th {
+            border: none !important;
+        }
+
+        /* ESTILO DO TOTAL GERAL DA NOTA EM DESTAQUE E CENTRALIZADO */
+        .total-lbl {
+            background-color: #ffffff !important;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center !important;
+        }
+        .total-val {
+            background-color: #ffffff !important;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: right !important;
+        }
+
+        /* CORREÇÃO PARA INTERPRETAR QUEBRAS DE LINHA DO TEXTAREA NO DOMPDF */
+        .preservar-linhas {
+            white-space: pre-wrap !important;
+        }
+
+        /* ALIGNMENT HELPERS PARA CABEÇALHOS DE TABELAS */
+        .items-table th.text-center {
+            text-align: center !important;
+        }
+        
+        .items-table th.text-right {
+            text-align: right !important;
+        }
+
+        .items-table td.text-center {
+            text-align: center !important;
+        }
+        
+        .items-table td.text-right {
+            text-align: right !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- RODAPÉ FIXO -->
+    <div class="footer">
+        Impresso em: <span class="bold">{$data_hoje}</span>
+    </div>
+
+    <!-- CABEÇALHO DO DOCUMENTO -->
+    <table style="margin-bottom: 8px; border-bottom: 2px solid #000000; padding-bottom: 4px; border-top: none; border-left: none;">
+        <tr>
+            <td style="width: 25%; vertical-align: middle; border: none;">
+                <img src="{$unidade_image}" style="max-width: 120px; max-height: 45px;" alt="Logo da Empresa">
+            </td>
+            <td style="width: 75%; text-align: right; vertical-align: middle; border: none; font-size: 8px; line-height: 1.25;">
+                <div style="font-size: 10px; font-weight: bold; margin-bottom: 2px;">{$pessoa_unidade_descricao}</div>
+                CNPJ: {$pessoa_unidade_cpf_cnpj} &bull; Fone: {$p_unidade_fone1} &bull; {$p_unidade_email}<br>
+                {$pessoa_unidade_logradouro} {$pessoa_unidade_numero} {$pessoa_unidade_complemento}<br>
+                {$pessoa_unidade_local_municipio_descricao} / {$pessoa_unidade_local_uf_sigla}
+            </td>
+            <td style="width: 30%; text-align: right; vertical-align: middle; border: none; line-height: 1.3;">
+                <div style="font-size: 16px; font-weight: bold;">Pedido Nº {$id}</div>
+                <div style="font-size: 9px; font-weight: bold;">Cod. Interno: {$cod_externo}</div>
+                <div style="font-size: 9px;">{$cadastro}</div>
+            </td>
+        </tr>
+    </table>
+    
+    <!-- TÍTULO DO DOCUMENTO CENTRALIZADO -->
+    <div style="text-align: center; font-size: 10px; font-weight: bold; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+        Identificação do Destinatário
+    </div>
+
+     <!-- BLOCO 1: DADOS GERAIS (Ajustado exatamente conforme o print enviado) -->
+    <table class="resumo-table" style="margin-bottom: 4px;">
+        <colgroup>
+            <col style="width: 55%;">
+            <col style="width: 45%;">
+        </colgroup>
+        <tr>
+            <td style="vertical-align: top; padding: 4px 6px; line-height: 1.35;">
+                <span class="bold" style="font-size: 10px;">{$pessoa_id} – {$pessoa_descricao}</span><br>
+                Cnpj/Cpf: {$pessoa_cpf_cnpj} &nbsp;&nbsp;&nbsp;&nbsp; Ie: {$pessoa_pj_inscricao_estadual}<br>
+                {$pessoa_fone1} {$pessoa_fone2}<br>
+                {$pessoa_email}<br>
+                <span class="bold">Contato:</span> <span class="bold">{$contato} {$contato_fone}</span>
+            </td>
+            <td style="vertical-align: top; padding: 4px 6px; line-height: 1.35;">
+                <span class="bold">Vendedor</span> {$pessoa_responsavel_id} – {$pessoa_responsavel_descricao}<br>
+                <span class="bold">Veiculo:</span> {$veiculo_marca_descricao} – {$veiculo_modelo_descricao} - {$veiculo_placa} - Km – {$veiculo_km_atual}<br>
+                Chassi {$veic_chassi} {$equipamento_identificacao} &nbsp;&nbsp;&nbsp;&nbsp; Combustivel {$veic_combustivel}<br>
+                Motor {$veic_motor} {$equipamento_descricao}
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: ENDEREÇOS (Ajustado exatamente conforme o print enviado) -->
+    <table>
+        <tr>
+            <td style="padding: 4px 6px; font-size: 9px; line-height: 1.25;">
+                {$logradouro} – {$numero} {$complemento} {$bairro} - {$local_municipio_descricao} – {$local_uf_descricao} {$cep}
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 3: OBSERVAÇÃO (Alinhado com o padrão Participantes e com ocultação automática por variável) -->
+    <table class="tabela-obs-{$obs2} resumo-table">
+        <tr>
+            <td class="section-header">Observação</td>
+        </tr>
+        <tr>
+            <!-- Escrito encostado na tag para eliminar recuos fantasmas e com preservação de quebra de linha -->
+            <td class="val preservar-linhas" style="padding: 4px 6px;">{$obs2}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 3.5: PARTICIPANTES -->
+    <table class="tabela-participantes-{$pessoa_descricao_participante} resumo-table">
+        <tr>
+            <td class="section-header">Participantes</td>
+        </tr>
+        <tr>
+            <td class="val">{$pessoa_descricao_participante}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 4: PRODUTOS (Exibição dinâmica: Ocultado por padrão) -->
+    <table class="tabela-produtos items-table" style="margin-bottom: 6px;">
+        <colgroup>
+            <col style="width: 8%;">   <!-- Código -->
+            <col style="width: 12%;">  <!-- Fabricante -->
+            <col style="width: 12%;">  <!-- Marca -->
+            <col style="width: 33%;">  <!-- Produto -->
+            <col style="width: 6%;">   <!-- Qtd -->
+            <col style="width: 5%;">   <!-- Und -->
+            <col style="width: 11%;">  <!-- Unitário -->
+            <col style="width: 13%;">  <!-- Total Bruto -->
+        </colgroup>
+        <thead>
+            <tr>
+                <th colspan="8" class="section-header" style="text-align: center; padding: 4px 6px;">Produtos</th>
+            </tr>
+            <tr>
+                <th class="text-center" style="width: 8%;">Código</th>
+                <th class="text-left" style="width: 12%;">Fabricante</th>
+                <th class="text-left" style="width: 12%;">Marca</th>
+                <th class="text-left" style="width: 33%;">Produto</th>
+                <th class="text-center" style="width: 6%;">Qtd</th>
+                <th class="text-center" style="width: 5%;">Und</th>
+                <th class="text-right" style="width: 11%;">Unitário</th>
+                <th class="text-right" style="width: 13%;">Total Bruto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[produtos_condicao_null]-->
+            <style>.tabela-produtos { display: table !important; }</style>
+            <tr class="linha-prod-{$produto_id}">
+                <td class="text-center">{$produto_id}</td>
+                <td>{$cod_fabricante}</td>
+                <td>{$produto_marca_descricao}</td>
+                <td><span class="bold">{$produto_descricao}</span> <span style="font-size: 8px;">{$produto_referencia_descricao}</span></td>
+                <td class="text-center bold">{$qtde}</td>
+                <td class="text-center">{$sigla}</td>
+                <td class="text-right">{$preco}</td>
+                <td class="text-right bold">{$total_bruto}</td>
+            </tr>
+            <!--[/produtos_condicao_null]-->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-right bold">Total Itens:</td>
+                <td class="text-center">{$qtde_sum}</td>
+                <td colspan="2">&nbsp;</td>
+                <td class="text-right bold">{$subtotal_produto}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- BLOCO 4.5: PEÇAS A SEREM FORNECIDAS PELO CLIENTE (Exibição dinâmica: Ocultado por padrão) -->
+    <table class="tabela-produtos-cliente items-table" style="margin-bottom: 6px;">
+        <colgroup>
+            <col style="width: 8%;">   <!-- Código -->
+            <col style="width: 12%;">  <!-- Fabricante -->
+            <col style="width: 12%;">  <!-- Marca -->
+            <col style="width: 33%;">  <!-- Produto -->
+            <col style="width: 6%;">   <!-- Espaçador vazio para Qtd do Pedido -->
+            <col style="width: 5%;">   <!-- Qtd da Peça (Alinhado com Und do Pedido) -->
+            <col style="width: 11%;">  <!-- Und da Peça (Alinhado com Unitário do Pedido) -->
+            <col style="width: 13%;">  <!-- Condição (Alinhado com Total Bruto do Pedido) -->
+        </colgroup>
+        <thead>
+            <tr>
+                <th colspan="8" class="section-header" style="text-align: center; padding: 4px 6px;">Peças a serem fornecidas pelo cliente</th>
+            </tr>
+            <tr>
+                <th class="text-center" style="width: 8%;">Código</th>
+                <th class="text-left" style="width: 12%;">Fabricante</th>
+                <th class="text-left" style="width: 12%;">Marca</th>
+                <th class="text-left" style="width: 33%;">Produto</th>
+                <th style="width: 6%; border: none !important;"></th> <!-- Coluna de espaçamento -->
+                <th class="text-center" style="width: 5%;">Qtd</th>
+                <th class="text-center" style="width: 11%;">Und</th>
+                <th class="text-right" style="width: 13%;">Condição</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[produtos_condicao]-->
+            <style>.tabela-produtos-cliente { display: table !important; }</style>
+            <tr class="linha-prod-cli-{$produto_id}">
+                <td class="text-center">{$produto_id}</td>
+                <td>{$cod_fabricante}</td>
+                <td>{$produto_marca_descricao}</td>
+                <td><span class="bold">{$produto_descricao}</span> <span style="font-size: 8px;">{$produto_referencia_descricao}</span></td>
+                <td></td> <!-- Espaço vazio -->
+                <td class="text-center bold">{$qtde}</td>
+                <td class="text-center">{$sigla}</td>
+                <td class="text-right">{$produto_condicao_descricao}</td>
+            </tr>
+            <!--[/produtos_condicao]-->
+        </tbody>
+    </table>
+
+    <!-- BLOCO 4.6: SERVIÇOS (Exibição dinâmica: Ocultado por padrão) -->
+    <table class="tabela-servicos items-table" style="margin-bottom: 8px;">
+        <colgroup>
+            <col style="width: 8%;">   <!-- Código (Alinha com Código acima) -->
+            <col style="width: 55%;">  <!-- Serviço (Alinha com Fabricante + Marca + Produto acima) -->
+            <col style="width: 6%;">   <!-- Qtd -->
+            <col style="width: 7%;">   <!-- Tempo -->
+            <col style="width: 11%;">  <!-- Unitário -->
+            <col style="width: 13%;">  <!-- Total Bruto -->
+        </colgroup>
+        <thead>
+            <tr>
+                <th colspan="6" class="section-header" style="text-align: center; padding: 4px 6px;">Serviços</th>
+            </tr>
+            <tr>
+                <th class="text-center" style="width: 8%;">Código</th>
+                <th class="text-left" style="width: 55%;">Serviço</th>
+                <th class="text-center" style="width: 6%;">Qtd</th>
+                <th class="text-center" style="width: 7%;">Tempo</th>
+                <th class="text-right" style="width: 11%;">Unitário</th>
+                <th class="text-right" style="width: 13%;">Total Bruto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[servicos]-->
+            <style>.tabela-servicos { display: table !important; }</style>
+            <tr class="linha-serv-{$servico_id}">
+                <td class="text-center">{$servico_id}</td>
+                <td class="bold">{$servico_descricao}</td>
+                <td class="text-center">{$qtde}</td>
+                <td class="text-center">{$tempo}</td>
+                <td class="text-right">{$preco}</td>
+                <td class="text-right bold">{$total}</td>
+            </tr>
+            <!--[/servicos]-->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" class="text-right bold">Total:</td>
+                <td class="text-right bold">{$subtotal_servico}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- BLOCO 5: RESUMO FINANCEIRO (Sino de 4 Colunas, borda externa apenas) -->
+    <table class="resumo-table" style="margin-bottom: 8px;">
+        <colgroup>
+            <col style="width: 18%;">
+            <col style="width: 32%;">
+            <col style="width: 18%;">
+            <col style="width: 32%;">
+        </colgroup>
+        <tr>
+            <td colspan="4" class="section-header">Resumo Financeiro</td>
+        </tr>
+        <tr>
+            <td class="lbl">Produto: Total Bruto:</td>
+            <td class="val bold">{$subtotal_produto}</td>
+            <td class="lbl">Serviço: Total Bruto:</td>
+            <td class="val bold">{$subtotal_servico}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Produto: Descontos:</td>
+            <td class="val">{$desconto_produto} - {$desc_perc_produto}%</td>
+            <td class="lbl">Serviço: Desconto:</td>
+            <td class="val">{$desconto_servico} - {$desc_perc_servico}%</td>
+        </tr>
+        <tr>
+            <td class="lbl">Produto: Total Líquido:</td>
+            <td class="val bold">{$total_produto}</td>
+            <td class="lbl">Serviço: Total Líquido:</td>
+            <td class="val bold">{$total_servico}</td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+            <td class="total-lbl">Total Geral:</td>
+            <td class="total-val text-right">{$total_pedido}</td>
+        </tr>
+    </table>
+
+    <!-- SEÇÃO LEGAL E CLAUSULAS DO ORÇAMENTO (FORA DE TABELA) -->
+    <div style="font-size: 8.5px; margin-bottom: 4px;"><span class="bold">Validade do orçamento: 15 dias</div></span>
+    <div style="font-size: 8.5px; margin-bottom: 12px;">Relação de produtos poderá sofrer alteração no decorrer da execução dos serviços/montagem do motor.</div>
+
+    <div style="margin-bottom: 12px; margin-top: 8px;">
+        <div class="bold" style="font-size: 9px; margin-bottom: 4px; text-align: center;">Cláusulas do Orçamento</div>
+        <div style="text-align: justify; font-size: 8.5px; line-height: 1.35; text-align: center;">
+            OBS. As peças que eventualmente venham a se tornar necessárias ao perfeito acabamento do serviço e que não tenham constado no orçamento serão cobradas a parte, independente de prévia autorização do cliente, a fim de não prejudicar o bom andamento dos serviços.
+        </div>
+    </div>
+
+    <div class="bold" style="font-size: 9px; margin-bottom: 40px; margin-top: 10px;">Autorizo a execução dos serviços e produtos acima orçados.</div>
+
+    <!-- SEÇÃO DE ASSINATURA E CONTROLE DE DATA -->
+    <table style="width: 100%; border: none; border-collapse: collapse; margin-bottom: 10px;">
+        <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 70%;">
+            <col style="width: 15%;">
+        </colgroup>
+        <tr>
+            <td style="border: none !important; width: 15%;">&nbsp;</td>
+            <td style="width: 70%; text-align: center; border-top: 1px solid #000000 !important; border-bottom: none !important; border-left: none !important; border-right: none !important; padding-top: 4px; vertical-align: top;">
+                <span class="bold" style="font-size: 9px;">{$pessoa_descricao}</span>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

@@ -1,0 +1,266 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Orçamento de Locação</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 1.00cm 1.20cm 1.20cm 1.20cm;
+        }
+
+        body {
+            font-size: 10px; /* Tamanho de fonte ideal e compacto para contratos de alta densidade */
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.35;
+            background-color: #ffffff;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* TABELAS E GRIDS DO DOCUMENTO */
+        table {
+            width: 100%;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            table-layout: fixed !important; /* CORREÇÃO CRÍTICA DOMPDF COLUNAS */
+            margin-bottom: 6px;
+        }
+
+        td, th {
+            padding: 3.5px 5px;
+            vertical-align: middle;
+            word-wrap: break-word;
+        }
+
+        /* CLASSE DE BORDAS EM CINZA SUAVE (#dce4ec) */
+        .grid-table, .items-table {
+            border-top: 1px solid #dce4ec;
+            border-left: 1px solid #dce4ec;
+        }
+        .grid-table td, .grid-table th, .items-table td, .items-table th {
+            border-right: 1px solid #dce4ec;
+            border-bottom: 1px solid #dce4ec;
+        }
+
+        .section-header {
+            background-color: #f4f6f8;
+            color: #111111;
+            font-size: 11px; /* Aumentado em +2px */
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 4px 5px;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            font-weight: bold;
+            color: #555555;
+            width: 15%;
+            font-size: 10.5px; /* Aumentado em +2px */
+        }
+        .val {
+            color: #111111;
+            font-size: 10.5px; /* Aumentado em +2px */
+        }
+
+        .preservar-linhas {
+            white-space: pre-wrap !important;
+        }
+
+        .linha-serv- { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- PAGINA 1: CAPA INTEIRA (FROTA MODERNA E COMPLETA) -->
+    <!-- ========================================== -->
+    <!-- Posicionamento absoluto força a imagem a ocupar 100% do papel escapando das margens padrões da folha -->
+    <div style="page-break-after: always; position: absolute; top: -1.00cm; left: -1.20cm; width: 21.00cm; height: 29.70cm; margin: 0; padding: 0; z-index: -100;">
+        <img src="{$site_cabecalho_01}" style="width: 21.00cm; height: 29.70cm; display: block;" alt="Capa">
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- PAGINA 2: CONTEÚDO DO ORÇAMENTO -->
+    <!-- ========================================== -->
+
+    <!-- CABEÇALHO DO ORÇAMENTO -->
+    <table class="grid-table">
+        <colgroup>
+            <col width="70%">
+            <col width="30%">
+        </colgroup>
+        <tr>
+            <!-- Coluna Esquerda: Dados da Unidade Emissora -->
+            <td style="width: 70%; padding: 6px; line-height: 1.4; font-size: 10.5px;">
+                <div style="margin-bottom: 4px;">
+                    <img src="{$unidade_image}" style="max-height: 40px; max-width: 150px; object-fit: contain;" alt="Logo Unidade">
+                </div>
+                <div class="bold" style="font-size: 11px;">Unidade Emissora: <span style="font-weight: normal;">{$pessoa_unidade_descricao}</span></div>
+                <div>{$pessoa_unidade_cpf_cnpj}</div>
+                <div>{$p_unidade_fone1}</div>
+                <div>contato@mglocacoes.com.br</div>
+            </td>
+            <!-- Coluna Direita: Emitido Por / Metadados -->
+            <td style="width: 30%; padding: 6px; line-height: 1.4; font-size: 10.5px;">
+                <div class="bold" style="font-size: 13px; margin-bottom: 15px; color: #2c3e50;">ORÇAMENTO Nº {$id}</div>
+                <div><span class="bold">Emitido por:</span></div>
+                <div>{$pessoa_responsavel_descricao}</div>
+                <div style="margin-top: 5px;"><span class="bold">Emissão:</span> {$cadastro}</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 1: DADOS GERAIS DO CLIENTE -->
+    <table class="grid-table" style="font-size: 10.5px;">
+        <colgroup>
+            <col width="8.33%" span="12">
+        </colgroup>
+        <tr>
+            <td colspan="3" class="lbl">Cliente</td>
+            <td colspan="5" class="val"><span class="bold">{$pessoa_id} - {$pessoa_descricao}</span></td>
+            <td colspan="1" class="lbl">LE</td>
+            <td colspan="3" class="val">{$pessoa_pj_inscricao_estadual}</td>
+        </tr>
+        <tr>
+            <td colspan="3" class="lbl">Cnpj/Cpf</td>
+            <td colspan="5" class="val">{$pessoa_cpf_cnpj}</td>
+            <td colspan="1" class="lbl">E-mail</td>
+            <td colspan="3" class="val">{$pessoa_email}</td>
+        </tr>
+        <tr>
+            <td colspan="3" class="lbl">Telefone</td>
+            <td colspan="5" class="val">{$pessoa_fone1} {$pessoa_fone2}</td>
+            <td colspan="1" class="lbl">Código Interno</td>
+            <td colspan="3" class="val">{$cod_interno}</td>
+        </tr>
+        <tr>
+            <td colspan="3" class="lbl">Status</td>
+            <td colspan="5" class="val">{$global_status_descricao}</td>
+            <td colspan="1" class="lbl">Cidade</td>
+            <td colspan="3" class="val">{$local_municipio_descricao} – {$local_uf_descricao} {$cep}</td>
+        </tr>
+        <tr>
+            <td colspan="3" class="lbl">Endereço</td>
+            <td colspan="9" class="val">{$logradouro} – {$numero} {$complemento} {$bairro}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: TABELA DE SERVIÇOS (Larguras de colunas fixadas diretamente na primeira linha) -->
+    <table class="items-table">
+        <colgroup>
+            <col width="8%">
+            <col width="54%">
+            <col width="13%">
+            <col width="12%">
+            <col width="13%">
+        </colgroup>
+        <thead>
+            <tr>
+                <th colspan="5" class="section-header" style="text-align: left; padding: 4px 6px; font-size: 11px;">Serviços</th>
+            </tr>
+            <tr style="background-color: #f4f6f8; font-weight: bold; font-size: 10.5px;">
+                <th class="text-center" style="width: 8%;">Qtde</th>
+                <th class="text-left" style="width: 54%;">Serviço</th>
+                <th class="text-center" style="width: 13%;">Tempo</th>
+                <th class="text-right" style="width: 12%;">Unitário</th>
+                <th class="text-right" style="width: 13%;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[servicos]-->
+            <tr class="linha-serv-{$servico_id}" style="font-size: 10px;">
+                <td class="text-center bold">{$qtde}</td>
+                <td>{$servico_descricao}</td>
+                <td class="text-center">{$tempo}</td>
+                <td class="text-right">{$preco}</td>
+                <td class="text-right bold">{$total_bruto}</td>
+            </tr>
+            <!--[/servicos]-->
+        </tbody>
+        <tfoot>
+            <tr style="background-color: #f4f6f8; font-weight: bold; font-size: 11px;">
+                <td colspan="4" class="text-right">Total:</td>
+                <td class="text-right">{$subtotal_servico}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- BLOCO 3: MENSAGEM / PRAZO DE PAGAMENTO (Fontes em 10.5px) -->
+    <table class="grid-table" style="font-size: 10.5px;">
+        <tr>
+            <td class="section-header" style="font-size: 11px;">Mensagem</td>
+        </tr>
+        <tr>
+            <td class="preservar-linhas" style="min-height: 40px; padding: 6px 8px; vertical-align: top; font-size: 10px;">{$obs1}</td>
+        </tr>
+        <tr>
+            <td style="padding: 6px 8px; font-size: 10.5px;"><span class="bold">Prazo Pagamento:</span> {$financ_prazo_pgto_descricao}</td>
+        </tr>
+    </table>
+
+    <!-- DATA DE GERAÇÃO (Alinhado à direita) -->
+    <div class="bold text-right" style="font-size: 10px; margin-top: 15px; margin-bottom: 30px;">
+        {$pessoa_unidade_local_municipio_descricao}, {$cadastro}
+    </div>
+
+    <!-- SEÇÃO DE ASSINATURA DUPLA SIMÉTRICA -->
+    <table style="border: none; table-layout: fixed; margin-top: 30px;">
+        <colgroup>
+            <col width="45%">
+            <col width="10%">
+            <col width="45%">
+        </colgroup>
+        <tr>
+            <td style="border: none; border-top: 1px solid #111111; padding-top: 4px; text-align: center; vertical-align: top; font-size: 10px;">
+                <span class="bold">Moacir Gonçalves</span><br>
+                {$pessoa_unidade_descricao}<br>
+                {$pessoa_unidade_cpf_cnpj}
+            </td>
+            <td style="border: none;">&nbsp;</td>
+            <td style="border: none; border-top: 1px solid #111111; padding-top: 4px; text-align: center; vertical-align: top; font-size: 10px;">
+                <span class="bold">{$pessoa_descricao}</span><br>
+                {$pessoa_cpf_cnpj}
+            </td>
+        </tr>
+    </table>
+
+    <!-- Endereço estático interno acoplado perfeitamente na base da página 2 -->
+    <div style="position: absolute; bottom: -0.80cm; left: 0; right: 0; text-align: center; font-size: 10px; color: #111111; border-top: 1px dashed #e2e8f0; padding-top: 4px;">
+        RUA MACHADO DE ASSIS, 733 – ZONA 06, CEP 87015-580 – MARINGÁ – PR
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- PAGINA 3: CONTRACAPA INTEIRA (ATENDEMOS EM TODO O BRASIL) -->
+    <!-- ========================================== -->
+    <!-- Posicionamento absoluto força a imagem a ocupar 100% do papel escapando das margens padrões da folha -->
+    <div style="page-break-before: always; position: absolute; top: -1.00cm; left: -1.20cm; width: 21.00cm; height: 29.70cm; margin: 0; padding: 0; z-index: -100;">
+        <img src="{$site_cabecalho_02}" style="width: 21.00cm; height: 29.70cm; display: block;" alt="Contracapa">
+    </div>
+
+</body>
+</html>
+<!--[/main]-->

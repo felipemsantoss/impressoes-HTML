@@ -1,0 +1,129 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiqueta de Despacho</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA DA FONTE EM ARIAL 12PX */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* DIMENSÕES DA FOLHA A4 RETRATO COM MARGENS DE 1,00cm CONFORME DIÁLOGO */
+        @page {
+            size: A4 portrait;
+            margin: 1.00cm;
+        }
+
+        body {
+            font-size: 12px; /* Arial 12px */
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            line-height: 1.4;
+            background-color: #ffffff;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        /* Forçar maiúsculas idênticas ao print */
+        .uppercase {
+            text-transform: uppercase !important;
+        }
+
+        .text-center {
+            text-align: center !important;
+        }
+
+        /* Tabela única centralizada de 13cm conforme régua do LibreOffice */
+        .shipping-table {
+            width: 13cm; /* Largura proporcional exata de 13cm */
+            margin: 50px auto; /* Centraliza a etiqueta horizontalmente na folha A4 */
+            border-collapse: separate !important; /* Correção DOMPDF para evitar bugs de borda */
+            border-spacing: 0 !important;
+            table-layout: fixed;
+            border: 1px solid #000000; /* Borda externa preta sólida */
+        }
+
+        .shipping-table td {
+            padding: 8px 12px;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+
+        /* Divisórias horizontais pretas sólidas */
+        .row-border-bottom td {
+            border-bottom: 1px solid #000000 !important;
+        }
+
+        /* Divisória vertical preta sólida */
+        .col-border-right {
+            border-right: 1px solid #000000 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tabela de Despacho Única (Centralizada e com Proporções Idênticas) -->
+    <table class="shipping-table">
+        <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+        </colgroup>
+        <tbody>
+            <!-- Linha 1: Emitente (Centralizado) -->
+            <tr class="row-border-bottom">
+                <td colspan="2" class="bold uppercase text-center" style="font-size: 12px; padding: 10px;">
+                    {$pessoa_unidade_descricao}
+                </td>
+            </tr>
+
+            <!-- Linha 2: Destinatário e Endereço -->
+            <tr class="row-border-bottom">
+                <td colspan="2" class="uppercase" style="padding: 10px 15px;">
+                    <div class="bold" style="text-transform: none; margin-bottom: 4px; font-size: 12px;">Destinatário</div>
+                    <div>{$pessoa_descricao}</div>
+                    <div>{$logradouro} {$numero} {$complemento}</div>
+                    <div>{$bairro} {$cep}</div>
+                    <div>{$local_municipio_descricao} / {$local_uf_descricao}</div>
+                </td>
+            </tr>
+
+            <!-- Linha 3: NF e Volumes -->
+            <tr class="row-border-bottom">
+                <td class="col-border-right bold">
+                    NF: <span style="font-weight: normal;">{$codigo}</span>
+                </td>
+                <td class="bold">
+                    Volumes: <span style="font-weight: normal;">{$volume_qtde}</span>
+                </td>
+            </tr>
+
+            <!-- Linha 4: Pesos (Líquido e Bruto) -->
+            <tr class="row-border-bottom">
+                <td class="col-border-right" style="padding-bottom: 12px;">
+                    <span class="bold">PESO LIQ:</span><br>
+                    <span style="display: block; margin-top: 4px;">{$volume_peso_liquido}</span>
+                </td>
+                <td style="padding-bottom: 12px;">
+                    <span class="bold">PESO BRUTO:</span><br>
+                    <span style="display: block; margin-top: 4px;">{$volume_peso_bruto}</span>
+                </td>
+            </tr>
+
+            <!-- Linha 5: Transportador -->
+            <tr>
+                <td colspan="2" class="bold" style="padding: 10px 15px;">
+                    Transportador: <span class="uppercase" style="font-weight: normal;">{$pessoa_transportadora_descricao}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

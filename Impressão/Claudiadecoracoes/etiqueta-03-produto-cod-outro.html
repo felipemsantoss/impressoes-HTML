@@ -1,0 +1,125 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiquetas de Código de Barras</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+            font-weight: normal !important; /* ABSOLUTAMENTE NADA EM NEGRITO */
+        }
+
+        /* DIMENSÕES FÍSICAS EXATAS DA PÁGINA DE ETIQUETA (11.00cm x 2.00cm) */
+        @page {
+            size: 11.00cm 2.00cm;
+            margin: 0px !important;
+        }
+
+        /* RESET E TAMANHO FIXO DA BOBINA EM FONTE 8PX COMPACTADA */
+        html, body {
+            width: 11.00cm;
+            height: 2.00cm;
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 8px;
+            color: #000000;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+
+        /* ESTRUTURA DE 3 COLUNAS SEM LINHAS DE GRADE */
+        table {
+            width: 11.00cm;
+            height: 2.00cm;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            table-layout: fixed !important;
+        }
+
+        td {
+            padding: 1.5px 2px 0px 2px; /* Reduzido padding superior de 3px para 1.5px para abrigar a nova altura de 2.00cm */
+            vertical-align: top;
+            border: none !important;
+            word-wrap: break-word;
+            line-height: 1.0;
+        }
+
+        /* CONFIGURAÇÃO CENTRALIZADA DO CÓDIGO DE BARRAS REAJUSTADA PARA A NOVA ALTURA DE 2.00CM */
+        .barcode-img {
+            display: inline-block;
+            height: 12px; /* Reduzido de 16px para 12px para evitar estouro vertical nas novas dimensões */
+            width: auto;
+        }
+
+        /* TRUQUE DE SEGURANÇA: OCULTA O ELEMENTO SE A IMAGEM ESTIVER EM BRANCO OU NÃO FOR ENCONTRADA */
+        img[src=""], img:not([src]) {
+            display: none !important;
+        }
+
+        /* TRUQUE DE MÁGICA CSS: SE A VARIÁVEL DE VALOR VIER VAZIA DO BANCO, FORÇA EXIBIÇÃO DE "0,00" */
+        .price-value:empty::before {
+            content: "0,00";
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Grade Horizontal de 3 Colunas de Etiquetas de Gôndola -->
+    <table>
+        <colgroup>
+            <col width="33.33%">
+            <col width="33.33%">
+            <col width="33.33%">
+        </colgroup>
+        <tr>
+            <!-- Coluna 1 -->
+            <td>
+                <!-- Padding-left reduzido para 6px para evitar quebras de linha indesejadas na descrição -->
+                <div style="text-align: left; padding-left: 6px; line-height: 1.05;">
+                    <div style="font-size: 8px; margin: 0; padding: 0;">{$descricao}</div>
+                    <div style="font-size: 8px; margin: 0; padding: 0;">R$ <span class="price-value">{$preco_venda}</span></div>
+                </div>
+                <!-- Código de Barras centralizado em bloco próprio com tratamento de erro inline -->
+                <div style="text-align: center; width: 100%; margin-top: 1px;">
+                    <img class="barcode-img" src="{$imagem_cod_outro}" onerror="this.style.display='none';" alt="Código de Barras">
+                </div>
+                <!-- Código legível centralizado perfeitamente abaixo da barra -->
+                <div style="font-size: 8px; text-align: center; width: 100%; margin-top: 1px; letter-spacing: 0.3px;">{$cod_outro}</div>
+            </td>
+            <!-- Coluna 2 -->
+            <td>
+                <!-- Padding-left reduzido para 6px para evitar quebras de linha indesejadas na descrição -->
+                <div style="text-align: left; padding-left: 6px; line-height: 1.05;">
+                    <div style="font-size: 8px; margin: 0; padding: 0;">{$descricao}</div>
+                    <div style="font-size: 8px; margin: 0; padding: 0;">R$ <span class="price-value">{$preco_venda}</span></div>
+                </div>
+                <!-- Código de Barras centralizado em bloco próprio com tratamento de erro inline -->
+                <div style="text-align: center; width: 100%; margin-top: 1px;">
+                    <img class="barcode-img" src="{$imagem_cod_outro}" onerror="this.style.display='none';" alt="Código de Barras">
+                </div>
+                <!-- Código legível centralizado perfeitamente abaixo da barra -->
+                <div style="font-size: 8px; text-align: center; width: 100%; margin-top: 1px; letter-spacing: 0.3px;">{$cod_outro}</div>
+            </td>
+            <!-- Coluna 3 -->
+            <td>
+                <!-- Padding-left reduzido para 6px para evitar quebras de linha indesejadas na descrição -->
+                <div style="text-align: left; padding-left: 6px; line-height: 1.05;">
+                    <div style="font-size: 8px; margin: 0; padding: 0;">{$descricao}</div>
+                    <div style="font-size: 8px; margin: 0; padding: 0;">R$ <span class="price-value">{$preco_venda}</span></div>
+                </div>
+                <!-- Código de Barras centralizado em bloco próprio com tratamento de erro inline -->
+                <div style="text-align: center; width: 100%; margin-top: 1px;">
+                    <img class="barcode-img" src="{$imagem_cod_outro}" onerror="this.style.display='none';" alt="Código de Barras">
+                </div>
+                <!-- Código legível centralizado perfeitamente abaixo da barra -->
+                <div style="font-size: 8px; text-align: center; width: 100%; margin-top: 1px; letter-spacing: 0.3px;">{$cod_outro}</div>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

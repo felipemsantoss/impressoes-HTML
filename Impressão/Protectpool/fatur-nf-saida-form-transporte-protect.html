@@ -1,0 +1,150 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiqueta de Destinatário</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DE TAMANHO DE BOBINA/ETIQUETA SUPORTADO PELO DOMPDF */
+        @page {
+            size: 13cm 8cm;
+            margin: 0px !important;
+        }
+
+        /* LIMITAÇÃO DO CANVAS DO CORPO PARA FORÇAR REDIMENSIONAMENTO CORRETO */
+        html, body {
+            width: 13cm;
+            height: 8cm;
+            margin: 0 !important;
+            padding: 0.15cm 0.35cm; /* Margem interna reduzida para acomodar fontes grandes */
+            background-color: #ffffff;
+            overflow: hidden; /* Elimina rolagens; a quebra real de página é evitada pelo .label-content abaixo */
+        }
+
+        /* CONTAINER COM ALTURA TRAVADA: impede que nomes longos (2 linhas) estourem
+           a altura da etiqueta e empurrem o DOMPDF a criar uma página/etiqueta extra em branco. */
+        .label-content {
+            width: 100%;
+            height: 7.5cm;
+            overflow: hidden;
+            page-break-inside: avoid;
+            page-break-after: avoid;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        /* FONTE ÚNICA (16px) PARA TODOS OS CAMPOS + MARGEM SUPERIOR FIXA (EM CM):
+           distribui o conteúdo pela etiqueta. Margem calculada com folga para o pior caso
+           (remetente E destinatário quebrando em 2 linhas cada) sem nunca passar de 1 página —
+           NÃO aumentar o font-size ou o margin-top sem checar essa folga, senão a etiqueta
+           volta a sair em 2 páginas (a 2ª quase em branco) no DOMPDF. */
+        .sender-title {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            line-height: 1.15;
+            margin-top: 0;
+        }
+
+        .label-type {
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1.15;
+            margin-top: 0.3cm;
+        }
+
+        .recipient-name {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            line-height: 1.15;
+            margin-top: 0.3cm;
+        }
+
+        .address-info {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            line-height: 1.15;
+            margin-top: 0.3cm;
+        }
+
+        .cep-info {
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1.15;
+            margin-top: 0.3cm;
+        }
+
+        /* METADADOS EM LINHA LADO A LADO */
+        .meta-container {
+            width: 100%;
+            margin-top: 0.3cm;
+        }
+        .meta-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .meta-table td {
+            padding: 0;
+            font-size: 16px;
+            font-weight: bold;
+            vertical-align: middle;
+            line-height: 1.15;
+        }
+
+        .transport-info {
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1.15;
+            margin-top: 0.3cm;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="label-content">
+
+        <!-- Remetente / Unidade Emissora -->
+        <div class="sender-title">{$pessoa_unidade_descricao}</div>
+
+        <!-- Tipo de Etiqueta -->
+        <div class="label-type">Destinatário</div>
+
+        <!-- Nome do Destinatário -->
+        <div class="recipient-name">{$pessoa_descricao}</div>
+
+        <!-- Cidade / UF -->
+        <div class="address-info">{$local_municipio_descricao} / {$local_uf_descricao}</div>
+
+        <!-- CEP -->
+        <div class="cep-info">CEP {$cep}</div>
+
+        <!-- NF e Volume Alinhados Lado a Lado na Horizontal -->
+        <div class="meta-container">
+            <table class="meta-table">
+                <tr>
+                    <td style="width: 50%; text-align: left;">NF: {$codigo}</td>
+                    <td style="width: 50%; text-align: left;">Volume: {$volume_qtde}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Transportadora -->
+        <div class="transport-info">
+            Transportadora: {$pessoa_transportadora_descricao}
+        </div>
+
+    </div>
+
+</body>
+</html>
+<!--[/main]-->

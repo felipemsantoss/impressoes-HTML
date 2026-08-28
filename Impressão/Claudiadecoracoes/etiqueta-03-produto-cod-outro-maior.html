@@ -1,0 +1,223 @@
+<style>
+    @page {
+        size: 11cm 2.4cm;
+        margin: 0;
+        padding: 0;
+    }
+
+    html {
+        margin: 0;
+        padding: 0;
+        width: 11cm;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        width: 11cm;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 9px;
+        color: #000;
+        background: #fff;
+    }
+
+    /* Impede quebra de página dentro das etiquetas */
+    table.etiquetas {
+        width: 11cm;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-spacing: 0;
+        border-collapse: collapse;
+        table-layout: fixed;
+
+        page-break-before: avoid;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+    }
+
+    table.etiquetas tr {
+        margin: 0;
+        padding: 0;
+        page-break-inside: avoid;
+    }
+
+    table.etiquetas td {
+        width: 33.333333%;
+        margin: 0;
+        padding: 1px 1px 0 1px;
+        border: 0;
+
+        vertical-align: top;
+
+        font-size: 9px;
+        line-height: 1.05;
+
+        overflow: hidden;
+    }
+
+    /* Descrição */
+    .descricao {
+        margin: 0;
+        padding: 0;
+
+        width: 100%;
+
+        font-size: 9px;
+        line-height: 1.05;
+
+        text-align: left;
+
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* Preço */
+    .preco {
+        margin: 1px 0 0 0;
+        padding: 0;
+
+        width: 100%;
+
+        font-size: 9px;
+        line-height: 1.05;
+
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    /* Área do código de barras */
+    .barcode-container {
+        width: 100%;
+
+        margin: 2px 0 0 0;
+        padding: 0;
+
+        text-align: center;
+        line-height: 0;
+    }
+
+    .barcode-img {
+        display: inline-block;
+
+        height: 16px;
+        width: auto;
+        max-width: 100%;
+
+        margin: 0;
+        padding: 0;
+
+        vertical-align: middle;
+    }
+
+    img[src=""],
+    img:not([src]) {
+        display: none;
+    }
+
+    /* Número do código */
+    .codigo-legivel {
+        width: 100%;
+
+        margin: 2px 0 0 0;
+        padding: 0;
+
+        font-size: 9px;
+        line-height: 1;
+
+        text-align: center;
+
+        white-space: nowrap;
+    }
+
+    .price-value:empty::before {
+        content: "0,00";
+    }
+</style>
+
+
+<table class="etiquetas">
+    <colgroup>
+        <col style="width: 33.333333%;">
+        <col style="width: 33.333333%;">
+        <col style="width: 33.333333%;">
+    </colgroup>
+
+    <tr>
+
+        <!-- ETIQUETA 1 -->
+        <td>
+            <div class="descricao">
+                {$descricao}
+            </div>
+
+            <div class="preco">
+                R$ <span class="price-value">{$preco_venda}</span>
+            </div>
+
+            <div class="barcode-container">
+                <img
+                    class="barcode-img"
+                    src="{$imagem_cod_outro}"
+                    onerror="this.style.display='none';"
+                    alt=""
+                >
+            </div>
+
+            <div class="codigo-legivel">
+                {$cod_outro}
+            </div>
+        </td>
+
+
+        <!-- ETIQUETA 2 -->
+        <td>
+            <div class="descricao">
+                {$descricao}
+            </div>
+
+            <div class="preco">
+                R$ <span class="price-value">{$preco_venda}</span>
+            </div>
+
+            <div class="barcode-container">
+                <img
+                    class="barcode-img"
+                    src="{$imagem_cod_outro}"
+                    onerror="this.style.display='none';"
+                    alt=""
+                >
+            </div>
+
+            <div class="codigo-legivel">
+                {$cod_outro}
+            </div>
+        </td>
+
+
+        <!-- ETIQUETA 3 -->
+        <td>
+            <div class="descricao">
+                {$descricao}
+            </div>
+
+            <div class="preco">
+                R$ <span class="price-value">{$preco_venda}</span>
+            </div>
+
+            <div class="barcode-container">
+                <img
+                    class="barcode-img"
+                    src="{$imagem_cod_outro}"
+                    onerror="this.style.display='none';"
+                    alt=""
+                >
+            </div>
+
+            <div class="codigo-legivel">
+                {$cod_outro}
+            </div>
+        </td>
+
+    </tr>
+</table>

@@ -1,0 +1,257 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Ordem de Serviço</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 1.00cm 1.20cm 1.20cm 1.20cm;
+        }
+
+        body {
+            font-size: 11px; /* Diminuído de 12px para 11px */
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.35;
+            background-color: #ffffff;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* TABELAS E GRIDS DO DOCUMENTO */
+        table {
+            width: 100%;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            table-layout: fixed !important; /* CORREÇÃO CRÍTICA DOMPDF COLUNAS */
+            margin-bottom: 6px;
+        }
+
+        td, th {
+            padding: 3.5px 5px;
+            vertical-align: middle;
+            word-wrap: break-word;
+        }
+
+        /* CLASSE DE BORDAS PRETAS */
+        .grid-table, .items-table {
+            border-top: 1.3px solid #111111;
+            border-left: 1.3px solid #111111;
+        }
+        .grid-table td, .grid-table th, .items-table td, .items-table th {
+            border-right: 1.3px solid #111111;
+            border-bottom: 1.3px solid #111111;
+        }
+
+        .section-header {
+            background-color: #f4f6f8;
+            color: #111111;
+            font-size: 12px; /* Diminuído de 13px para 12px */
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 4px 5px;
+        }
+
+        /* LBL COM LARGURA FIXA REMOVIDA PARA OBEDECER O COLSPAN */
+        .lbl {
+            font-weight: bold;
+            font-size: 11.5px; /* Diminuído de 12.5px para 11.5px */
+        }
+        .val {
+            color: #111111;
+            font-size: 11.5px; /* Diminuído de 12.5px para 11.5px */
+        }
+
+        .preservar-linhas {
+            white-space: pre-wrap !important;
+        }
+
+        .linha-serv- { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- PAGINA 1: CAPA INTEIRA (FROTA MODERNA E COMPLETA) -->
+    <!-- ========================================== -->
+    <!-- Posicionamento absoluto força a imagem a ocupar 100% do papel escapando das margens padrões da folha -->
+    <div style="page-break-after: always; position: absolute; top: -1.00cm; left: -1.20cm; width: 21.00cm; height: 29.70cm; margin: 0; padding: 0; z-index: -100; text-align: center;">
+        <img src="{$site_cabecalho_01}" style="height: 29.70cm; width: auto; max-width: 21.00cm; display: inline-block;" alt="Capa">
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- PAGINA 2: CONTEÚDO DO ORÇAMENTO -->
+    <!-- ========================================== -->
+
+    <!-- LOGO SOLTA NO TOPO (Fora da Tabela) -->
+    <div style="margin-bottom: 5px;">
+        <img src="{$unidade_image}" style="max-height: 80px; max-width: 300px; object-fit: contain;" alt="Logo Unidade">
+    </div>
+
+    <!-- TÍTULO CENTRALIZADO (Fora da Tabela) -->
+    <div class="bold text-center" style="font-size: 16px; margin-bottom: 10px;"> <!-- Diminuído de 17px para 16px -->
+        Ordem de Serviço Nº {$id}
+    </div>
+
+     <!-- BLOCO 1: DADOS GERAIS DA UNIDADE E DO CLIENTE (mesma grade/alinhamento com correções para DOMPDF) -->
+    <table style="width: 100%; table-layout: fixed; border: 1.3px solid #111111; border-collapse: collapse !important; font-size: 11.5px; margin-bottom: 6px;"> <!-- Diminuído de 12.5px para 11.5px -->
+        <tr>
+            <td class="lbl" style="width: 12%; padding: 4px 6px; font-weight: bold; vertical-align: top; border-bottom: 1.3px solid #111111;">Unidade</td>
+            <td class="val" style="width: 52%; padding: 4px 6px; border-bottom: 1.3px solid #111111;">
+                <span class="bold">{$pessoa_unidade_descricao}</span><br>
+                <span class="bold">{$pessoa_unidade_cpf_cnpj}</span><br>
+                <span class="bold">{$p_unidade_fone1}</span><br>
+                <span class="bold">contato@mglocacoes.com.br</span><br>
+                <span class="bold">Endereço:</span> {$pessoa_unidade_logradouro} {$pessoa_unidade_numero} {$pessoa_unidade_complemento} CEP: {$pessoa_unidade_cep} {$pessoa_unidade_local_municipio_descricao}/{$pessoa_unidade_local_uf_sigla}
+            </td>
+            <td colspan="2" style="width: 36%; padding: 6px; line-height: 1.4; font-size: 11.5px; vertical-align: top; text-align: center; border-bottom: 1.3px solid #111111;"> <!-- Diminuído de 12.5px para 11.5px -->
+                <div><span class="bold">Emitido por:</span></div>
+                <div>{$pessoa_responsavel_descricao}</div>
+                <div style="margin-top: 5px;"><span class="bold">Emissão:</span> {$cadastro}</div>
+            </td>
+        </tr>
+        <tr>
+            <td class="lbl" style="width: 14%; padding: 1px 6px; font-weight: bold;">Cliente</td>
+            <td class="val" style="width: 48%; padding: 1px 6px;"><span class="bold">{$pessoa_id} - {$pessoa_descricao}</span></td>
+            <td class="lbl" style="width: 12%; padding: 1px 6px; font-weight: bold;">LE</td>
+            <td class="val" style="width: 26%; padding: 1px 6px;">{$pessoa_pj_inscricao_estadual}</td>
+        </tr>
+        <tr>
+            <td class="lbl" style="width: 14%; padding: 1px 6px; font-weight: bold;">Cnpj/Cpf</td>
+            <td class="val" style="width: 48%; padding: 1px 6px;">{$pessoa_cpf_cnpj}</td>
+            <td class="lbl" style="width: 12%; padding: 1px 6px; font-weight: bold;">E-mail</td>
+            <td class="val" style="width: 26%; padding: 1px 6px;">{$pessoa_email}</td>
+        </tr>
+        <tr>
+            <td class="lbl" style="width: 14%; padding: 1px 6px; font-weight: bold;">Telefone</td>
+            <td class="val" style="width: 48%; padding: 1px 6px;">{$pessoa_fone1} {$pessoa_fone2}</td>
+            <td class="lbl" style="width: 12%; padding: 1px 6px; font-weight: bold;">Cód Interno</td>
+            <td class="val" style="width: 26%; padding: 1px 6px;">{$cod_interno}</td>
+        </tr>
+        <tr>
+            <td class="lbl" style="width: 14%; padding: 1px 6px; font-weight: bold;">Cidade/Estado</td>
+            <td class="val" style="width: 48%; padding: 1px 6px;">{$local_municipio_descricao} – {$local_uf_descricao} {$cep}</td>
+            <td class="lbl" style="width: 12%; padding: 1px 6px; font-weight: bold;">Status</td>
+            <td class="val" style="width: 26%; padding: 1px 6px;">{$global_status_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl" style="width: 14%; padding: 1px 6px; font-weight: bold;">Endereço</td>
+            <td class="val" colspan="3" style="width: 86%; padding: 1px 6px;">{$logradouro} – {$numero} {$complemento} {$bairro}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: TABELA DE SERVIÇOS -->
+    <div class="section-header" style="padding: 4px 6px; font-size: 12px; background-color: #ffffff;">Serviços</div>
+    <table class="items-table">
+        <colgroup>
+            <col width="8%">
+            <col width="54%">
+            <col width="13%">
+            <col width="12%">
+            <col width="13%">
+        </colgroup>
+        <thead>
+            <tr style="background-color: #cccccc; font-weight: bold; font-size: 11.5px;"> <!-- Diminuído de 12.5px para 11.5px -->
+                <th class="text-center" style="width: 8%;">Qtde</th>
+                <th class="text-left" style="width: 54%;">Serviço</th>
+                <th class="text-center" style="width: 13%;">Tempo</th>
+                <th class="text-right" style="width: 12%;">Unitário</th>
+                <th class="text-right" style="width: 13%;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[servicos]-->
+            <tr class="linha-serv-{$servico_id}" style="font-size: 11px;"> <!-- Diminuído de 12px para 11px -->
+                <td class="text-center bold">{$qtde}</td>
+                <td>{$servico_descricao}</td>
+                <td class="text-center">{$tempo}</td>
+                <td class="text-right">{$preco}</td>
+                <td class="text-right bold">{$total_bruto}</td>
+            </tr>
+            <!--[/servicos]-->
+        </tbody>
+        <tfoot>
+            <tr style="background-color: #ffffff; font-weight: bold; font-size: 12px;"> <!-- Diminuído de 13px para 12px -->
+                <td colspan="4" class="text-right">Total:</td>
+                <td class="text-right">{$subtotal_servico}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- BLOCO 3: MENSAGEM + PRAZO DE PAGAMENTO + ASSINATURAS (bloco único, sem quebra de página) -->
+    <div class="section-header" style="padding: 4px 6px; font-size: 12px; background-color: #ffffff;">Observações</div>
+    <table style="width: 100%; border: 1.3px solid #111111; border-collapse: collapse !important; font-size: 11.5px; page-break-inside: avoid !important; margin-bottom: 6px;">
+        <colgroup>
+            <col width="50%">
+            <col width="50%">
+        </colgroup>
+        <tbody>
+            <tr>
+                <td colspan="2" class="preservar-linhas" style="padding: 6px 12px; vertical-align: top; font-size: 11px; border: none;">{$obs1}</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="padding: 4px 12px 2px 12px; font-size: 11.5px; border: none;">
+                    <span class="bold">Prazo Pagamento:</span> {$financ_prazo_pgto_descricao}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="padding: 2px 12px; font-size: 11.5px; text-align: center; border: none;">
+                    <span class="bold">{$pessoa_unidade_local_municipio_descricao}, {$cadastro}</span>
+                </td>
+            </tr>
+            <!-- ASSINATURAS -->
+            <tr>
+                <!-- Assinatura Moacir -->
+                <td style="width: 50%; padding: 8px 12px 8px 12px; text-align: center; vertical-align: bottom; border: none;">
+                    <div style="margin-bottom: 2px;">
+                        <img src="{$site_cabecalho_03}" style="height: 50px; width: auto; display: inline-block;" alt="Assinatura">
+                    </div>
+                    <div style="border-top: 1px solid #111111; width: 80%; margin: 0 auto; padding-top: 3px; font-size: 11px;">
+                        {$pessoa_unidade_descricao}<br>
+                        {$pessoa_unidade_cpf_cnpj}
+                    </div>
+                </td>
+                <!-- Assinatura Cliente -->
+                <td style="width: 50%; padding: 8px 12px 8px 12px; text-align: center; vertical-align: bottom; border: none;">
+                    <div style="height: 40px; line-height: 1; margin-bottom: 2px;"></div>
+                    <div style="border-top: 1px solid #111111; width: 80%; margin: 0 auto; padding-top: 3px; font-size: 11px;">
+                        {$pessoa_descricao}<br>
+                        {$pessoa_cpf_cnpj}
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- ========================================== -->
+    <!-- PAGINA 3: CONTRACAPA INTEIRA -->
+    <!-- ========================================== -->
+    <div style="page-break-before: always; position: absolute; top: -1.00cm; left: -1.20cm; width: 21.00cm; height: 29.70cm; margin: 0; padding: 0; z-index: -100; text-align: center;">
+        <img src="{$site_cabecalho_02}" style="height: 29.70cm; width: auto; max-width: 21.00cm; display: inline-block;" alt="Contracapa">
+    </div>
+
+</body>
+</html>
+<!--[/main]-->

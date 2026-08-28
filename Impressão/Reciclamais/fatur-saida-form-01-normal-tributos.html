@@ -1,0 +1,322 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Faturamento</title>
+    <style>
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 DEITADA (LANDSCAPE) */
+        @page {
+            size: A4 landscape; /* Define a folha deitada de forma nativa */
+            margin: 30px 20px 40px 20px; /* Margens otimizadas para o formato horizontal */
+        }
+
+        /* RESET E FONTES */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 9px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* RODAPÉ REAL E REPETÍVEL (ESTILO LIBREOFFICE) */
+        .footer {
+            position: fixed;
+            bottom: -30px;
+            left: 0px;
+            right: 0px;
+            height: 15px;
+            text-align: right;
+            font-size: 7.5px;
+            color: #7f8c8d;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 4px;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-prod- { display: none !important; }
+        .linha-parc- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; /* Força o alinhamento perfeito das colunas */
+            margin-bottom: 6px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 3px 4px;
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) */
+        .grid-table {
+            margin-bottom: 5px;
+        }
+        .grid-table td, .grid-table th {
+            border: 1px solid #dce4ec;
+        }
+        
+        /* CABEÇALHOS */
+        .section-header {
+            background-color: #f4f6f8;
+            color: #2c3e50;
+            font-size: 8.5px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 3px 4px;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-size: 8px;
+            font-weight: bold;
+            width: 15%;
+        }
+        .val {
+            width: 35%;
+            color: #111111;
+        }
+
+        /* TABELAS DE ITENS */
+        .items-table th {
+            background-color: #2c3e50;
+            color: #ffffff;
+            font-size: 9px;
+            text-transform: uppercase;
+            border: 1px solid #2c3e50;
+            padding: 3px 2px;
+        }
+        .items-table td {
+            border: 1px solid #dce4ec;
+            border-bottom: 1px solid #eeeeee;
+            padding: 3px 4px;
+            font-size: 8px;
+        }
+        .items-table tfoot td {
+            background-color: #f4f6f8;
+            font-weight: bold;
+            border: 1px solid #dce4ec;
+            padding: 3px 4px;
+            font-size: 8px;
+        }
+
+        /* ESTILO DO TOTAL GERAL DA NOTA EM DESTAQUE E CENTRALIZADO */
+        .total-lbl {
+            background-color: #2c3e50 !important;
+            color: #ffffff !important;
+            font-size: 11px;
+            font-weight: bold;
+            width: 15%;
+            border-color: #2c3e50 !important;
+            text-align: center !important; /* Centralizado horizontalmente */
+        }
+        .total-val {
+            background-color: #2c3e50 !important;
+            color: #ffffff !important;
+            font-size: 13px;
+            font-weight: bold;
+            width: 35%;
+            border-color: #2c3e50 !important;
+            text-align: right !important; /* Centralizado horizontalmente */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- RODAPÉ FIXO -->
+    <div class="footer">
+        Impresso em: <span class="bold">{$data_hoje}</span>
+    </div>
+
+    <!-- CABEÇALHO DO DOCUMENTO -->
+    <table style="margin-bottom: 6px; border-bottom: 2px solid #2c3e50; padding-bottom: 3px;">
+        <tr>
+            <td style="width: 30%; vertical-align: middle;">
+                <img src="{$unidade_image}" style="max-width: 100px; max-height: 35px;" alt="Logo da Empresa">
+            </td>
+            <td style="width: 70%; text-align: right; vertical-align: middle;">
+                <span style="font-size: 16px; font-weight: bold; color: #2c3e50;">Faturamento Id {$id} &ndash; Nº {$codigo}</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 1: DADOS DA EMISSORA E CADASTRO -->
+    <table class="grid-table">
+        <tr>
+            <td class="lbl">Unidade Emissora:</td>
+            <td class="val">
+                <span class="bold">{$pessoa_unidade_descricao}</span><br>
+                {$pessoa_unidade_cpf_cnpj} &bull; {$pessoa_unidade_fone1} &bull; {$pessoa_unidade_email}
+            </td>
+            <td class="lbl">Dados Gerais:</td>
+            <td class="val">
+                Cadastro: <span class="bold">{$cadastro}</span><br>
+                Tipo: {$tipo} &bull; Faturar: {$faturar}
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 2: DADOS DO CLIENTE E ENDEREÇO -->
+    <table class="grid-table">
+        <tr>
+            <td class="lbl" style="width: 15%;">Cliente:</td>
+            <td class="val" style="width: 35%;"><span class="bold">{$pessoa_id} - {$pessoa_descricao}</span></td>
+            <td class="lbl" style="width: 15%;">Operação:</td>
+            <td class="val" style="width: 35%;">{$fatur_operacao_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Cnpj/Cpf:</td>
+            <td class="val">{$pessoa_cpf_cnpj}</td>
+            <td class="lbl">Insc. Estadual:</td>
+            <td class="val">{$pessoa_pj_inscricao_estadual}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Telefone / E-mail:</td>
+            <td class="val">{$pessoa_fone1} &bull; {$pessoa_email}</td>
+            <td class="lbl">Vendedor:</td>
+            <td class="val">{$pessoa_responsavel_id} - {$pessoa_responsavel_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Endereço:</td>
+            <td class="val" colspan="3">{$logradouro}, {$numero} {$complemento} - {$bairro} &bull; <span class="bold">Cidade/UF:</span> {$local_municipio_descricao} / {$local_uf_descricao}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 3: ITENS DO FATURAMENTO (PRODUTOS) - 12 COLUNAS PAISAGEM -->
+    <table class="items-table" style="margin-bottom: 5px;">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 5%;">Código</th>
+                <th style="text-align: left; width: 23%;">Produto</th>
+                <th class="text-center" style="width: 8%;">Ncm</th>
+                <th class="text-center" style="width: 8%;">Cest</th>
+                <th class="text-center" style="width: 8%;">Csosn/Cst</th>
+                <th class="text-center" style="width: 8%;">Cfop</th>
+                <th class="text-center" style="width: 5%;">Qtd</th>
+                <th class="text-center" style="width: 5%;">Und</th>
+                <th class="text-right" style="width: 8%;">Unitário</th>
+                <th class="text-right" style="width: 8%;">Desconto</th>
+                <th class="text-right" style="width: 8%;">Valor Icms st</th>
+                <th class="text-right" style="width: 6%;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[produtos]-->
+            <tr class="linha-prod-{$produto_id}">
+                <td class="text-center">{$produto_id}</td>
+                <td><span class="bold">{$produto_descricao}</span></td>
+                <td class="text-center">{$tributo_tab_classfiscal_ncm}</td>
+                <td class="text-center">{$tributo_tab_cest_codigo}</td>
+                <td class="text-center">{$tributo_tab_icms_st_cst_codigo}</td>
+                <td class="text-center">{$tributo_tab_cfop_codigo}</td>
+                <td class="text-center">{$qtde}</td>
+                <td class="text-center">{$sigla}</td>
+                <td class="text-right">{$preco}</td>
+                <td class="text-right">{$desconto}</td>
+                <td class="text-right">{$st_valor}</td>
+                <td class="text-right bold text-primary">{$total}</td>
+            </tr>
+            <!--[/produtos]-->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6" class="text-right">Total Itens:</td>
+                <td class="text-center">{$qtde_sum}</td>
+                <td colspan="4" class="text-right">Total:</td>
+                <td class="text-right bold">{$total_produto}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- BLOCO 4: DETALHAMENTO DE IMPOSTOS E RESUMO FINANCEIRO -->
+    <table class="grid-table" style="margin-bottom: 5px;">
+        <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+            <col style="width: 15%;">
+            <col style="width: 35%;">
+        </colgroup>
+        <!-- Linha 1 -->
+        <tr>
+            <td class="lbl">Base cálculo Icms:</td>
+            <td class="val text-left">{$total_icms_base}</td>
+            <td class="lbl">Valor Icms:</td>
+            <td class="val text-left">{$total_icms_valor}</td>
+        </tr>
+        <!-- Linha 2 -->
+        <tr>
+            <td class="lbl">Base Cálculo Icms St:</td>
+            <td class="val text-left">{$total_st_base}</td>
+            <td class="lbl">Valor Icms St:</td>
+            <td class="val text-left">{$total_st_valor}</td>
+        </tr>
+        <!-- Linha 3 -->
+        <tr>
+            <td class="lbl">Desconto Produtos:</td>
+            <td class="val text-left">{$desconto_produto}</td>
+            <td class="lbl">Valor Ipi:</td>
+            <td class="val text-left">{$total_ipi_valor}</td>
+        </tr>
+        <!-- Linha 4 -->
+        <tr>
+            <td class="lbl">Outras Despesas:</td>
+            <td class="val text-left">{$total_despesa_outras}</td>
+            <td class="lbl">Frete:</td>
+            <td class="val text-left">{$total_frete}</td>
+        </tr>
+        <!-- Linha 5 -->
+        <tr>
+            <td class="lbl">Prazo Pagamento:</td>
+            <td class="val">{$financ_prazo_pgto_descricao}</td>
+            <td class="lbl">Forma Pagamento:</td>
+            <td class="val">{$financ_forma_pgto_descricao}</td>
+        </tr>
+        <!-- Linha 6: Observação ocupando a largura total (100%) -->
+        <tr>
+            <td class="lbl">Observação:</td>
+            <td class="val" colspan="3">{$obs1}</td>
+        </tr>
+        <!-- Linha 7: Justificativa (Esquerda) e o Total Geral em Destaque e Centralizado (Direita) -->
+        <tr>
+            <td class="lbl">Justificativa:</td>
+            <td class="val">{$complementar} {$justificativa}</td>
+            <td class="total-lbl">Total Geral:</td>
+            <td class="total-val text-left">{$total_nf}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 5: TABELA DE PARCELAS / FORMA DE PAGAMENTO -->
+    <table class="items-table" style="margin-bottom: 0px;">
+        <thead>
+            <tr>
+                <th style="text-align: left; padding-left: 10px; width: 40%;">Forma de Pagamento</th>
+                <th class="text-center" style="width: 30%;">Vencimento</th>
+                <th class="text-right" style="width: 30%;">Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[parcelas]-->
+            <tr class="linha-parc-{$parcela}">
+                <td style="padding-left: 10px;">{$financ_forma_pgto_descricao_parcela}</td>
+                <td class="text-center bold">{$vencimento}</td>
+                <td class="text-right bold">{$valor}</td>
+            </tr>
+            <!--[/parcelas]-->
+        </tbody>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

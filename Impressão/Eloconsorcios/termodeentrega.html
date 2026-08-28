@@ -1,0 +1,215 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Termo de Entrega de Veículo Locado</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL E CORREÇÃO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important; /* CORREÇÃO DOMPDF */
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 1.80cm 1.50cm;
+        }
+
+        body {
+            font-size: 10px; /* Tamanho de fonte ideal para leitura confortável de contratos */
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            background-color: #ffffff;
+        }
+
+        /* TEXTO JURÍDICO */
+        .text-justify {
+            text-align: justify;
+        }
+        
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        p {
+            margin: 0 0 10px 0;
+        }
+
+        .section-header {
+            font-size: 10px;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 6px;
+        }
+
+        /* ESTRUTURA GERAL DAS TABELAS - CORREÇÃO DE COLAPSO DO DOMPDF */
+        table {
+            width: 100%;
+            border-collapse: separate !important; /* CORREÇÃO DOMPDF */
+            border-spacing: 0 !important; /* CORREÇÃO DOMPDF */
+            table-layout: fixed;
+            margin-bottom: 12px;
+        }
+        
+        td, th {
+            vertical-align: top;
+            padding: 4px 6px;
+            word-wrap: break-word;
+            line-height: 1.3;
+        }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) - TRATAMENTO DE BORDAS SEPARATE */
+        .grid-table {
+            border-top: 1px solid #c0c0c0;
+            border-left: 1px solid #c0c0c0;
+        }
+        .grid-table td, .grid-table th {
+            border-right: 1px solid #c0c0c0;
+            border-bottom: 1px solid #c0c0c0;
+        }
+
+        .table-lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-size: 8.5px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGOMARCA CENTRALIZADA NO TOPO -->
+    <div style="text-align: center; margin-bottom: 15px;">
+        <img src="{$pessoa_unidade_logo}" style="max-height: 45px;" alt="Logo Vector">
+    </div>
+
+    <!-- TÍTULO PRINCIPAL DO CONTRATO -->
+    <div class="bold text-center" style="font-size: 12px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px;">
+        TERMO DE ENTREGA DE VEÍCULO LOCADO
+    </div>
+
+    <!-- DADOS DO CLIENTE E CONTRATO -->
+    <div class="bold" style="margin-bottom: 15px; font-size: 11px;">
+        Cliente: <span style="font-weight: normal;">{$pessoa_descricao}</span> &nbsp;&nbsp;&bull;&nbsp;&nbsp; Contrato: <span style="font-weight: normal;">{$id}</span>
+    </div>
+
+    <!-- SEÇÃO: DADOS DO CONDUTOR (Laço dinâmico de pessoas ativado) -->
+    <div class="section-header">Dados do Condutor:</div>
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 25%;">
+            <col style="width: 35%;">
+            <col style="width: 20%;">
+            <col style="width: 20%;">
+        </colgroup>
+        <thead>
+            <tr style="font-weight: bold; text-align: left;" class="table-lbl">
+                <td style="width: 25%;">Nome</td>
+                <td style="width: 35%;">Endereço</td>
+                <td style="width: 20%;">Cidade/UF</td>
+                <td style="width: 20%;">CPF / CNH</td>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[pessoas]-->
+            <tr>
+                <td>{$pessoa_descricao}</td>
+                <td>
+                    {$pes_logradouro} {$pes_numero}<br>
+                    {$pes_complemento} {$pes_bairro}
+                </td>
+                <td>{$pes_local_municipio_descricao} / {$pes_local_uf_sigla}</td>
+                <td>{$pes_cpf_cnpj} / {$pf_cnh_numero}</td>
+            </tr>
+            <!--[/pessoas]-->
+        </tbody>
+    </table>
+
+    <!-- SEÇÃO: DADOS DO VEÍCULO (Laço dinâmico de veiculos ativado) -->
+    <div class="section-header">Dados do Veículo:</div>
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 35%;">
+            <col style="width: 15%;">
+            <col style="width: 15%;">
+            <col style="width: 20%;">
+            <col style="width: 15%;">
+        </colgroup>
+        <thead>
+            <tr style="font-weight: bold; text-align: left;" class="table-lbl">
+                <td style="width: 35%;">Modelo</td>
+                <td style="width: 15%;">Renavam</td>
+                <td style="width: 15%;">Placa</td>
+                <td style="width: 20%;">Ano / Modelo</td>
+                <td style="width: 15%;">Chassi</td>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[veiculos]-->
+            <tr>
+                <td>{$veiculo_marca_descricao} - {$veiculo_modelo_descricao}</td>
+                <td>{$veiculo_renavam}</td>
+                <td>{$veiculo_placa}</td>
+                <td>{$veiculo_ano} / {$veiculo_anomodelo}</td>
+                <td>{$veiculo_chassi}</td>
+            </tr>
+            <!--[/veiculos]-->
+        </tbody>
+    </table>
+
+    <!-- SEÇÃO: TERMO DE RESPONSABILIDADE -->
+    <div class="text-justify" style="margin-top: 15px; margin-bottom: 25px;">
+        <div class="bold" style="text-decoration: underline; margin-bottom: 8px;">TERMO DE RESPONSABILIDADE:</div>
+        <p>Declaro, para todos os fins de direito que na qualidade de Locatário do veículo acima discriminado, a partir da assinatura do presente termo, assumo total responsabilidade, tanto na esfera cívil, como na esfera criminal, com relação a utilizaçãoao do veículo, conforme pactuado no Contrato de Locação e Condições Gerais deste. Declaro ainda, assumir eventuais penalidades (multas e pontuação) aplicadas em decorrência de quaisquer infrações cometidas quando na condução do veículo locado e durante o período em que este estiver sob minha responsabilidade. Declaro, por fim, conhecer todas as normas de trânsito, obrigando-me a conservar devidamente o veículo e a comunicacão imediata á LOCADORA sobre qualquer circunstância que envolva, de alguma forma o mesmo.</p>
+
+        <!-- Linha de Assinatura do Locatário (Alinhada à Direita) -->
+        <table style="width: 100%; border: none; border-collapse: collapse; margin-top: 30px; table-layout: fixed;">
+            <tr>
+                <td style="width: 50%; border: none !important;">&nbsp;</td>
+                <td style="width: 50%; text-align: center; border-top: 1px solid #111111 !important; border-bottom: none !important; border-left: none !important; border-right: none !important; padding-top: 4px; font-size: 9.5px; vertical-align: top;">
+                    Assinatura do Locatário (Igual CNH)
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- SEÇÃO: DECLARAÇÃO -->
+    <div class="text-justify" style="margin-top: 15px; margin-bottom: 25px;">
+        <div class="bold" style="text-decoration: underline; margin-bottom: 8px;">DECLARAÇÃO:</div>
+        <p>Do veículo locado e acima qualificado, neste ato, outorgo poderes gerais a ELO LOCAÇÕES COMÉRCIO DE VEÍCULOS EIRELI para, nos termos das ao artigo 257, parágrafos 1º, 3º, 7º e 8º do Código de Trânsito Brasileiro, indicar o outorgante como condutor do veículo locado, acima identificado, preencher seus dados no formulário de "Indicação do condutor", inclusive assinatura, e representar o outorgante perante os orgãos que compõe o Sistema Nacional de Trânsito, quando assim for necessário para qualquer processo, seja ele administrativo, judicial e extrajudicial em que seja imputada qualquer penalidade em face de infrações cometidas durante o período em que o veículo locado estiver sob-responsabilidade do outorgante. Para atendimento das questões acima mencionadas, autorizo também o fornecimento das cópias de meus (RG/CPF/CNH), bem como Contrato de Locação, por mim assinado, sempre que necessários.</p>
+
+        <!-- Rodapé de Encerramento (Data na esquerda e Assinatura do Condutor na direita) -->
+        <table style="width: 100%; border: none; border-collapse: collapse; margin-top: 40px; table-layout: fixed;">
+            <colgroup>
+                <col style="width: 45%;">
+                <col style="width: 10%;">
+                <col style="width: 45%;">
+            </colgroup>
+            <tr>
+                <td style="border: none !important; vertical-align: bottom; font-size: 10px; font-weight: bold; padding: 0;">
+                    {$pes_un_local_municipio_descricao}, {$cadastro}
+                </td>
+                <td style="border: none !important;">&nbsp;</td>
+                <td style="border: none !important; border-top: 1px solid #111111 !important; text-align: center; padding-top: 5px; font-size: 9.5px; vertical-align: top;">
+                    Assinatura do Condutor
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>
+<!--[/main]-->
