@@ -1,0 +1,322 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Requisição de Abastecimento</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 1.20cm 1.50cm;
+        }
+
+        body {
+            font-size: 11px;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: #ffffff;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .via {
+            margin-bottom: 55px;
+        }
+
+        /* CABEÇALHO: LOGO + TÍTULO */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 14px;
+        }
+        .header-table td {
+            border: none;
+            padding: 0;
+            vertical-align: middle;
+        }
+        .titulo {
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: underline;
+            text-align: right;
+        }
+
+        /* LINHAS DE CAMPOS (APENAS ESPAÇO RESERVADO, SEM LINHA) */
+        .campo-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px;
+        }
+        .campo-table td {
+            border: none;
+            padding: 0 6px 0 0;
+            font-size: 11px;
+            vertical-align: bottom;
+        }
+        .campo-lbl {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* LINHA DIVISÓRIA ENTRE O BLOCO LOCAL E O BLOCO VEÍCULO */
+        .divisoria-campos {
+            border-top: 1px solid #000000;
+            margin: 6px 0 10px 0;
+        }
+
+        /* ESPAÇO EM BRANCO RESERVADO (IGUAL AO MODELO ORIGINAL) */
+        .espaco {
+            height: 45px;
+        }
+
+        /* ASSINATURAS */
+        .assinatura-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 45px;
+        }
+        .assinatura-table td {
+            border: none;
+            text-align: center;
+            font-size: 10.5px;
+            vertical-align: top;
+            padding: 0 10px;
+        }
+        .linha-assinatura {
+            width: 190px;
+            margin: 0 auto 4px auto;
+            border-top: 1px solid #000000;
+        }
+
+        .divisoria-via {
+            border-top: 1px dashed #999999;
+            margin: 0 0 35px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- VIA 1 -->
+    <!-- ========================================== -->
+    <div class="via">
+
+        <table class="header-table">
+            <colgroup>
+                <col width="38%">
+                <col width="62%">
+            </colgroup>
+            <tr>
+                <td><img src="{$site_cabecalho_03}" style="max-width: 300px; max-height: 150px;" alt="Logo"></td>
+                <td class="titulo">REQUISIÇÃO DE ABASTECIMENTO</td>
+            </tr>
+        </table>
+
+        <table class="campo-table">
+            <colgroup>
+                <col width="12%">
+                <col width="46%">
+                <col width="8%">
+                <col width="34%">
+            </colgroup>
+            <tr>
+                <td class="campo-lbl">LOCAL:</td>
+                <td></td>
+                <td class="campo-lbl">Nº: {$id}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="campo-lbl">LOCAL:</td>
+                <td></td>
+                <td class="campo-lbl" colspan="2" style="text-align: right;">DATA: {$cadastro}</td>
+            </tr>
+        </table>
+
+        <div class="divisoria-campos"></div>
+
+        <table class="campo-table">
+            <colgroup>
+                <col width="12%">
+                <col width="26%">
+                <col width="10%">
+                <col width="16%">
+                <col width="18%">
+                <col width="18%">
+            </colgroup>
+            <tr>
+                <td class="campo-lbl">VEÍCULO: {$veiculo_marca_descricao}</td>
+                <td></td>
+                <td class="campo-lbl">PLACA: {$veiculo_placa}</td>
+                <td></td>
+                <td class="campo-lbl">Nº DO CONTRATO: {$contrato}</td>
+                <td></td>
+            </tr>
+        </table>
+
+        <div class="espaco"></div>
+
+        <table class="campo-table">
+            <colgroup>
+                <col width="18%">
+                <col width="82%">
+            </colgroup>
+            <tr>
+                <td class="campo-lbl">CPF: {$pes_cpf_cnpj}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="campo-lbl">QUANTIDADE: {$qtde}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="campo-lbl">COMBUSTÍVEL: {$tipo}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="campo-lbl">KM: {$km}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="campo-lbl">OBS: {$obs}</td>
+                <td></td>
+            </tr>
+        </table>
+
+        <table class="assinatura-table">
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <tr>
+                <td>
+                    <div class="linha-assinatura"></div>
+                    MOTORISTA
+                </td>
+                <td>
+                    <div class="linha-assinatura"></div>
+                    20.840.105/0001-66<br>
+                    <span class="bold">ELO CONSORCIO</span>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+    <div class="divisoria-via"></div>
+
+    <!-- ========================================== -->
+    <!-- VIA 2 -->
+    <!-- ========================================== -->
+    <div class="via">
+
+        <table class="header-table">
+            <colgroup>
+                <col width="38%">
+                <col width="62%">
+            </colgroup>
+            <tr>
+                <td><img src="{$site_cabecalho_03}" style="max-width: 300px; max-height: 150px;" alt="Logo"></td>
+                <td class="titulo">REQUISIÇÃO DE ABASTECIMENTO</td>
+            </tr>
+        </table>
+
+        <table class="campo-table">
+            <colgroup>
+                <col width="12%">
+                <col width="46%">
+                <col width="8%">
+                <col width="34%">
+            </colgroup>
+            <tr>
+                <td class="campo-lbl">LOCAL:</td>
+                <td></td>
+                <td class="campo-lbl">Nº: {$id}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="campo-lbl">LOCAL:</td>
+                <td></td>
+                <td class="campo-lbl" colspan="2" style="text-align: right;">DATA: {$cadastro}</td>
+            </tr>
+        </table>
+
+        <div class="divisoria-campos"></div>
+
+        <table class="campo-table">
+            <colgroup>
+                <col width="12%">
+                <col width="26%">
+                <col width="10%">
+                <col width="16%">
+                <col width="18%">
+                <col width="18%">
+            </colgroup>
+            <tr>
+                <td class="campo-lbl">VEÍCULO: {$veiculo_marca_descricao}</td>
+                <td></td>
+                <td class="campo-lbl">PLACA: {$veiculo_placa}</td>
+                <td></td>
+                <td class="campo-lbl">Nº DO CONTRATO: {$contrato}</td>
+                <td></td>
+            </tr>
+        </table>
+
+        <div class="espaco"></div>
+
+        <table class="campo-table">
+            <colgroup>
+                <col width="18%">
+                <col width="82%">
+            </colgroup>
+            <tr>
+                <td class="campo-lbl">CPF: {$pes_cpf_cnpj}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="campo-lbl">QUANTIDADE: {$qtde}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="campo-lbl">COMBUSTÍVEL: {$tipo}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="campo-lbl">KM: {$km}</td>
+                <td></td>
+            </tr>
+        </table>
+
+        <table class="assinatura-table">
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <tr>
+                <td>
+                    <div class="linha-assinatura"></div>
+                    MOTORISTA
+                </td>
+                <td>
+                    <div class="linha-assinatura"></div>
+                    20.840.105/0001-66<br>
+                    <span class="bold">ELO CONSORCIO</span>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</body>
+</html>
+<!--[/main]-->
