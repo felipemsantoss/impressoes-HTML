@@ -1,0 +1,203 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Recibo em Duas Vias</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 1.00cm 1.20cm 1.50cm 1.20cm; /* Margem inferior de 1.50cm para o rodapé respirar */
+        }
+
+        body {
+            font-size: 10px;
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.35;
+            background-color: #ffffff;
+        }
+
+        /* RODAPÉ REAL E REPETÍVEL (DATA DA IMPRESSÃO) */
+        .footer {
+            position: fixed;
+            bottom: -25px;
+            left: 0px;
+            right: 0px;
+            height: 15px;
+            text-align: right;
+            font-size: 8px;
+            color: #7f8c8d;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 4px;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* ESTRUTURA DO RECIBO EM MOLDURA SÓLIDA PRETA */
+        .receipt-table {
+            width: 100%;
+            border-collapse: collapse !important;
+            border: 1px solid #000000;
+            table-layout: fixed;
+            margin-bottom: 0px;
+            page-break-inside: avoid;
+        }
+
+        .receipt-table td {
+            vertical-align: top;
+            padding: 8px 10px;
+            word-wrap: break-word;
+        }
+
+        /* LINHA DE CORTE TRACEJADA SEPARANDO AS DUAS VIAS */
+        .cut-line {
+            border-top: 1px dashed #000000;
+            margin: 25px 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- RODAPÉ FIXO COM DATA DA IMPRESSÃO -->
+    <div class="footer">
+        Impresso em: <span class="bold">{$data_hoje}</span>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PRIMEIRA VIA DO RECIBO                     -->
+    <!-- ========================================== -->
+    <table class="receipt-table">
+        <colgroup>
+            <col width="65%">
+            <col width="35%">
+        </colgroup>
+        <tbody>
+            <!-- Cabeçalho do Recibo com Valor em Destaque Cinza -->
+            <tr style="border-bottom: 1px solid #000000;">
+                <td style="font-size: 15px; font-weight: bold; text-align: center; vertical-align: middle; padding: 6px;">
+                    RECIBO
+                </td>
+                <td style="font-size: 14px; font-weight: bold; text-align: right; background-color: #cccccc; padding: 6px 12px; vertical-align: middle; border-left: 1px solid #000000;">
+                    R$ {$valor}
+                </td>
+            </tr>
+
+            <!-- Bloco 1: Recebi(emos) de e Importância -->
+            <tr style="border-bottom: 1px solid #000000;">
+                <td colspan="2" style="line-height: 1.45;">
+                    <div>Recebi(emos) de</div>
+                    <div class="bold" style="font-size: 11px;">{$pessoa_emite_descricao}</div>
+                    <div>{$pes_em_fantasia} {$pes_em_cpf_cnpj}</div>
+                    <div style="margin-top: 6px;">A importância de <span class="bold">{$valor_extenso}</span></div>
+                </td>
+            </tr>
+
+            <!-- Bloco 2: Histórico -->
+            <tr style="border-bottom: 1px solid #000000;">
+                <td colspan="2" style="line-height: 1.45;">
+                    <span class="bold">Histórico:</span> {$historico}
+                </td>
+            </tr>
+
+            <!-- Bloco 3: Emitente e Campo de Assinatura -->
+            <tr>
+                <td colspan="2" style="line-height: 1.45; padding-bottom: 15px;">
+                    <div><span class="bold">Emitente:</span></div>
+                    <div class="bold" style="font-size: 11px;">{$pessoa_recebe_descricao}</div>
+                    <div>{$pes_rec_fantasia} {$pes_rec_cpf_cnpj}</div>
+                    <div>{$pes_rec_logradouro} {$pes_rec_numero} {$pes_rec_complemento}</div>
+                    <div>{$pes_rec_bairro} {$pes_rec_local_municipio_descricao} {$pes_rec_local_uf_sigla}</div>
+
+                    <!-- Assinatura alinhada à direita -->
+                    <div style="width: 250px; margin-left: auto; text-align: center; margin-top: 30px;">
+                        <div style="border-top: 1px solid #000000; padding-top: 4px; font-size: 10px;">Assinatura</div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- ========================================== -->
+    <!-- LINHA TRACEJADA DE CORTE                   -->
+    <!-- ========================================== -->
+    <div class="cut-line"></div>
+
+
+    <!-- ========================================== -->
+    <!-- SEGUNDA VIA DO RECIBO (IDÊNTICA)           -->
+    <!-- ========================================== -->
+    <table class="receipt-table">
+        <colgroup>
+            <col width="65%">
+            <col width="35%">
+        </colgroup>
+        <tbody>
+            <!-- Cabeçalho do Recibo com Valor em Destaque Cinza -->
+            <tr style="border-bottom: 1px solid #000000;">
+                <td style="font-size: 15px; font-weight: bold; text-align: center; vertical-align: middle; padding: 6px;">
+                    RECIBO
+                </td>
+                <td style="font-size: 14px; font-weight: bold; text-align: right; background-color: #cccccc; padding: 6px 12px; vertical-align: middle; border-left: 1px solid #000000;">
+                    R$ {$valor}
+                </td>
+            </tr>
+
+            <!-- Bloco 1: Recebi(emos) de e Importância -->
+            <tr style="border-bottom: 1px solid #000000;">
+                <td colspan="2" style="line-height: 1.45;">
+                    <div>Recebi(emos) de</div>
+                    <div class="bold" style="font-size: 11px;">{$pessoa_emite_descricao}</div>
+                    <div>{$pes_em_fantasia} {$pes_em_cpf_cnpj}</div>
+                    <div style="margin-top: 6px;">A importância de <span class="bold">{$valor_extenso}</span></div>
+                </td>
+            </tr>
+
+            <!-- Bloco 2: Histórico -->
+            <tr style="border-bottom: 1px solid #000000;">
+                <td colspan="2" style="line-height: 1.45;">
+                    <span class="bold">Histórico:</span> {$historico}
+                </td>
+            </tr>
+
+            <!-- Bloco 3: Emitente e Campo de Assinatura -->
+            <tr>
+                <td colspan="2" style="line-height: 1.45; padding-bottom: 15px;">
+                    <div><span class="bold">Emitente:</span></div>
+                    <div class="bold" style="font-size: 11px;">{$pessoa_recebe_descricao}</div>
+                    <div>{$pes_rec_fantasia} {$pes_rec_cpf_cnpj}</div>
+                    <div>{$pes_rec_logradouro} {$pes_rec_numero} {$pes_rec_complemento}</div>
+                    <div>{$pes_rec_bairro} {$pes_rec_local_municipio_descricao} {$pes_rec_local_uf_sigla}</div>
+
+                    <!-- Assinatura alinhada à direita -->
+                    <div style="width: 250px; margin-left: auto; text-align: center; margin-top: 30px;">
+                        <div style="border-top: 1px solid #000000; padding-top: 4px; font-size: 10px;">Assinatura</div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->

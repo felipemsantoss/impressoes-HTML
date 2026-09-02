@@ -3,110 +3,138 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Etiqueta 3 Colunas</title>
-    <!-- Carrega a biblioteca JsBarcode estável -->
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <title>Etiquetas de Código de Barras</title>
     <style>
-        /* CONFIGURAÇÃO EXATA DA FONTE EM ARIAL 6PX */
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
         * {
             font-family: Arial, Helvetica, sans-serif !important;
             box-sizing: border-box !important;
+            font-weight: normal !important; /* ABSOLUTAMENTE NADA EM NEGRITO */
         }
 
-        /* DIMENSÕES EXATAS DA PÁGINA (11,00cm x 2,10cm) E MARGENS DO LIBREOFFICE */
+        /* DIMENSÕES FÍSICAS EXATAS DA PÁGINA DE ETIQUETA (11.00cm x 2.00cm) */
         @page {
-            size: 11cm 2.10cm;
-            margin: 0.00cm 0.30cm 0.00cm 0.00cm; /* Cima: 0 | Direita: 0.30cm | Baixo: 0 | Esquerda: 0 */
+            size: 11.00cm 2.00cm;
+            margin: 0px !important;
         }
 
-        body {
-            font-size: 6px; /* Arial 6px */
+        /* RESET E TAMANHO FIXO DA BOBINA */
+        html, body {
+            width: 11.00cm;
+            height: 2.00cm;
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 9px;
             color: #000000;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+
+        /* ESTRUTURA DE 3 COLUNAS SEM LINHAS DE GRADE */
+        table {
+            width: 11.00cm;
+            height: 2.00cm;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            table-layout: fixed !important;
+        }
+
+        /* CADA CÉLULA OCUPA EXATAMENTE 1/3 DA BOBINA COM FOLGA SIMÉTRICA
+           NAS LATERAIS, PARA QUE PEQUENOS DESVIOS DE ALINHAMENTO DA BOBINA
+           NÃO CORTEM O TEXTO DA 2ª E DA 3ª ETIQUETA */
+        td {
+            width: 3.6666cm;
+            padding: 1.5px 4px 0px 4px;
+            vertical-align: top;
+            border: none !important;
+            overflow: hidden;
+            word-wrap: break-word;
+            line-height: 1.0;
+        }
+
+        /* BLOCO INTERNO CENTRALIZADO: A SOBRA HORIZONTAL FICA DIVIDIDA
+           IGUALMENTE DOS DOIS LADOS */
+        .etq {
+            width: 100%;
+            text-align: center;
+        }
+
+        .etq .linha {
+            font-size: 9px;
             margin: 0;
             padding: 0;
-            line-height: 1.1;
-            background-color: #ffffff;
+            line-height: 1.05;
         }
 
-        /* Estrutura de tabela de 3 colunas sem flexbox para DOMPDF */
-        table {
-            width: 100%;
-            border-collapse: collapse !important;
-            table-layout: fixed;
-        }
-
-        td {
-            width: 33.33%;
-            text-align: center;
-            vertical-align: top;
-            padding: 1px 3px;
-        }
-
-        /* Texto de Descrição em 6px */
-        .desc-text {
-            font-size: 6px;
-            font-weight: bold;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-bottom: 1px;
-            text-transform: uppercase;
-        }
-
-        /* Texto do Código de Barras abaixo do SVG */
-        .barcode-val {
-            font-size: 6px;
-            margin-top: 1px;
-        }
-
-        svg {
-            display: block;
-            margin: 0 auto;
+        /* CÓDIGO DE BARRAS */
+        .barcode-img {
+            display: inline-block;
+            height: 12px;
+            width: auto;
             max-width: 100%;
+        }
+
+        .cod-legivel {
+            font-size: 9px;
+            text-align: center;
+            width: 100%;
+            margin-top: 1px;
+            letter-spacing: 0.3px;
+        }
+
+        /* TRUQUE DE SEGURANÇA: OCULTA O ELEMENTO SE A IMAGEM ESTIVER EM BRANCO OU NÃO FOR ENCONTRADA */
+        img[src=""], img:not([src]) {
+            display: none !important;
+        }
+
+        /* TRUQUE DE MÁGICA CSS: SE A VARIÁVEL DE VALOR VIER VAZIA DO BANCO, FORÇA EXIBIÇÃO DE "0,00" */
+        .price-value:empty::before {
+            content: "0,00";
         }
     </style>
 </head>
 <body>
 
+    <!-- Grade Horizontal de 3 Colunas de Etiquetas de Gôndola -->
     <table>
+        <colgroup>
+            <col style="width: 3.6666cm;">
+            <col style="width: 3.6666cm;">
+            <col style="width: 3.6666cm;">
+        </colgroup>
         <tr>
-            <!-- Coluna 1 (Esquerda) -->
+            <!-- Coluna 1 -->
             <td>
-                <div class="desc-text">{$descricao}</div>
-                <svg id="barcode-1"></svg>
-                <div class="barcode-val">{$cod_barra}</div>
+                <div class="etq">
+                    <div class="linha">{$descricao}</div>
+                </div>
+                <div style="text-align: center; width: 100%; margin-top: 1px;">
+                    <img class="barcode-img" src="{$imagem_codigo_barras}" onerror="this.style.display='none';" alt="Código de Barras">
+                </div>
+                <div class="cod-legivel">{$cod_barra}</div>
             </td>
-            
-            <!-- Coluna 2 (Centro) -->
+            <!-- Coluna 2 -->
             <td>
-                <div class="desc-text">{$descricao}</div>
-                <svg id="barcode-2"></svg>
-                <div class="barcode-val">{$cod_barra}</div>
+                <div class="etq">
+                    <div class="linha">{$descricao}</div>
+                </div>
+                <div style="text-align: center; width: 100%; margin-top: 1px;">
+                    <img class="barcode-img" src="{$imagem_codigo_barras}" onerror="this.style.display='none';" alt="Código de Barras">
+                </div>
+                <div class="cod-legivel">{$cod_barra}</div>
             </td>
-            
-            <!-- Coluna 3 (Direita) -->
+            <!-- Coluna 3 -->
             <td>
-                <div class="desc-text">{$descricao}</div>
-                <svg id="barcode-3"></svg>
-                <div class="barcode-val">{$cod_barra}</div>
+                <div class="etq">
+                    <div class="linha">{$descricao}</div>
+                </div>
+                <div style="text-align: center; width: 100%; margin-top: 1px;">
+                    <img class="barcode-img" src="{$imagem_codigo_barras}" onerror="this.style.display='none';" alt="Código de Barras">
+                </div>
+                <div class="cod-legivel">{$cod_barra}</div>
             </td>
         </tr>
     </table>
-
-    <!-- Scripts de inicialização JsBarcode individuais para evitar colisão -->
-    <script>
-        var config = {
-            format: "CODE128",
-            lineColor: "#000",
-            width: 1.0,         // Espessura fina das barras para caber na etiqueta estreita
-            height: 14,         // Altura compactada para respeitar o limite de 2,10cm de folha
-            displayValue: false // Desativado para usarmos o controle de texto nativo em Arial 6px abaixo
-        };
-
-        JsBarcode("#barcode-1", "{$cod_barra}", config);
-        JsBarcode("#barcode-2", "{$cod_barra}", config);
-        JsBarcode("#barcode-3", "{$cod_barra}", config);
-    </script>
 
 </body>
 </html>

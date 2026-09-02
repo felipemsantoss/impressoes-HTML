@@ -1,0 +1,189 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Espelho de Currículo</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 1.20cm 1.50cm 1.50cm 1.50cm;
+        }
+
+        body {
+            font-size: 10px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.4;
+            background-color: #ffffff;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        p {
+            margin: 0 0 6px 0;
+        }
+
+        /* CABEÇALHOS DE SEÇÕES DO CURRÍCULO (CINZA CLARO) */
+        .section-header {
+            background-color: #e2e8f0 !important;
+            color: #111111 !important;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 4px 6px;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ESTILO DAS LISTAS */
+        ul {
+            margin: 0 0 10px 0;
+            padding-left: 15px;
+        }
+        li {
+            margin-bottom: 4px;
+        }
+
+        /* DIVISÕES DE LOOP CONTÍNUO */
+        .loop-item {
+            margin-bottom: 10px;
+            page-break-inside: avoid;
+        }
+
+        /* TRUQUE DO ADIANTI: OCULTA ELEMENTOS DO LAÇO SE ESTIVEREM VAZIOS */
+        .linha-prof- { display: none !important; }
+        .linha-exp- { display: none !important; }
+        .linha-cur- { display: none !important; }
+        .linha-vag- { display: none !important; }
+        .linha-obs- { display: none !important; }
+
+        .preservar-linhas {
+            white-space: pre-wrap !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGO CORPORATIVO CENTRALIZADO NO TOPO -->
+    <div style="text-align: center; margin-bottom: 25px;">
+        <img src="{$unidade_image}" style="max-height: 50px; max-width: 150px; object-fit: contain;" alt="Logo Job Soluções">
+    </div>
+
+    <!-- CABEÇALHO DO CURRÍCULO (NOME, PROFISSÃO E FOTO) -->
+    <table style="width: 100%; border: none; margin-bottom: 20px;">
+        <colgroup>
+            <col width="75%">
+            <col width="25%">
+        </colgroup>
+        <tr>
+            <td style="border: none; padding: 0; vertical-align: middle;">
+                <div style="font-size: 20px; font-weight: bold; color: #111111; margin-bottom: 4px;">{$pessoa_descricao}</div>
+                <div style="font-size: 11px; color: #555555;">{$pessoa_profissao_descricao}</div>
+            </td>
+            <td style="border: none; padding: 0; text-align: right; vertical-align: middle;">
+                <!-- Tamanho da foto reajustado proporcionalmente para a escala 200 do PDF -->
+                <img src="{$foto}" style="width: 100px; height: 125px; object-fit: cover; border: 1px solid #cbd5e0; display: block; margin-left: auto;" alt="Foto do Candidato">
+            </td>
+        </tr>
+    </table>
+
+    <!-- SEÇÃO: DADOS PESSOAIS -->
+    <div class="section-header">Dados Pessoais</div>
+    <table style="width: 100%; border: none; margin-bottom: 10px; line-height: 1.5;">
+        <colgroup>
+            <col width="50%">
+            <col width="50%">
+        </colgroup>
+        <tr>
+            <td><span class="bold">Idade:</span> {$pes_nascimento_idade} Anos</td>
+            <td><span class="bold">Sexo:</span> {$pf_genero}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Estado Civil:</span> {$pf_estado_civil}</td>
+            <td><span class="bold">Filhos:</span> {$pf_filho_menor}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Telefone / Celular:</span> {$pes_fone1}</td>
+            <td><span class="bold">Telefone / Celular:</span> {$pes_fone2}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">E-mail:</span> {$pes_email}</td>
+            <td><span class="bold">Carteira de Habilitação:</span> {$pf_cnh_permissao}</td>
+        </tr>
+    </table>
+
+    <!-- SEÇÃO: ENDEREÇO -->
+    <div class="section-header">Endereço</div>
+    <ul style="line-height: 1.5;">
+        <li><span class="bold">Rua:</span> {$pes_logradouro}</li>
+        <li><span class="bold">Bairro:</span> {$pes_bairro}</li>
+        <li><span class="bold">Cidade:</span> {$pes_local_municipio_descricao} – {$pes_local_uf_sigla}</li>
+        <li><span class="bold">CEP:</span> {$pes_end_cep}</li>
+    </ul>
+
+    <!-- SEÇÃO: ATIVIDADES DESENVOLVIDAS (Loop experiencias) -->
+    <div class="section-header">Atividades Desenvolvidas</div>
+    <!--[experiencias]-->
+    <div class="loop-item linha-exp-{$empresa}">
+        <div style="font-size: 9px; color: #555555; margin-bottom: 2px;">{$mes_inicio} / {$ano_inicio} – {$mes_fim} / {$ano_fim}</div>
+        <div class="bold" style="font-size: 10.5px; margin-bottom: 4px;">{$pessoa_profissao_descricao} | {$empresa}</div>
+        <ul>
+            <li>{$funcao}</li>
+        </ul>
+    </div>
+    <!--[/experiencias]-->
+
+    <!-- SEÇÃO: ESCOLARIDADE (Loop profissoes) -->
+    <div class="section-header">Escolaridade</div>
+    <!--[profissoes]-->
+    <div class="loop-item linha-prof-{$pf_escolaridade}">
+        <div class="bold" style="font-size: 10.5px;">{$pf_escolaridade}</div>
+    </div>
+    <!--[/profissoes]-->
+
+    <!-- SEÇÃO: CERTIFICAÇÕES (Loop cursos) -->
+    <div class="section-header">Certificações</div>
+    <!--[cursos]-->
+    <div class="loop-item linha-cur-{$descricao}">
+        <div style="font-size: 9px; color: #555555; margin-bottom: 2px;">{$mes_inicio} / {$ano_inicio} – {$mes_fim} / {$ano_fim}</div>
+        <div class="bold" style="font-size: 10.5px;">{$descricao} | {$instituicao}</div>
+    </div>
+    <!--[/cursos]-->
+
+    <!-- SEÇÃO: HABILIDADE E QUALIFICAÇÕES (Loop vagas_emprego) -->
+    <div class="section-header">Habilidade e Qualificações</div>
+    <!--[vagas_emprego]-->
+    <div class="loop-item linha-vag-{$vaga_emprego_descricao}">
+        <div><span class="bold">Cargo Pretendido:</span> {$vaga_emprego_descricao}</div>
+    </div>
+    <!--[/vagas_emprego]-->
+
+    <!-- SEÇÃO ADICIONADA: PERCEPÇÕES DA ENTREVISTA (Com tratamento de quebras de linha textarea) -->
+    <div class="linha-obs-{$obs}">
+        <div class="section-header">Percepções da Entrevista</div>
+        <div class="preservar-linhas" style="font-size: 10px; line-height: 1.5; padding: 4px 6px;">{$obs}</div>
+    </div>
+
+</body>
+</html>
+<!--[/main]-->
