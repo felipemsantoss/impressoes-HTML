@@ -218,7 +218,7 @@
                 <th class="text-center" style="width: 6%;">Und</th>
                 <th class="text-right nowrap" style="width: 8%;">Unitário</th>
                 <th class="text-right nowrap" style="width: 12%;">Desconto</th>
-                <th class="text-right nowrap" style="width: 13%;">Total Líquido</th>
+                <th class="text-right nowrap" style="width: 13%;">Total Bruto</th>
             </tr>
         </thead>
         <tbody>
@@ -230,7 +230,7 @@
                 <td class="text-center">{$sigla}</td>
                 <td class="text-right nowrap">{$preco}</td>
                 <td class="text-right nowrap">{$desconto}</td>
-                <td class="text-right bold nowrap">{$total}</td>
+                <td class="text-right bold nowrap">{$total_bruto}</td>
             </tr>
             <!--[/produtos]-->
         </tbody>
@@ -239,7 +239,7 @@
                 <td colspan="2" class="text-right">TOTAL DE ITENS:</td>
                 <td class="text-center">{$qtde_sum}</td>
                 <td colspan="3" class="text-right nowrap">TOTAL DE PRODUTOS:</td>
-                <td class="text-right bold nowrap">{$total_sum}</td>
+                <td class="text-right bold nowrap">{$subtotal_produto}</td>
             </tr>
         </tfoot>
     </table>
@@ -261,7 +261,7 @@
                 <th class="text-center" style="width: 12%;">Qtde</th>
                 <th class="text-right nowrap" style="width: 8%;">Unitário</th>
                 <th class="text-right nowrap" style="width: 12%;">Desconto</th>
-                <th class="text-right nowrap" style="width: 13%;">Total Líquido</th>
+                <th class="text-right nowrap" style="width: 13%;">Total Bruto</th>
             </tr>
         </thead>
         <tbody>
@@ -272,7 +272,7 @@
                 <td class="text-center">{$qtde}</td>
                 <td class="text-right nowrap">{$preco}</td>
                 <td class="text-right nowrap">{$desconto}</td>
-                <td class="text-right bold nowrap">{$total}</td>
+                <td class="text-right bold nowrap">{$total_bruto}</td>
             </tr>
             <!--[/servicos]-->
         </tbody>
@@ -281,7 +281,7 @@
                 <td colspan="2" class="text-right">TOTAL DE ITENS:</td>
                 <td class="text-center">{$servicos_qtde_sum}</td>
                 <td colspan="2" class="text-right bold nowrap">TOTAL DE SERVIÇOS:</td>
-                <td class="text-right bold nowrap">{$servicos_total_sum}</td>
+                <td class="text-right bold nowrap">{$subtotal_servico}</td>
             </tr>
         </tfoot>
     </table>
