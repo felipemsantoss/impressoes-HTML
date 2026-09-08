@@ -77,6 +77,34 @@
         .linha-vag- { display: none !important; }
         .linha-obs- { display: none !important; }
 
+        /* TRUQUE DO ADIANTI: OCULTA CADA CAMPO AVULSO QUANDO A VARIÁVEL VEM VAZIA */
+        .campo-profissao- { display: none !important; }
+        .campo-foto- { display: none !important; }
+        .campo-idade- { display: none !important; }
+        .campo-genero- { display: none !important; }
+        .campo-civil- { display: none !important; }
+        .campo-filhos- { display: none !important; }
+        .campo-fone1- { display: none !important; }
+        .campo-fone2- { display: none !important; }
+        .campo-email- { display: none !important; }
+        .campo-cnh- { display: none !important; }
+        .campo-rua- { display: none !important; }
+        .campo-bairro- { display: none !important; }
+        .campo-cidade- { display: none !important; }
+        .campo-uf- { display: none !important; }
+        .campo-cep- { display: none !important; }
+        .campo-periodo- { display: none !important; }
+        .campo-empresa- { display: none !important; }
+        .campo-funcao- { display: none !important; }
+        .campo-curso- { display: none !important; }
+        .campo-instituicao- { display: none !important; }
+
+        /* OCULTA OS TÍTULOS DAS SEÇÕES DE LAÇO (SÓ APARECEM SE O LAÇO FOR EXECUTADO) */
+        .secao-experiencias { display: none !important; }
+        .secao-profissoes { display: none !important; }
+        .secao-cursos { display: none !important; }
+        .secao-vagas { display: none !important; }
+
         .preservar-linhas {
             white-space: pre-wrap !important;
         }
@@ -98,11 +126,11 @@
         <tr>
             <td style="border: none; padding: 0; vertical-align: middle;">
                 <div style="font-size: 20px; font-weight: bold; color: #111111; margin-bottom: 4px;">{$pessoa_descricao}</div>
-                <div style="font-size: 11px; color: #555555;">{$pessoa_profissao_descricao}</div>
+                <div class="campo-profissao-{$pessoa_profissao_descricao}" style="font-size: 11px; color: #555555;">{$pessoa_profissao_descricao}</div>
             </td>
             <td style="border: none; padding: 0; text-align: right; vertical-align: middle;">
                 <!-- Tamanho da foto reajustado proporcionalmente para a escala 200 do PDF -->
-                <img src="{$foto}" style="width: 100px; height: 125px; object-fit: cover; border: 1px solid #cbd5e0; display: block; margin-left: auto;" alt="Foto do Candidato">
+                <img class="campo-foto-{$foto}" src="{$foto}" style="width: 100px; height: 125px; object-fit: cover; border: 1px solid #cbd5e0; display: block; margin-left: auto;" alt="Foto do Candidato">
             </td>
         </tr>
     </table>
@@ -115,64 +143,68 @@
             <col width="50%">
         </colgroup>
         <tr>
-            <td><span class="bold">Idade:</span> {$pes_nascimento_idade} Anos</td>
-            <td><span class="bold">Sexo:</span> {$pf_genero}</td>
+            <td><span class="campo-idade-{$pes_nascimento_idade}"><span class="bold">Idade:</span> {$pes_nascimento_idade} Anos</span></td>
+            <td><span class="campo-genero-{$pf_genero}"><span class="bold">Sexo:</span> {$pf_genero}</span></td>
         </tr>
         <tr>
-            <td><span class="bold">Estado Civil:</span> {$pf_estado_civil}</td>
-            <td><span class="bold">Filhos:</span> {$pf_filho_menor}</td>
+            <td><span class="campo-civil-{$pf_estado_civil}"><span class="bold">Estado Civil:</span> {$pf_estado_civil}</span></td>
+            <td><span class="campo-filhos-{$pf_filho_menor}"><span class="bold">Filhos:</span> {$pf_filho_menor}</span></td>
         </tr>
         <tr>
-            <td><span class="bold">Telefone / Celular:</span> {$pes_fone1}</td>
-            <td><span class="bold">Telefone / Celular:</span> {$pes_fone2}</td>
+            <td><span class="campo-fone1-{$pes_fone1}"><span class="bold">Telefone / Celular:</span> {$pes_fone1}</span></td>
+            <td><span class="campo-fone2-{$pes_fone2}"><span class="bold">Telefone / Celular:</span> {$pes_fone2}</span></td>
         </tr>
         <tr>
-            <td><span class="bold">E-mail:</span> {$pes_email}</td>
-            <td><span class="bold">Carteira de Habilitação:</span> {$pf_cnh_permissao}</td>
+            <td><span class="campo-email-{$pes_email}"><span class="bold">E-mail:</span> {$pes_email}</span></td>
+            <td><span class="campo-cnh-{$pf_cnh_permissao}"><span class="bold">Carteira de Habilitação:</span> {$pf_cnh_permissao}</span></td>
         </tr>
     </table>
 
     <!-- SEÇÃO: ENDEREÇO -->
     <div class="section-header">Endereço</div>
     <ul style="line-height: 1.5;">
-        <li><span class="bold">Rua:</span> {$pes_logradouro}</li>
-        <li><span class="bold">Bairro:</span> {$pes_bairro}</li>
-        <li><span class="bold">Cidade:</span> {$pes_local_municipio_descricao} – {$pes_local_uf_sigla}</li>
-        <li><span class="bold">CEP:</span> {$pes_end_cep}</li>
+        <li class="campo-rua-{$pes_logradouro}"><span class="bold">Rua:</span> {$pes_logradouro}</li>
+        <li class="campo-bairro-{$pes_bairro}"><span class="bold">Bairro:</span> {$pes_bairro}</li>
+        <li class="campo-cidade-{$pes_local_municipio_descricao}"><span class="bold">Cidade:</span> {$pes_local_municipio_descricao} <span class="campo-uf-{$pes_local_uf_sigla}">– {$pes_local_uf_sigla}</span></li>
+        <li class="campo-cep-{$pes_end_cep}"><span class="bold">CEP:</span> {$pes_end_cep}</li>
     </ul>
 
     <!-- SEÇÃO: ATIVIDADES DESENVOLVIDAS (Loop experiencias) -->
-    <div class="section-header">Atividades Desenvolvidas</div>
+    <div class="section-header secao-experiencias">Atividades Desenvolvidas</div>
     <!--[experiencias]-->
+    <style>.secao-experiencias { display: block !important; }</style>
     <div class="loop-item linha-exp-{$empresa}">
-        <div style="font-size: 9px; color: #555555; margin-bottom: 2px;">{$mes_inicio} / {$ano_inicio} – {$mes_fim} / {$ano_fim}</div>
-        <div class="bold" style="font-size: 10.5px; margin-bottom: 4px;">{$pessoa_profissao_descricao} | {$empresa}</div>
+        <div class="campo-periodo-{$ano_inicio}" style="font-size: 9px; color: #555555; margin-bottom: 2px;">{$mes_inicio} / {$ano_inicio} – {$mes_fim} / {$ano_fim}</div>
+        <div class="bold campo-empresa-{$empresa}" style="font-size: 10.5px; margin-bottom: 4px;">{$pessoa_profissao_descricao} | {$empresa}</div>
         <ul>
-            <li>{$funcao}</li>
+            <li class="campo-funcao-{$funcao}">{$funcao}</li>
         </ul>
     </div>
     <!--[/experiencias]-->
 
     <!-- SEÇÃO: ESCOLARIDADE (Loop profissoes) -->
-    <div class="section-header">Escolaridade</div>
+    <div class="section-header secao-profissoes">Escolaridade</div>
     <!--[profissoes]-->
+    <style>.secao-profissoes { display: block !important; }</style>
     <div class="loop-item linha-prof-{$pf_escolaridade}">
         <div class="bold" style="font-size: 10.5px;">{$pf_escolaridade}</div>
     </div>
     <!--[/profissoes]-->
 
     <!-- SEÇÃO: CERTIFICAÇÕES (Loop cursos) -->
-    <div class="section-header">Certificações</div>
+    <div class="section-header secao-cursos">Certificações</div>
     <!--[cursos]-->
+    <style>.secao-cursos { display: block !important; }</style>
     <div class="loop-item linha-cur-{$descricao}">
-        <div style="font-size: 9px; color: #555555; margin-bottom: 2px;">{$mes_inicio} / {$ano_inicio} – {$mes_fim} / {$ano_fim}</div>
-        <div class="bold" style="font-size: 10.5px;">{$descricao} | {$instituicao}</div>
+        <div class="campo-periodo-{$ano_inicio}" style="font-size: 9px; color: #555555; margin-bottom: 2px;">{$mes_inicio} / {$ano_inicio} – {$mes_fim} / {$ano_fim}</div>
+        <div class="bold" style="font-size: 10.5px;"><span class="campo-curso-{$descricao}">{$descricao}</span> <span class="campo-instituicao-{$instituicao}">| {$instituicao}</span></div>
     </div>
     <!--[/cursos]-->
 
     <!-- SEÇÃO: HABILIDADE E QUALIFICAÇÕES (Loop vagas_emprego) -->
-    <div class="section-header">Habilidade e Qualificações</div>
+    <div class="section-header secao-vagas">Habilidade e Qualificações</div>
     <!--[vagas_emprego]-->
+    <style>.secao-vagas { display: block !important; }</style>
     <div class="loop-item linha-vag-{$vaga_emprego_descricao}">
         <div><span class="bold">Cargo Pretendido:</span> {$vaga_emprego_descricao}</div>
     </div>
