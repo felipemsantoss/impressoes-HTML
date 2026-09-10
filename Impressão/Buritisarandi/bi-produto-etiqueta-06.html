@@ -1,0 +1,84 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiqueta de Gôndola - Horizontal Expandida</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* TRAVA CRÍTICA DAS DIMENSÕES FÍSICAS DA ETIQUETA (10.00cm x 2.80cm) */
+        @page {
+            size: 10.00cm 2.80cm;
+            margin: 0px !important;
+        }
+
+        /* LIMITAÇÃO DO CANVAS DO CORPO - POSITION:RELATIVE ANCORA OS BLOCOS ABSOLUTOS ABAIXO */
+        html, body {
+            position: relative;
+            width: 10.00cm;
+            height: 2.80cm;
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #ffffff;
+            overflow: hidden; /* Elimina quebras e rolagens verticais */
+            color: #000000;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        /* Descrição fixada no topo, não avança até o final da etiqueta e não invade a linha inferior */
+        .label-desc {
+            position: absolute;
+            top: 0.35cm;
+            left: 0.40cm;
+            right: 0.90cm;
+            height: 1.55cm;
+            overflow: hidden;
+            font-size: 15px;
+            text-transform: uppercase;
+            line-height: 1.15;
+        }
+
+        /* Código interno sempre fixado no rodapé esquerdo, independente do tamanho da descrição */
+        .label-cod {
+            position: absolute;
+            left: 0.40cm;
+            bottom: 0.55cm;
+            font-size: 17px;
+            color: #555555;
+        }
+
+        /* Preço sempre fixado no meio inferior direito, bem recuado da borda para não cortar na impressão física */
+        .label-price {
+            position: absolute;
+            right: 1.40cm;
+            bottom: 0.48cm;
+            font-size: 22px;
+            font-weight: bold;
+            line-height: 1.0;
+        }
+
+        /* TRUQUE DE MÁGICA CSS: SE A VARIÁVEL DE VALOR VIER VAZIA DO BANCO, FORÇA EXIBIÇÃO DE "0,00" */
+        .price-value:empty::before {
+            content: "0,00";
+        }
+    </style>
+</head>
+<body>
+
+    <div class="label-desc">{$descricao}</div>
+
+    <div class="label-cod">cod. interno: {$id}</div>
+
+    <div class="label-price">R$ <span class="price-value">{$preco_venda}</span></div>
+
+</body>
+</html>
+<!--[/main]-->
