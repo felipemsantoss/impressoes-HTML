@@ -18,7 +18,7 @@
         }
 
         body {
-            font-size: 9px;
+            font-size: 12px;
             color: #111111;
             margin: 0;
             padding: 0;
@@ -68,7 +68,7 @@
         .section-header {
             background-color: #2a6099 !important;
             color: #ffffff !important;
-            font-size: 9px;
+            font-size: 12px;
             font-weight: bold;
             text-transform: uppercase;
             padding: 3px 5px;
@@ -95,7 +95,7 @@
             left: 0;
             right: 0;
             text-align: center;
-            font-size: 9px;
+            font-size: 12px;
             color: #111111;
         }
 
@@ -129,17 +129,24 @@
         </tr>
     </table>
 
-    <!-- BLOCO 1: DADOS DO CLIENTE (Contendo a nova linha de metadados integrada no topo) -->
+    <!-- LINHA DE METADADOS POSICIONADA LOGO ABAIXO DO CABEÇALHO (Dividida em duas colunas de 50% com textos centralizados) -->
+    <table style="border: none; margin-bottom: 10px !important; width: 100%;">
+        <colgroup>
+            <col width="40%">
+            <col width="60%">
+        </colgroup>
+        <tr>
+            <td style="font-size: 20px; color: #2a6099; padding: 2px 0; border: none; text-align: center; vertical-align: middle;" bold><span class="bold">DATA {$cadastro}</span></td>
+            <td style="font-size: 26px ; color: #2a6099; padding: 2px 0; border: none; text-align: center; vertical-align: middle;"bold><span class="bold">ORÇAMENTO OM-{$cod_interno}</span></td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 1: DADOS DO CLIENTE (Campos de metadados removidos conforme solicitado) -->
     <table class="grid-table">
         <colgroup>
             <col width="50%">
             <col width="50%">
         </colgroup>
-        <!-- Linha de metadados integrada no topo -->
-        <tr style="background-color: #fbfcfd; border-bottom: 1px solid #2a6099;">
-            <td style="font-size: 9px; color: #2a6099;"><span class="bold">ORÇAMENTO OM-{$cod_externo}</span></td>
-            <td style="font-size: 9px; text-align: left;"><span class="bold">DATA {$inicio}</span></td>
-        </tr>
         <tr>
             <td><span class="bold">CLIENTE:</span> {$pessoa_id} – {$pessoa_descricao}</td>
             <td><span class="bold">TELEFONE:</span> {$pessoa_fone1} {$pessoa_fone2} {$contato_fone}</td>
@@ -149,7 +156,8 @@
             <td><span class="bold">EMAIL:</span> {$pessoa_email} {$contato_email}</td>
         </tr>
         <tr>
-            <td colspan="2"><span class="bold">CNPJ:</span> {$pessoa_cpf_cnpj}</td>
+            <td><span class="bold">CNPJ:</span> {$pessoa_cpf_cnpj}</td>
+            <td><span class="bold">UNIDADE / SETOR:</span> {$pessoa_pj_fantasia}</td>
         </tr>
     </table>
 
@@ -270,21 +278,22 @@
     <!-- BLOCO 7: OBSERVACÕES FIXAS DO CONTRATO -->
     <div style="border-left: 1px solid #2a6099; border-right: 1px solid #2a6099; border-bottom: 1px solid #2a6099; padding: 5px; margin-bottom: 0px !important; page-break-inside: avoid;">
         <div class="bold" style="text-decoration: underline; margin-bottom: 3px;">Observações:</div>
-        <div class="bold" style="font-size: 7.2px; line-height: 1.3;">
+        <div class="bold" style="font-size: 11px; line-height: 1.3;">
             (1) O ITEM-TEC não se responsabiliza por perdas de programação do equipamento, já que defeitos podem acarretar perdas de programação.<br>
             (2) A GARANTIA de três meses do conserto se refere apenas pelo serviço realizado e componentes utilizados no reparo, em caso de defeito ocasionado por outros motivos, realizaremos um novo orçamento.<br>
             (3) Sugerimos assim que o cliente receber o equipamento consertado, faça os testes com o mesmo, pois a garantia começa a contar na emissão da nota de prestação de serviços.<br>
             (4) CASO O ORÇAMENTO SEJA APROVADO OU O EQUIPAMENTO SEJA DECLARADO COMO “SEM POSSIBILIDADE DE CONSERTO”, O PRESENTE ORÇAMENTO NÃO TERA CUSTO. CASO O EQUIPAMENTO VENHA A TER POSSIBILIDADE DE REPARO E O ORÇAMENTO NÃO FOR APROVADO, SERÁ COBRADA UMA TAXA DE 10% DO VALOR TOTAL DO MESMO ORÇAMENTO.<br>
-            (5) <span style="background-color: #ffff00; color: #000000 !important; padding: 0 2px;">VALIDADE DO ORÇAMENTO 30 DIAS.</span>
+            (5) <span style="background-color: #ffff00; color: #000000 !important; padding: 0 2px;">VALIDADE DO ORÇAMENTO 30 DIAS.</span><br>
+            (6) Orçamentos que incluírem peças terão o faturamento separado em Nota de Serviço e Nota de Venda.
         </div>
     </div>
 
-    <!-- BLOCO DE FECHAMENTO UNIFICADO (Agrupa a barra azul de fechamento de observações com a tabela de faturamento para evitar quebra de página separada) -->
+    <!-- SEÇÃO DE FECHAMENTO (SÓ ENVIADA PARA A PRÓXIMA PÁGINA SE NÃO COUBER COMPLETA) -->
     <div style="page-break-inside: avoid; width: 100%;">
-        <!-- Linha azul final de fechamento da seção de observações (Agora pertence a este bloco rígido e se move junto com o fechamento) -->
-        <div style="background-color: #2a6099; height: 14px; border-left: 1px solid #2a6099; border-right: 1px solid #2a6099; color: #2a6099; font-size: 8px; padding: 2px 5px;">.</div>
+        <!-- Linha azul final de fechamento da seção de observações -->
+        <div style="background-color: #2a6099; height: 14px; border-left: 1px solid #2a6099; border-right: 1px solid #2a6099; color: #2a6099; font-size: 11px; padding: 2px 5px;">.</div>
 
-        <!-- BLOCO 8: FECHAMENTO / METADADOS E IMAGEM (Unido perfeitamente no topo) -->
+        <!-- BLOCO 8: FECHAMENTO / METADADOS (Ocupa a página atual se houver espaço) -->
         <table class="grid-table" style="border-top: none !important;">
             <colgroup>
                 <col width="50%">
@@ -292,29 +301,34 @@
             </colgroup>
             <tr>
                 <td style="line-height: 1.45;">
-                    <span class="bold">ENVIADO ORÇAMENTO EM:</span> {$envio}<br>
-                    <span class="bold">NOTA FISCAL:</span> {$codigo_nf}<br>
+                    <span class="bold">ENVIADO ORÇAMENTO EM:</span> {$envio_data}<br>
+                    <span class="bold">NOTA DE REMESSA:</span> {$codigo_nf}<br>
                     <span class="bold">ENTRADA DIA:</span> {$cadastro}
                 </td>
                 <td style="line-height: 1.45; border-left: 1px solid #2a6099;">
-                    <span class="bold">VALOR:</span> {$total_servico}<br>
+                    <span class="bold">VALOR:</span> {$total_pedido}<br>
                     <span class="bold">PRAZO DE ENTREGA:</span> {$prazo_entrega_dia} ÚTEIS APÓS A APROVAÇÃO
-                </td>
-            </tr>
-            <!-- Linha divisória horizontal azul estilizada como cabeçalho de seção para a Imagem -->
-            <tr>
-                <td colspan="2" class="section-header" style="color: #ffffff; font-weight: bold; border-bottom: 1px solid #2a6099;">IMAGEM</td>
-            </tr>
-            <tr>
-                <td colspan="2" style="padding: 10px; text-align: center;">
-                    <!-- Altura máxima de 480px para exibição correta vertical sem compressão da foto do motor -->
-                    <!--[pedido_image]-->
-                    <img src="{$image}" style="max-height: 480px; max-width: 100%; height: auto; display: block; margin: 0 auto;" alt="Imagem do Equipamento">
-                    <!--[/pedido_image]-->
                 </td>
             </tr>
         </table>
     </div>
+
+    <!-- SEÇÃO DA IMAGEM INDEPENDENTE (cada foto evita quebra individualmente; o conjunto flui livremente para aproveitar o espaço que sobrar na página) -->
+    <table class="grid-table" style="border-top: none !important; width: 100%;">
+        <!-- Linha divisória horizontal azul estilizada como cabeçalho de seção para a Imagem; presa à primeira foto para não ficar sozinha no fim da página -->
+        <tr style="page-break-inside: avoid !important; page-break-after: avoid !important;">
+            <td class="section-header" style="color: #ffffff; font-weight: bold; border-bottom: 1px solid #2a6099;">IMAGEM</td>
+        </tr>
+        <!--[pedido_image]-->
+        <!-- Cada imagem é renderizada em sua própria linha e nunca é cortada ao meio; se não couber no restante da página, a foto inteira desce para a próxima -->
+        <!-- border-top explícito: sem ele, a foto que abre uma página nova (após quebra) fica sem a linha de cima da caixa, pois dependia só da borda inferior da foto anterior, que ficou na página passada -->
+        <tr style="page-break-inside: avoid !important;">
+            <td style="padding: 10px; text-align: center; border-top: 1px solid #2a6099;">
+                <img src="{$image}" style="max-height: 280px; max-width: 100%; height: auto; display: block; margin: 0 auto;" alt="Imagem do Equipamento">
+            </td>
+        </tr>
+        <!--[/pedido_image]-->
+    </table>
 
 </body>
 </html>
