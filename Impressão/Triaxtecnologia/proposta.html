@@ -1,0 +1,466 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Proposta Comercial</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* SEM MARGEM NA FOLHA: a margem física (1.00/1.20/1.20/1.20cm) é simulada via padding no .conteudo-pagina.
+           Isso evita por completo a técnica de margem negativa para sangria (que com blocos de altura de página
+           inteira em sequência fazia o DOMPDF inserir página em branco antes de cada capa — bug encontrado ao testar). */
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        body {
+            font-size: 12px;
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.4;
+            background-color: #ffffff;
+        }
+
+        /* PÁGINAS 100% IMAGEM (capa, institucional, soluções): bloco de fluxo normal, sem margem/padding, ocupando a folha inteira */
+        .pagina-imagem {
+            page-break-after: always;
+            width: 21.00cm;
+            height: 29.70cm;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            overflow: hidden;
+        }
+        .pagina-imagem img {
+            height: 29.70cm;
+            width: auto;
+            max-width: 21.00cm;
+            display: inline-block;
+        }
+
+        /* CABEÇALHO RECORTADO (só título + logo): largura total da folha, sem margem; altura acompanha a proporção real da imagem já recortada */
+        .cabecalho-recortado {
+            width: 21.00cm;
+            margin: 0;
+            display: block;
+        }
+        .cabecalho-recortado img {
+            width: 21.00cm;
+            display: block;
+        }
+
+        /* CONTEÚDO DE TEXTO/TABELAS ABAIXO DO CABEÇALHO RECORTADO: aqui sim aplicamos a margem física da página como padding */
+        .conteudo-pagina {
+            padding: 0.15cm 1.20cm 1.20cm 1.20cm;
+        }
+
+        .preservar-linhas {
+            white-space: pre-wrap !important;
+        }
+
+        /* === ESTILOS DO BLOCO "PROPOSTA COMERCIAL" (mesclados do pedido-form-08-discritivo) === */
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .pedido-comercial table {
+            width: 100%;
+            border-collapse: collapse !important;
+            table-layout: fixed !important; /* CORREÇÃO CRÍTICA DOMPDF */
+            margin-bottom: 6px;
+        }
+
+        .pedido-comercial td, .pedido-comercial th {
+            padding: 3px 4px;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+
+        .pedido-comercial {
+            font-size: 10.5px;
+            line-height: 1.4;
+        }
+
+        /* DIVISORES HORIZONTAIS IDÊNTICOS AO PDF */
+        .solid-divider {
+            border-bottom: 1px solid #111111;
+            margin: 8px 0;
+        }
+
+        .linha-prod- { display: none !important; }
+        .linha-desc- { display: none !important; }
+        .linha-serv- { display: none !important; }
+        .linha-parc- { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 1: DADOS DA PROPOSTA (número, data, cliente, vendedor) -->
+    <!-- Página nova, só com blocos de fluxo normal (sem position:absolute) — sem sobrepor nada em cima
+         de imagem, que era o que bagunçava o dimensionamento no DOMPDF real. A capa entra intocada logo
+         em seguida, como página 2. Faixas coloridas de topo/rodapé encostam na borda da folha porque o
+         @page já está com margin:0 no documento inteiro (não precisa de margem negativa pra sangrar). -->
+    <!-- ========================================== -->
+    <div style="page-break-after: always;">
+        <div style="width: 100%; height: 0.45cm; background-color: #12a89d;"></div>
+
+        <div style="padding: 2.60cm 2.00cm 1.20cm 2.00cm;">
+            <img src="{$unidade_image}" style="max-height: 55px; max-width: 220px; display: block; margin-bottom: 1.50cm;" alt="Logo">
+
+            <div style="font-size: 30px; font-weight: bold; color: #1f4e8c; letter-spacing: 0.5px; text-transform: uppercase;">Proposta Comercial</div>
+            <div style="width: 3.50cm; height: 0.12cm; background-color: #12a89d; margin: 0.45cm 0 1.60cm 0;"></div>
+
+            <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                <tr>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e2e2e2; width: 32%; color: #888888; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">Número</td>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e2e2e2; font-weight: bold; color: #1f4e8c; font-size: 15px;">{$id}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e2e2e2; color: #888888; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">Data</td>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e2e2e2; font-weight: bold;">{$cadastro}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e2e2e2; color: #888888; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">Cliente</td>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e2e2e2; font-weight: bold;">{$pessoa_id} – {$pessoa_descricao}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0; color: #888888; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;">Vendedor</td>
+                    <td style="padding: 10px 0; font-weight: bold;">{$pessoa_responsavel_id} - {$pessoa_responsavel_descricao}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div style="width: 100%; height: 0.45cm; background-color: #1f4e8c;"></div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 2: CAPA -->
+    <!-- ========================================== -->
+    <div class="pagina-imagem">
+        <img src="{$site_cabecalho_01}" alt="Capa">
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 3: + DE 20 ANOS DE INOVAÇÃO E TECNOLOGIA -->
+    <!-- ========================================== -->
+    <div class="pagina-imagem">
+        <img src="{$site_cabecalho_02}" alt="Institucional">
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 4: SOLUÇÕES TRIAX TECNOLOGIA -->
+    <!-- ========================================== -->
+    <div class="pagina-imagem">
+        <img src="{$site_cabecalho_03}" alt="Soluções Triax Tecnologia">
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 5: PROPOSTA COMERCIAL -->
+    <!-- Sem page-break-before aqui: a página 4 (.pagina-imagem) já força quebra com page-break-after.
+         Ter os dois juntos (break-after + break-before) fazia o DOMPDF inserir uma página em branco extra. -->
+    <!-- ========================================== -->
+    <div class="cabecalho-recortado">
+        <img src="{$site_corpo_02}" alt="Proposta Comercial">
+    </div>
+
+    <!-- BLOCO DA PROPOSTA COMERCIAL (mesclado de Triaxtecnologia/pedido-form-08-discritivo.html) -->
+    <!-- OBS: o rodapé fixo original (frase + "Impresso em:") foi deixado de fora aqui de propósito -->
+    <!-- position: fixed no DomPDF se repete no PDF inteiro, e apareceria por cima das capas 100% imagem -->
+    <div class="conteudo-pagina pedido-comercial">
+
+        <div class="solid-divider" style="margin-top: 0;"></div>
+
+        <!-- TÍTULO DO PEDIDO -->
+        <table style="border: none; margin-bottom: 8px;">
+            <tr>
+                <td style="font-size: 14.5px; font-weight: bold; padding: 0;">Pedido Nº {$id}</td>
+                <td style="font-size: 14.5px; font-weight: bold; text-align: right; padding: 0;">Emissão {$cadastro}</td>
+            </tr>
+        </table>
+
+        <div class="solid-divider"></div>
+
+        <!-- DADOS DO CLIENTE (Mapeamento exato de variáveis) -->
+        <table style="border: none; margin-bottom: 8px; line-height: 1.3;">
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <tr>
+                <td><span class="bold">Cliente:</span> {$pessoa_id} – {$pessoa_descricao}</td>
+                <td><span class="bold">Fantasia:</span> {$pessoa_pj_fantasia}</td>
+            </tr>
+            <tr>
+                <td><span class="bold">Telefone:</span> {$pessoa_fone1} {$pessoa_fone2}</td>
+                <td><span class="bold">Cnpj/Cpf:</span> {$pessoa_cpf_cnpj} &nbsp;&nbsp;&nbsp;&nbsp; <span class="bold">IE:</span> {$pessoa_pj_inscricao_estadual}</td>
+            </tr>
+            <tr>
+                <td><span class="bold">Endereço:</span> {$logradouro} – {$numero} – {$complemento}</td>
+                <td><span class="bold">Cidade:</span> {$local_municipio_descricao} – {$local_uf_descricao}</td>
+            </tr>
+            <tr>
+                <td><span class="bold">Bairro:</span> {$bairro}</td>
+                <td><span class="bold">CEP:</span> {$cep}</td>
+            </tr>
+            <tr>
+                <td><span class="bold">Contato:</span> {$contato} - {$contato_fone}</td>
+                <td><span class="bold">E-mail:</span> {$pessoa_email}</td>
+            </tr>
+            <tr>
+                <td colspan="2"><span class="bold">Descrição do Orçamento:</span> {$cod_externo}</td>
+            </tr>
+        </table>
+
+        <div class="solid-divider"></div>
+
+        <!-- TABELA DE PRODUTOS -->
+        <table style="border: none; margin-bottom: 4px;">
+            <colgroup>
+                <col width="10%">
+                <col width="54%">
+                <col width="12%">
+                <col width="12%">
+                <col width="12%">
+            </colgroup>
+            <thead>
+                <tr style="font-weight: bold;">
+                    <th style="width: 10%; padding: 3px 4px; text-align: left;">Código</th>
+                    <th style="width: 54%; padding: 3px 4px; text-align: left;">Produto</th>
+                    <th style="width: 12%; padding: 3px 4px; text-align: right;">Qtde</th>
+                    <th style="width: 12%; padding: 3px 4px; text-align: right;">Unitário</th>
+                    <th style="width: 12%; padding: 3px 4px; text-align: right;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--[produtos]-->
+                <tr class="linha-prod-{$produto_id}">
+                    <td>{$produto_id}</td>
+                    <td>{$produto_descricao} {$produto_referencia_descricao}</td>
+                    <td style="text-align: right;">{$qtde}</td>
+                    <td style="text-align: right;">{$preco}</td>
+                    <td style="text-align: right;">{$total_bruto}</td>
+                </tr>
+                <!--[/produtos]-->
+                <tr style="font-weight: bold;">
+                    <td colspan="4" style="text-align: right; padding-top: 8px;">Totalização de Produto:</td>
+                    <td style="text-align: right; padding-top: 8px;">{$subtotal_produto}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="solid-divider"></div>
+
+        <!-- TABELA DE DESCRITIVO (Segundo bloco de produtos solicitado) -->
+        <table style="border: none; margin-bottom: 4px;">
+            <colgroup>
+                <col width="10%">
+                <col width="54%">
+                <col width="12%">
+                <col width="12%">
+                <col width="12%">
+            </colgroup>
+            <thead>
+                <tr style="font-weight: bold;">
+                    <th style="width: 10%; padding: 3px 4px; text-align: left;">Código</th>
+                    <th style="width: 54%; padding: 3px 4px; text-align: left;">Produto</th>
+                    <th style="width: 12%; padding: 3px 4px; text-align: right;">Qtde</th>
+                    <th style="width: 12%; padding: 3px 4px; text-align: right;">Unitário</th>
+                    <th style="width: 12%; padding: 3px 4px; text-align: right;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--[descritivos]-->
+                <tr class="linha-desc-{$pedido_id}">
+                    <td>{$pedido_id}</td>
+                    <td>{$descricao}</td>
+                    <td style="text-align: right;">{$qtde}</td>
+                    <td style="text-align: right;">{$preco}</td>
+                    <td style="text-align: right;">{$total}</td>
+                </tr>
+                <!--[/descritivos]-->
+                <tr style="font-weight: bold;">
+                    <td colspan="4" style="text-align: right; padding-top: 8px;">Totalização Descritivo:</td>
+                    <td style="text-align: right; padding-top: 8px;">{$total_descritivo}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="solid-divider"></div>
+
+        <!-- TABELA DE SERVIÇOS (Unitário e Total removidos; larguras reajustadas) -->
+        <table style="border: none; margin-bottom: 8px;">
+            <colgroup>
+                <col width="10%">
+                <col width="78%">
+                <col width="12%">
+            </colgroup>
+            <thead>
+                <tr style="font-weight: bold;">
+                    <th style="width: 10%; padding: 3px 4px; text-align: left;">Código</th>
+                    <th style="width: 78%; padding: 3px 4px; text-align: left;">Serviço</th>
+                    <th style="width: 12%; padding: 3px 4px; text-align: right;">Qtde</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--[servicos]-->
+                <tr class="linha-serv-{$servico_id}">
+                    <td>{$servico_id}</td>
+                    <td>{$servico_grupo_descricao} - {$servico_descricao}</td>
+                    <td style="text-align: right;">{$qtde}</td>
+                </tr>
+                <!--[/servicos]-->
+                <tr style="font-weight: bold;">
+                    <td colspan="2" style="text-align: right; padding-top: 8px;">Totalização Serviço:</td>
+                    <td style="text-align: right; padding-top: 8px;">{$subtotal_servico}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="solid-divider"></div>
+
+        <!-- SEÇÃO EQUIPAMENTOS: DEFEITO E DIAGNÓSTICO -->
+        <!--[equipamentos]-->
+        <div style="margin-bottom: 6px; page-break-inside: avoid;">
+            <div class="bold" style="font-size: 10.5px; margin-bottom: 3px;">Defeito</div>
+            <div style="padding: 2px 4px;" class="preservar-linhas">{$defeito}</div>
+        </div>
+
+        <div class="solid-divider"></div>
+
+        <div style="margin-bottom: 6px; page-break-inside: avoid;">
+            <div class="bold" style="font-size: 10.5px; margin-bottom: 3px;">Diagnóstico</div>
+            <div style="padding: 2px 4px;" class="preservar-linhas">{$diagnostico}</div>
+        </div>
+
+        <div class="solid-divider"></div>
+        <!--[/equipamentos]-->
+
+        <!-- RESUMO FINANCEIRO (Sem linhas/bordas, idêntico ao PDF) -->
+        <table style="border: none; margin-bottom: 12px; page-break-inside: avoid;">
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <tr>
+                <td style="padding: 0; border: none; padding-right: 15px;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 2px 0;"><span class="bold">Forma Pagamento:</span></td>
+                            <td style="text-align: right; padding: 2px 0;">{$financ_forma_pgto_descricao}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 2px 0;"><span class="bold">Prazo Pagamento:</span></td>
+                            <td style="text-align: right; padding: 2px 0;">{$financ_prazo_pgto_descricao}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 2px 0;"><span class="bold">Frete:</span></td>
+                            <td style="text-align: right; padding: 2px 0;">{$frete}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 2px 0;"><span class="bold">Descontos:</span></td>
+                            <td style="text-align: right; padding: 2px 0;">{$desconto_unificado} – {$desc_perc_unificado} %</td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="padding: 0; border: none;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 2px 0;"><span class="bold">Total Produto:</span></td>
+                            <td style="text-align: right; padding: 2px 0;">{$subtotal_produto}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 2px 0;"><span class="bold">Total Descritivo:</span></td>
+                            <td style="text-align: right; padding: 2px 0;">{$total_descritivo}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 2px 0;"><span class="bold">Total Serviço:</span></td>
+                            <td style="text-align: right; padding: 2px 0;">{$subtotal_servico}</td>
+                        </tr>
+                        <tr style="font-size: 11.5px; font-weight: bold;">
+                            <td style="padding-top: 4px;"><span class="bold">Total Geral</span></td>
+                            <td style="text-align: right; padding-top: 4px; font-size: 12.5px;">{$total_geral}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <div class="solid-divider"></div>
+
+        <!-- TABELA DE PARCELAS (Sem grade/bordas, idêntica às outras tabelas, larguras travadas) -->
+        <table style="border: none; margin-bottom: 25px;">
+            <colgroup>
+                <col width="20%">
+                <col width="30%">
+                <col width="50%">
+            </colgroup>
+            <thead>
+                <tr style="font-weight: bold;">
+                    <th style="width: 20%; padding: 3px 4px; text-align: left;">Parcela</th>
+                    <th style="width: 30%; padding: 3px 4px; text-align: right;">Valor</th>
+                    <th style="width: 50%; padding: 3px 4px; text-align: left; padding-left: 20px;">Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--[parcelas]-->
+                <tr class="linha-parc-{$parcela}">
+                    <td>{$parcela}</td>
+                    <td style="text-align: right; font-weight: bold;">{$valor}</td>
+                    <td style="padding-left: 20px;">{$financ_forma_pgto_descricao}</td>
+                </tr>
+                <!--[/parcelas]-->
+            </tbody>
+        </table>
+
+            <!-- OBSERVAÇÃO -->
+        <div style="margin-bottom: 8px; page-break-inside: avoid;">
+            <span class="bold">Observação:</span>
+            <div style="margin-top: 2px;" class="preservar-linhas">{$obs1}</div>
+        </div>
+
+        <!-- NOTA LEGAL / EXPLICATIVA -->
+        <p class="no-indent" style="font-size: 9px; line-height: 1.27; margin-bottom: 10px; text-align: justify; page-break-inside: avoid;">
+            *** Por não haver projeto estrutural serão adotadas as melhores práticas para um bom desenvolvimento e qualidade do projeto. Os valores da proposta se limitam aos quantitativos descritos em mão de obra e material. Caso seja necessárias estruturas não inclusas ou aumento nos quantitativos os mesmas poderão ser orçadas a parte.
+        </p>
+
+        <!-- ASSINATURAS E RESPONSÁVEL -->
+        <table style="border: none; margin-top: 30px; page-break-inside: avoid;">
+            <colgroup>
+                <col width="45%">
+                <col width="10%">
+                <col width="45%">
+            </colgroup>
+            <tr>
+                <td style="border: none; padding: 0; line-height: 1.35; font-size: 10.5px; vertical-align: top; text-align: center;">
+                    <span class="bold" style="font-size: 11.5px;">{$pessoa_responsavel_descricao}</span><br>
+                    {$p_unidade_fone1}<br>
+                    contato@triaxti.com.br
+                </td>
+                <td style="border: none;">&nbsp;</td>
+                <td style="border: none; border-top: 1px solid #111111; padding-top: 5px; text-align: center; vertical-align: top; font-size: 10.5px;">
+                    <span class="bold">{$pessoa_descricao}</span>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</body>
+</html>
+<!--[/main]-->
