@@ -233,9 +233,15 @@
             </td>
             <td style="vertical-align: top; padding: 4px 6px; line-height: 1.35;">
                 <span class="bold">Vendedor</span> {$pessoa_responsavel_id} – {$pessoa_responsavel_descricao}<br>
+                <span class="bold">Vendedor interno:</span>
+                <!--[participantes]-->
+                &nbsp;-&nbsp;{$pessoa_descricao_participante}
+                <!--[/participantes]--><br>
                 <span class="bold">Veiculo:</span> {$veiculo_marca_descricao} – {$veiculo_modelo_descricao} - {$veiculo_placa} - Km – {$veiculo_km_atual}<br>
-                Chassi {$veic_chassi} {$equipamento_identificacao} &nbsp;&nbsp;&nbsp;&nbsp; Combustivel {$veic_combustivel}<br>
-                Motor {$veic_motor} {$equipamento_descricao}
+                <span class="bold">Equipamento:</span>
+                <!--[equipamentos]-->
+                {$descricao}&nbsp;&nbsp;
+                <!--[/equipamentos]--><br>
             </td>
         </tr>
     </table>
