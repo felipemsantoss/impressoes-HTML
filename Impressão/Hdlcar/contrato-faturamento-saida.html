@@ -1,0 +1,249 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrato de Compra e Venda de Veículo Usado</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 3.40cm 1.60cm 2.60cm 1.60cm; /* margem maior em cima/baixo para caber cabeçalho e rodapé fixos */
+        }
+
+        body {
+            font-size: 11px;
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.4;
+            background-color: #ffffff;
+        }
+
+        p {
+            margin: 0 0 8px 0;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-justify {
+            text-align: justify;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .clausula-titulo {
+            text-align: center;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin: 14px 0 8px 0;
+        }
+
+        /* CABEÇALHO FIXO: LOGO (repete em todas as páginas) */
+        .header-fixed {
+            position: fixed;
+            top: -2.80cm;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+        .header-fixed img {
+            max-height: 100px;
+            max-width: 220px;
+        }
+
+        /* RODAPÉ FIXO: FAIXA DE CONTATO DA UNIDADE (repete em todas as páginas) */
+        .footer-fixed {
+            position: fixed;
+            bottom: -2.10cm;
+            left: -1.60cm;
+            right: -1.60cm;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-size: 9px;
+            padding: 8px 1.60cm;
+            text-align: center;
+        }
+        .footer-fixed span {
+            margin: 0 10px;
+            white-space: nowrap;
+        }
+
+        /* TABELA DE PARCELAS */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 6px 0 10px 0;
+        }
+        th, td {
+            border: 1px solid #333333;
+            padding: 4px 6px;
+            font-size: 10px;
+        }
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* BLOCO DE ASSINATURAS */
+        .signature-block {
+            margin-top: 26px;
+            page-break-inside: avoid;
+        }
+        .signature-line {
+            border-top: 1px solid #111111;
+            width: 90%;
+            padding-top: 4px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO FIXO: LOGO DA UNIDADE -->
+    <div class="header-fixed">
+        <img src="{$site_cabecalho_01}" alt="Logo">
+    </div>
+
+    <!-- RODAPÉ FIXO: FAIXA DE CONTATO DA UNIDADE -->
+    <div class="footer-fixed">
+        <span>Tel: {$pessoa_unidade_fone1}</span>
+        <span>WhatsApp: {$pessoa_unidade_fone1}</span>
+        <span>{$pessoa_unidade_email}</span>
+        <span>{$pessoa_unidade_logradouro}, nº {$pessoa_unidade_numero} - {$pessoa_unidade_local_municipio_descricao}/{$pessoa_unidade_local_uf_sigla}</span>
+    </div>
+
+    <!-- TÍTULO -->
+    <div class="text-center bold" style="font-size: 14px; margin-bottom: 4px;">
+        CONTRATO DE COMPRA E VENDA DE VEÍCULO USADO
+    </div>
+    <div class="text-center bold" style="margin-bottom: 14px;">
+        Nº CONTRATO: {$codigo}.
+    </div>
+
+    <div class="text-center bold" style="margin-bottom: 10px;">
+        IDENTIFICAÇÃO DAS PARTES CONTRATANTES
+    </div>
+
+    <div class="text-justify">
+        <p><span class="bold">VENDEDOR: {$pessoa_unidade_descricao}</span>, C.P.F./C.N.P.J. nº {$pessoa_unidade_cpf_cnpj}, residente e domiciliado na {$pessoa_unidade_logradouro}, nº {$pessoa_unidade_numero} {$pessoa_unidade_complemento}, {$pessoa_unidade_local_municipio_descricao} no Estado de {$pessoa_unidade_local_uf_sigla}. CEP: {$pessoa_unidade_cep}.</p>
+
+        <p><span class="bold">COMPRADOR: {$pessoa_descricao}</span>, C.P.F./C.N.P.J. nº {$pessoa_cpf_cnpj}, residente e domiciliado na {$logradouro}, nº {$numero} {$complemento} &ndash; {$bairro}, {$local_municipio_descricao} - {$local_uf_descricao}. CEP: {$cep}.</p>
+
+        <p class="bold" style="font-style: italic;">As partes acima identificadas têm, entre si, justo e acertado o presente Contrato de Compra e Venda de 0 KM, que se regerá pelas cláusulas seguintes e pelas condições descritas no presente.</p>
+
+        <div class="clausula-titulo" style="text-align: left; text-transform: none;">DO OBJETO DO CONTRATO: Cláusula 1ª.</div>
+        <p>O presente contrato tem como <span class="bold">OBJETO</span> a venda de 1 (um) VEÍCULO:</p>
+
+        <table>
+            <tr>
+                <th style="width: 70%; text-align: left;">Descrição</th>
+                <th style="width: 30%; text-align: right;">Valor</th>
+            </tr>
+            <!--[produtos]-->
+            <tr>
+                <td>{$produto_descricao}</td>
+                <td class="text-right">R$ {$preco}</td>
+            </tr>
+            <!--[/produtos]-->
+        </table>
+
+        <p><span class="bold">Observação 1:</span> {$obs1}</p>
+        <p><span class="bold">Observação 2:</span> {$obs2}</p>
+        <p><span class="bold">Dados complementares:</span> {$complementar}</p>
+
+        <div class="clausula-titulo" style="text-align: left; text-transform: none;">DAS RESPONSABILIDADES</div>
+        <p><span class="bold">Cláusula 3ª.</span> Fica responsável o VENDEDOR pela entrega do veículo livre de qualquer defeito que prejudique seu bom funcionamento, sendo responsável em repara-lo, caso este necessite de substituição de alguma peça pelo prazo de 03 dias; garantia do veiculo conforme manual do fabricante.</p>
+
+        <p><span class="bold">Cláusula 4ª.</span> Compromete-se o VENDEDOR a entregar o veículo objeto deste contrato, na data de <span class="bold">{$entrega}</span> ao COMPRADOR, no Centro de {$pessoa_unidade_local_municipio_descricao} no Estado de {$pessoa_unidade_local_uf_sigla}. CEP: {$pessoa_unidade_cep}, nas condições do termo de vistoria em anexo ao presente instrumento; conforme CHECK LIST DE Nº {$codigo}.</p>
+
+        <div class="clausula-titulo" style="text-align: left; text-transform: none;">DA TRANSFERÊNCIA DA PROPRIEDADE DO VEÍCULO</div>
+        <p><span class="bold">Cláusula 5ª.</span> Será feita a transferência da propriedade do veículo, após a quitação da última parcela de pagamento.</p>
+
+        <div class="clausula-titulo" style="text-align: left; text-transform: none;">DO PREÇO</div>
+        <p><span class="bold">Cláusula 6ª.</span> O COMPRADOR efetuará o pagamento ao VENDEDOR conforme as parcelas abaixo, e após a quitação será entregue o CRV (Certificado de Registro de Veículo) e a transferência da mesma, depois desta data será de propriedade do comprador a transferir sob pena de ser responsabilizado civil e criminal pelos termos e clausulas acordado neste contrato; porem os valores monetários referente a transferência fica por conta do vendedor.</p>
+
+        <table>
+            <tr>
+                <th style="width: 40%; text-align: left;">Forma de Pagamento</th>
+                <th style="width: 30%; text-align: center;">Vencimento</th>
+                <th style="width: 30%; text-align: right;">Valor</th>
+            </tr>
+            <!--[parcelas]-->
+            <tr>
+                <td>{$financ_forma_pgto_descricao_parcela}</td>
+                <td class="text-center">{$vencimento}</td>
+                <td class="text-right">R$ {$valor}</td>
+            </tr>
+            <!--[/parcelas]-->
+        </table>
+
+        <p class="text-right bold" style="font-size: 12px;">Total Geral: R$ {$total_nf}</p>
+
+        <div class="clausula-titulo" style="text-align: left; text-transform: none;">CONDIÇÕES GERAIS</div>
+        <p><span class="bold">Cláusula 7ª.</span> Havendo algum problema no funcionamento ou estrutura do veículo, o COMPRADOR deverá informar ao VENDEDOR imediatamente, respeitando-se o prazo estipulado na Cláusula 3ª e 4ª do presente instrumento.</p>
+        <p><span class="bold">Cláusula 8ª.</span> O VENDEDOR não é responsável por eventuais danos causados pelo COMPRADOR, oriundos de negligência no uso do veículo.</p>
+        <p><span class="bold">Cláusula 9ª.</span> Este instrumento começa a valer a partir da assinatura de ambos os interessados; caso alguma das partes não cumpra o disposto nas cláusulas estabelecidas neste instrumento, responsabilizar-se-á pelo pagamento de multa equivalente a 20% (vinte por cento) do valor da compra.</p>
+
+        <div class="clausula-titulo" style="text-align: left; text-transform: none;">DO FORO</div>
+        <p><span class="bold">Cláusula 10ª.</span> As partes elegem o foro da comarca de {$pessoa_unidade_local_municipio_descricao} para dirimir quaisquer controvérsias oriundas deste Contrato.</p>
+
+        <p>Por estarem assim justos e contratados, firmam o presente instrumento, em duas vias de igual teor, juntamente com 2 (duas) testemunhas.</p>
+
+        <p>{$pessoa_unidade_local_municipio_descricao}, {$cadastro}.</p>
+
+        <!-- ASSINATURAS -->
+        <div class="signature-block">
+            <div class="signature-line">
+                VENDEDOR<br>
+                <span class="bold">{$pessoa_unidade_descricao}</span><br>
+                RG: _______________________<br>
+                C.P.F. nº {$pessoa_unidade_cpf_cnpj}
+            </div>
+        </div>
+
+        <div class="signature-block">
+            <div class="signature-line">
+                COMPRADOR<br>
+                <span class="bold">{$pessoa_descricao}</span><br>
+                RG: _______________________<br>
+                C.P.F. nº {$pessoa_cpf_cnpj}
+            </div>
+        </div>
+
+        <div class="signature-block">
+            <div class="signature-line">
+                TESTEMUNHA<br>
+                RG: <br>
+                CPF:
+            </div>
+        </div>
+
+        <div class="signature-block">
+            <div class="signature-line">
+                TESTEMUNHA<br>
+                RG: <br>
+                C.P.F. nº
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+<!--[/main]-->
