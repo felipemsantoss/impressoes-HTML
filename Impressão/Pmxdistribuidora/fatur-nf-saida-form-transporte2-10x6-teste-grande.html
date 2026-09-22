@@ -1,0 +1,131 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiqueta de Despacho - Teste Tamanho Grande</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* TESTE: PROPORÇÃO 10x6 AMPLIADA 3x (30.00cm x 18.00cm Paisagem) - SÓ PARA DIAGNÓSTICO */
+        @page {
+            size: 30.00cm 18.00cm;
+            margin: 0px !important;
+        }
+
+        /* CORPO COMO TABELA PARA CENTRALIZAR O CONTEÚDO NA VERTICAL E HORIZONTAL */
+        html, body {
+            width: 30.00cm;
+            height: 18.00cm;
+            margin: 0 !important;
+            padding: 0 !important;
+            color: #000000;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .uppercase {
+            text-transform: uppercase !important;
+        }
+
+        .text-center {
+            text-align: center !important;
+        }
+
+        /* TABELA AMPLIADA (mesma proporção do 10x6 original, só que 3x maior), centralizada na página */
+        .shipping-table {
+            width: 27.00cm;
+            margin: 0.60cm 0 0 3.00cm; /* empurrado mais para a direita, margem superior reduzida para esticar a tabela verticalmente */
+            font-size: 32px;
+            line-height: 1.2;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            table-layout: fixed;
+            border: 2px solid #000000;
+            text-align: left;
+        }
+
+        .shipping-table td {
+            padding: 10px 15px !important;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+
+        .row-border-bottom td {
+            border-bottom: 2px solid #000000 !important;
+        }
+
+        .col-border-right {
+            border-right: 2px solid #000000 !important;
+        }
+    </style>
+</head>
+<body>
+
+        <!-- Tabela de Despacho - Versão de Teste Ampliada 3x (10x6 -> 30x18) -->
+        <table class="shipping-table">
+            <colgroup>
+                <col style="width: 50%;">
+                <col style="width: 50%;">
+            </colgroup>
+            <tbody>
+                <!-- Linha 1: Emitente (Centralizado) -->
+                <tr class="row-border-bottom">
+                    <td colspan="2" class="bold uppercase text-center" style="font-size: 34px; padding: 12px !important;">
+                        {$pessoa_unidade_descricao}
+                    </td>
+                </tr>
+
+                <!-- Linha 2: Destinatário e Endereço -->
+                <tr class="row-border-bottom">
+                    <td colspan="2" class="uppercase" style="padding: 10px 18px !important;">
+                        <div class="bold" style="text-transform: none; margin-bottom: 3px; font-size: 32px;">Destinatário</div>
+                        <div class="bold">{$pessoa_descricao}</div>
+                        <div>{$logradouro} {$numero} {$complemento}</div>
+                        <div>{$bairro} {$cep}</div>
+                        <div>{$local_municipio_descricao} / {$local_uf_descricao}</div>
+                    </td>
+                </tr>
+
+                <!-- Linha 3: NF e Volumes -->
+                <tr class="row-border-bottom">
+                    <td class="col-border-right bold" style="font-size: 44px;">
+                        NF: <span style="font-weight: normal;">{$codigo}</span>
+                    </td>
+                    <td class="bold">
+                        Volumes: <span style="font-weight: normal;">{$volume_qtde}</span>
+                    </td>
+                </tr>
+
+                <!-- Linha 4: Pesos (Líquido e Bruto) -->
+                <tr class="row-border-bottom">
+                    <td class="col-border-right" style="padding-bottom: 10px !important;">
+                        <span class="bold">PESO LIQ:</span><br>
+                        <span style="display: block; margin-top: 3px;">{$volume_peso_liquido}</span>
+                    </td>
+                    <td style="padding-bottom: 10px !important;">
+                        <span class="bold">PESO BRUTO:</span><br>
+                        <span style="display: block; margin-top: 3px;">{$volume_peso_bruto}</span>
+                    </td>
+                </tr>
+
+                <!-- Linha 5: Transportador -->
+                <tr>
+                    <td colspan="2" class="bold" style="padding: 10px 18px !important;">
+                        Transportador: <span class="uppercase" style="font-weight: normal;">{$pessoa_transportadora_descricao}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+</body>
+</html>
+<!--[/main]-->
