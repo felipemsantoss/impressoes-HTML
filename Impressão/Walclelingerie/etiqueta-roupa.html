@@ -1,0 +1,203 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiqueta de Composição - Roupa</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* DIMENSÕES FÍSICAS EXATAS DA PÁGINA: 10cm (4 etiquetas de 2,5cm) x 5,5cm */
+        @page {
+            size: 10.00cm 5.50cm;
+            margin: 0px !important;
+        }
+
+        html, body {
+            width: 10.00cm;
+            height: 5.50cm;
+            margin: 0 !important;
+            padding: 0 !important;
+            color: #000000;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        /* GRADE DE 4 COLUNAS IGUAIS, SEM LINHAS DE GRADE */
+        table {
+            width: 10.00cm;
+            height: 5.50cm;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            table-layout: fixed !important;
+        }
+
+        td {
+            width: 2.50cm;
+            padding: 3px 3px 0 3px;
+            vertical-align: top;
+            border: none !important;
+            overflow: hidden;
+            word-wrap: break-word;
+            text-align: center;
+        }
+
+        .etq {
+            width: 100%;
+            font-size: 6px;
+            line-height: 1.15;
+        }
+
+        .marca {
+            font-size: 6px;
+            margin-bottom: 5px;
+        }
+
+        .composicao {
+            font-size: 6.5px;
+            margin-bottom: 5px;
+        }
+
+        .icones {
+            text-align: center;
+            margin-bottom: 5px;
+            white-space: nowrap;
+        }
+
+        .icones img {
+            display: block;
+            width: 86px;
+            height: 11px;
+            margin: 0 auto;
+        }
+
+        .rodape {
+            font-size: 7px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Grade Horizontal de 4 Etiquetas Iguais (2,5cm cada) -->
+    <table>
+        <colgroup>
+            <col style="width: 2.50cm;">
+            <col style="width: 2.50cm;">
+            <col style="width: 2.50cm;">
+            <col style="width: 2.50cm;">
+        </colgroup>
+        <tr>
+            <!-- Coluna 1 -->
+            <td>
+                <div class="etq">
+                    <div class="marca">
+                        COMERCIALIZADO POR<br>
+                        MONJUA<br>
+                        98.102.650/0001-42
+                    </div>
+                    <div class="marca">FEITO NO BRASIL</div>
+                    <div class="composicao">
+                        92%Poliamida<br>
+                        8%Elastano<br>
+                        Bojo:<br>
+                        60%Poliuretano<br>
+                        40%Poliester
+                    </div>
+                    <div class="icones">
+                        <img src="{$site_cabecalho_01}" alt="Simbolos de lavagem">
+                    </div>
+                    <div class="rodape bold">
+                        {$descricao}<br>
+                        {$cod_barra}
+                    </div>
+                </div>
+            </td>
+            <!-- Coluna 2 -->
+            <td>
+                <div class="etq">
+                    <div class="marca">
+                        COMERCIALIZADO POR<br>
+                        MONJUA<br>
+                        98.102.650/0001-42
+                    </div>
+                    <div class="marca">FEITO NO BRASIL</div>
+                    <div class="composicao">
+                        92%Poliamida<br>
+                        8%Elastano<br>
+                        Bojo:<br>
+                        60%Poliuretano<br>
+                        40%Poliester
+                    </div>
+                    <div class="icones">
+                        <img src="{$site_cabecalho_01}" alt="Simbolos de lavagem">
+                    </div>
+                    <div class="rodape bold">
+                        {$descricao}<br>
+                        {$cod_barra}
+                    </div>
+                </div>
+            </td>
+            <!-- Coluna 3 -->
+            <td>
+                <div class="etq">
+                    <div class="marca">
+                        COMERCIALIZADO POR<br>
+                        MONJUA<br>
+                        98.102.650/0001-42
+                    </div>
+                    <div class="marca">FEITO NO BRASIL</div>
+                    <div class="composicao">
+                        92%Poliamida<br>
+                        8%Elastano<br>
+                        Bojo:<br>
+                        60%Poliuretano<br>
+                        40%Poliester
+                    </div>
+                    <div class="icones">
+                        <img src="{$site_cabecalho_01}" alt="Simbolos de lavagem">
+                    </div>
+                    <div class="rodape bold">
+                        {$descricao}<br>
+                        {$cod_barra}
+                    </div>
+                </div>
+            </td>
+            <!-- Coluna 4 -->
+            <td>
+                <div class="etq">
+                    <div class="marca">
+                        COMERCIALIZADO POR<br>
+                        MONJUA<br>
+                        98.102.650/0001-42
+                    </div>
+                    <div class="marca">FEITO NO BRASIL</div>
+                    <div class="composicao">
+                        92%Poliamida<br>
+                        8%Elastano<br>
+                        Bojo:<br>
+                        60%Poliuretano<br>
+                        40%Poliester
+                    </div>
+                    <div class="icones">
+                        <img src="{$site_cabecalho_01}" alt="Simbolos de lavagem">
+                    </div>
+                    <div class="rodape bold">
+                        {$descricao}<br>
+                        {$cod_barra}
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->
