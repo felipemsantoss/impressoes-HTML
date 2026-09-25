@@ -11,16 +11,16 @@
             box-sizing: border-box !important;
         }
 
-        /* TESTE: PROPORÇÃO 10x6 AMPLIADA 3x (30.00cm x 18.00cm Paisagem) - SÓ PARA DIAGNÓSTICO */
+        /* TAMANHO REAL DA ETIQUETA: 10x6cm Paisagem (100mm x 60mm configurado na impressora) */
         @page {
-            size: 30.00cm 18.00cm;
+            size: 10.00cm 6.00cm;
             margin: 0px !important;
         }
 
         /* CORPO COMO TABELA PARA CENTRALIZAR O CONTEÚDO NA VERTICAL E HORIZONTAL */
         html, body {
-            width: 30.00cm;
-            height: 18.00cm;
+            width: 10.00cm;
+            height: 6.00cm;
             margin: 0 !important;
             padding: 0 !important;
             color: #000000;
@@ -40,31 +40,31 @@
             text-align: center !important;
         }
 
-        /* TABELA AMPLIADA (mesma proporção do 10x6 original, só que 3x maior), centralizada na página */
+        /* TABELA NO TAMANHO REAL DA ETIQUETA (proporção original 10x6, sem ampliação) */
         .shipping-table {
-            width: 27.00cm;
-            margin: 0.60cm 0 0 3.00cm; /* empurrado mais para a direita, margem superior reduzida para esticar a tabela verticalmente */
-            font-size: 32px;
+            width: 9.00cm;
+            margin: 1.35cm 0 0 0.50cm;
+            font-size: 9.2px;
             line-height: 1.2;
             border-collapse: separate !important;
             border-spacing: 0 !important;
             table-layout: fixed;
-            border: 2px solid #000000;
+            border: 1px solid #000000;
             text-align: left;
         }
 
         .shipping-table td {
-            padding: 10px 15px !important;
+            padding: 3px 5px !important;
             vertical-align: top;
             word-wrap: break-word;
         }
 
         .row-border-bottom td {
-            border-bottom: 2px solid #000000 !important;
+            border-bottom: 1px solid #000000 !important;
         }
 
         .col-border-right {
-            border-right: 2px solid #000000 !important;
+            border-right: 1px solid #000000 !important;
         }
     </style>
 </head>
@@ -79,15 +79,15 @@
             <tbody>
                 <!-- Linha 1: Emitente (Centralizado) -->
                 <tr class="row-border-bottom">
-                    <td colspan="2" class="bold uppercase text-center" style="font-size: 34px; padding: 12px !important;">
+                    <td colspan="2" class="bold uppercase text-center" style="font-size: 9.8px; padding: 4px !important;">
                         {$pessoa_unidade_descricao}
                     </td>
                 </tr>
 
                 <!-- Linha 2: Destinatário e Endereço -->
                 <tr class="row-border-bottom">
-                    <td colspan="2" class="uppercase" style="padding: 10px 18px !important;">
-                        <div class="bold" style="text-transform: none; margin-bottom: 3px; font-size: 32px;">Destinatário</div>
+                    <td colspan="2" class="uppercase" style="padding: 3px 6px !important;">
+                        <div class="bold" style="text-transform: none; margin-bottom: 1px; font-size: 9.2px;">Destinatário</div>
                         <div class="bold">{$pessoa_descricao}</div>
                         <div>{$logradouro} {$numero} {$complemento}</div>
                         <div>{$bairro} {$cep}</div>
@@ -97,7 +97,7 @@
 
                 <!-- Linha 3: NF e Volumes -->
                 <tr class="row-border-bottom">
-                    <td class="col-border-right bold" style="font-size: 44px;">
+                    <td class="col-border-right bold" style="font-size: 13.2px;">
                         NF: <span style="font-weight: normal;">{$codigo}</span>
                     </td>
                     <td class="bold">
@@ -107,19 +107,19 @@
 
                 <!-- Linha 4: Pesos (Líquido e Bruto) -->
                 <tr class="row-border-bottom">
-                    <td class="col-border-right" style="padding-bottom: 10px !important;">
+                    <td class="col-border-right" style="padding-bottom: 3px !important;">
                         <span class="bold">PESO LIQ:</span><br>
-                        <span style="display: block; margin-top: 3px;">{$volume_peso_liquido}</span>
+                        <span style="display: block; margin-top: 1px;">{$volume_peso_liquido}</span>
                     </td>
-                    <td style="padding-bottom: 10px !important;">
+                    <td style="padding-bottom: 3px !important;">
                         <span class="bold">PESO BRUTO:</span><br>
-                        <span style="display: block; margin-top: 3px;">{$volume_peso_bruto}</span>
+                        <span style="display: block; margin-top: 1px;">{$volume_peso_bruto}</span>
                     </td>
                 </tr>
 
                 <!-- Linha 5: Transportador -->
                 <tr>
-                    <td colspan="2" class="bold" style="padding: 10px 18px !important;">
+                    <td colspan="2" class="bold" style="padding: 3px 6px !important;">
                         Transportador: <span class="uppercase" style="font-weight: normal;">{$pessoa_transportadora_descricao}</span>
                     </td>
                 </tr>
