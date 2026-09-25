@@ -233,7 +233,7 @@
             </tr>
             <!--[/servicos]-->
             <tr style="font-weight: bold;">
-                <td style="text-align: right;">TOTAL GERAL</td>
+                <td style="text-align: right;">TOTAL GERAL MÃO DE OBRA</td>
                 <td style="text-align: right;">{$total_servico}</td>
             </tr>
         </tbody>
@@ -272,7 +272,7 @@
             </tr>
             <!--[/produtos]-->
             <tr style="font-weight: bold;">
-                <td colspan="5" style="text-align: right;">TOTAL GERAL</td>
+                <td colspan="5" style="text-align: right;">TOTAL GERAL PEÇAS</td>
                 <td style="text-align: right;">{$produtos_total_sum}</td>
             </tr>
         </tbody>
@@ -335,7 +335,7 @@
             (3) Sugerimos assim que o cliente receber o equipamento consertado, faça os testes com o mesmo, pois a garantia começa a contar na emissão da nota de prestação de serviços.<br>
             (4) CASO O ORÇAMENTO SEJA APROVADO OU O EQUIPAMENTO SEJA DECLARADO COMO “SEM POSSIBILIDADE DE CONSERTO”, O PRESENTE ORÇAMENTO NÃO TERA CUSTO. CASO O EQUIPAMENTO VENHA A TER POSSIBILIDADE DE REPARO E O ORÇAMENTO NÃO FOR APROVADO, SERÁ COBRADA UMA TAXA DE 10% DO VALOR TOTAL DO MESMO ORÇAMENTO.<br>
             (5) <span style="background-color: #ffff00; color: #000000 !important; padding: 0 2px;">VALIDADE DO ORÇAMENTO 30 DIAS.</span><br>
-            (6) Informamos que, caso haja inclusão de PEÇAS no orçamento, estas serão faturadas em nota de produto, de forma separada da nota de serviços. Logo serão emitidas duas notas.
+            (6) Orçamentos que incluírem peças terão o faturamento separado em Nota de Serviço e Nota de Venda.
         </div>
     </div>
 
@@ -352,7 +352,7 @@
             </colgroup>
             <tr>
                 <td style="line-height: 1.45;">
-                    <span class="bold">ENVIADO ORÇAMENTO EM:</span> {$envio}<br>
+                    <span class="bold">ENVIADO ORÇAMENTO EM:</span> {$envio_data}<br>
                     <span class="bold">NOTA DE REMESSA:</span> {$codigo_nf}<br>
                     <span class="bold">ENTRADA DIA:</span> {$cadastro}
                 </td>
@@ -364,7 +364,7 @@
         </table>
     </div>
 
-    <!-- SEÇÃO DA IMAGEM INDEPENDENTE (Borda de união de página corrigida e tratada com page-break-inside: avoid para o bloco inteiro) -->
+     <!-- SEÇÃO DA IMAGEM INDEPENDENTE (Borda de união de página corrigida e tratada com page-break-inside: avoid para o bloco inteiro) -->
     <div style="page-break-inside: avoid !important; width: 100%;">
         <table class="grid-table" style="border-top: none !important;">
             <!-- Linha divisória horizontal azul estilizada como cabeçalho de seção para a Imagem -->
@@ -382,7 +382,6 @@
             <!--[/pedido_image]-->
         </table>
     </div>
-
 
 </body>
 </html>
