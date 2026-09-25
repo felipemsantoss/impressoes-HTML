@@ -65,12 +65,11 @@
 
         /* GRADE ESTRUTURADA (FORM STYLE) - TRATAMENTO DE BORDAS SEPARATE */
         .grid-table {
-            border-top: 1px solid #dce4ec;
-            border-left: 1px solid #dce4ec;
+            border-collapse: collapse !important;
+            border: 1px solid #dce4ec;
         }
         .grid-table td, .grid-table th {
-            border-right: 1px solid #dce4ec;
-            border-bottom: 1px solid #dce4ec;
+            border: 1px solid #dce4ec;
         }
 
         /* CABEÇALHOS DE TABELAS */
@@ -279,15 +278,15 @@
     <!-- TABELA 5: DADOS DA CONTRATAÇÃO -->
     <table class="grid-table">
         <colgroup>
-            <col style="width: 25%;">
-            <col style="width: 75%;">
+            <col style="width: 40%;">
+            <col style="width: 60%;">
         </colgroup>
         <tr>
             <td colspan="2" class="section-header">DADOS DA CONTRATAÇÃO</td>
         </tr>
         <tr>
-            <td class="lbl" style="width: 25%;">PLANO GARANTIA CONTRATADO:</td>
-            <td class="val" style="width: 75%;">{$servico_plano_descricao}</td>
+            <td class="lbl" style="width: 40%;">PLANO GARANTIA CONTRATADO:</td>
+            <td class="val" style="width: 60%;">{$servico_plano_descricao}</td>
         </tr>
         <tr>
             <td class="lbl">VALOR ALUGUEL:</td>
