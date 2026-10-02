@@ -31,18 +31,24 @@
             font-weight: bold;
         }
 
-        /* GRADE DE 4 COLUNAS IGUAIS, SEM LINHAS DE GRADE */
+        /* 4 COLUNAS DE 2,35cm (nao 2,5cm): na impressao real cada coluna
+           de 2,5cm escorregava ~1,5mm para a direita em relacao a anterior,
+           ou seja, o passo fisico das etiquetas no rolo e ~2,35cm.
+           margin-left negativo calibrado pelas fotos de impressao: com 0 as 4
+           saiam para a direita, com -0.35cm saiam para a esquerda na mesma medida */
         table {
-            width: 10.00cm;
+            width: 9.40cm;
             height: 5.50cm;
+            margin-left: -0.17cm;
             border-collapse: separate !important;
             border-spacing: 0 !important;
             table-layout: fixed !important;
         }
 
+        /* padding-top deixa espaco livre para a costura */
         td {
-            width: 2.50cm;
-            padding: 38px 8px 0 8px;
+            width: 2.35cm;
+            padding: 52px 4px 0 4px;
             vertical-align: top;
             border: none !important;
             overflow: hidden;
@@ -52,61 +58,62 @@
 
         .etq {
             width: 100%;
-            font-size: 8px;
-            line-height: 1.15;
+            font-size: 6px;
+            line-height: 1.05;
         }
 
         .marca {
-            font-size: 8px;
-            margin-bottom: 5px;
+            font-size: 6px;
+            margin-bottom: 1px;
         }
 
         .composicao {
-            font-size: 8.5px;
-            margin-bottom: 5px;
+            font-size: 6.5px;
+            margin-bottom: 0;
         }
 
         .icones {
             text-align: center;
-            margin-bottom: 5px;
-            white-space: nowrap;
         }
 
+        /* So a largura e fixa: a altura segue a proporcao da imagem (2 linhas de 3 simbolos) */
         .icones img {
-            display: block;
-            width: 78px;
-            height: 26px;
-            margin: 0 auto;
+            display: inline-block;
+            width: 48px;
         }
 
         .rodape {
-            font-size: 9px;
+            font-size: 10px;
+            line-height: 1.0;
         }
     </style>
 </head>
 <body>
 
-    <!-- Grade Horizontal de 4 Etiquetas Iguais (2,5cm cada) -->
+    <!-- Grade Horizontal de 4 Etiquetas Iguais (2,35cm cada) -->
     <table>
         <colgroup>
-            <col style="width: 2.50cm;">
-            <col style="width: 2.50cm;">
-            <col style="width: 2.50cm;">
-            <col style="width: 2.50cm;">
+            <col style="width: 2.35cm;">
+            <col style="width: 2.35cm;">
+            <col style="width: 2.35cm;">
+            <col style="width: 2.35cm;">
         </colgroup>
         <tr>
             <!-- Coluna 1 -->
             <td>
                 <div class="etq">
                     <div class="marca">
-                        COMERCIALIZADO POR<br>
-                        MONJUA<br>
+                        COMERCIALIZADO<br>
+                        POR: MONJUÁ
+                    </div>
+                    <div class="marca">
+                        CNPJ:<br>
                         98.102.650/0001-42
                     </div>
                     <div class="marca">FEITO NO BRASIL</div>
                     <div class="composicao">
-                        92%Poliamida<br>
-                        8%Elastano<br>
+                        90%Poliamida<br>
+                        10%Elastano<br>
                         Bojo:<br>
                         60%Poliuretano<br>
                         40%Poliester
@@ -114,8 +121,8 @@
                     <div class="icones">
                         <img src="{$site_cabecalho_01}" alt="Simbolos de lavagem">
                     </div>
-                    <div class="rodape bold">
-                        Tamanho:{$cod_outro}<br>
+                    <div class="rodape">
+                        Tamanho: {$cod_outro}
                     </div>
                 </div>
             </td>
@@ -123,14 +130,17 @@
             <td>
                 <div class="etq">
                     <div class="marca">
-                        COMERCIALIZADO POR<br>
-                        MONJUA<br>
+                        COMERCIALIZADO<br>
+                        POR: MONJUÁ
+                    </div>
+                    <div class="marca">
+                        CNPJ:<br>
                         98.102.650/0001-42
                     </div>
                     <div class="marca">FEITO NO BRASIL</div>
                     <div class="composicao">
-                        92%Poliamida<br>
-                        8%Elastano<br>
+                        90%Poliamida<br>
+                        10%Elastano<br>
                         Bojo:<br>
                         60%Poliuretano<br>
                         40%Poliester
@@ -138,8 +148,8 @@
                     <div class="icones">
                         <img src="{$site_cabecalho_01}" alt="Simbolos de lavagem">
                     </div>
-                    <div class="rodape bold">
-                        Tamanho:{$cod_outro}<br>
+                    <div class="rodape">
+                        Tamanho: {$cod_outro}
                     </div>
                 </div>
             </td>
@@ -147,14 +157,17 @@
             <td>
                 <div class="etq">
                     <div class="marca">
-                        COMERCIALIZADO POR<br>
-                        MONJUA<br>
+                        COMERCIALIZADO<br>
+                        POR: MONJUÁ
+                    </div>
+                    <div class="marca">
+                        CNPJ:<br>
                         98.102.650/0001-42
                     </div>
                     <div class="marca">FEITO NO BRASIL</div>
                     <div class="composicao">
-                        92%Poliamida<br>
-                        8%Elastano<br>
+                        90%Poliamida<br>
+                        10%Elastano<br>
                         Bojo:<br>
                         60%Poliuretano<br>
                         40%Poliester
@@ -162,8 +175,8 @@
                     <div class="icones">
                         <img src="{$site_cabecalho_01}" alt="Simbolos de lavagem">
                     </div>
-                    <div class="rodape bold">
-                        Tamanho:{$cod_outro}<br>
+                    <div class="rodape">
+                        Tamanho: {$cod_outro}
                     </div>
                 </div>
             </td>
@@ -171,14 +184,17 @@
             <td>
                 <div class="etq">
                     <div class="marca">
-                        COMERCIALIZADO POR<br>
-                        MONJUA<br>
+                        COMERCIALIZADO<br>
+                        POR: MONJUÁ
+                    </div>
+                    <div class="marca">
+                        CNPJ:<br>
                         98.102.650/0001-42
                     </div>
                     <div class="marca">FEITO NO BRASIL</div>
                     <div class="composicao">
-                        92%Poliamida<br>
-                        8%Elastano<br>
+                        90%Poliamida<br>
+                        10%Elastano<br>
                         Bojo:<br>
                         60%Poliuretano<br>
                         40%Poliester
@@ -186,8 +202,8 @@
                     <div class="icones">
                         <img src="{$site_cabecalho_01}" alt="Simbolos de lavagem">
                     </div>
-                    <div class="rodape bold">
-                        Tamanho:{$cod_outro}<br>
+                    <div class="rodape">
+                        Tamanho: {$cod_outro}
                     </div>
                 </div>
             </td>
