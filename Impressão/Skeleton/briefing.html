@@ -1,0 +1,622 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Briefing</title>
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 1.00cm 1.00cm 1.40cm 1.00cm;
+        }
+
+        body {
+            font-size: 9px;
+            line-height: 1.3;
+            color: #111111;
+            margin: 0;
+            padding: 0;
+        }
+
+        .bold { font-weight: bold; }
+
+        /* CABEÇALHO: LOGO + TÍTULO */
+        table.cabecalho {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #4472C4;
+            margin-bottom: 10px;
+        }
+        table.cabecalho td {
+            border: none;
+            vertical-align: middle;
+            padding: 8px 10px;
+        }
+        table.cabecalho .col-logo {
+            width: 28%;
+            border-right: 1px solid #4472C4;
+            text-align: center;
+        }
+        table.cabecalho .col-logo img {
+            max-height: 110px;
+            max-width: 100%;
+            display: inline-block;
+        }
+        table.cabecalho .col-titulo {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* BARRA DE SEÇÃO */
+        .hdr {
+            background-color: #4472C4;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 9.5px;
+            padding: 4px 6px;
+            border: 1px solid #4472C4;
+        }
+        .cat-row {
+            background-color: #D9E2F3;
+            color: #1f4e8c;
+            font-weight: bold;
+            font-size: 9px;
+            padding: 3px 6px;
+            border: 1px solid #4472C4;
+            border-top: none;
+        }
+
+        /* TABELAS DE CAMPOS GENÉRICAS */
+        table.form {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-bottom: 8px;
+        }
+        table.form td {
+            border: 1px solid #4472C4;
+            border-top: none;
+            padding: 4px 6px;
+            vertical-align: top;
+            word-wrap: break-word;
+            font-size: 9px;
+        }
+        table.form-2 td { width: 50%; }
+        table.form-4 td { width: 25%; }
+        table.form-6 td { width: 16.6666%; }
+        table.form-8 td { width: 12.5%; font-size: 8px; padding: 3px 4px; }
+
+        .lbl { font-weight: bold; }
+        .lbl6 { font-weight: bold; }
+        .lbl8 { font-weight: bold; }
+
+        /* BLOCO "PESSOA" (destacado em azul) */
+        .pessoa-label {
+            background-color: #4472C4;
+            color: #ffffff;
+            font-weight: bold;
+            width: 18%;
+        }
+        .pessoa-value {
+            background-color: #D9E2F3;
+            color: #1f4e8c;
+            font-weight: bold;
+        }
+
+        /* CAIXA DE ESCOPO DO PROJETO */
+        .escopo-box {
+            border: 1px solid #4472C4;
+            border-top: none;
+            min-height: 4.20cm;
+            padding: 6px 8px;
+            white-space: pre-wrap;
+        }
+
+        /* RODAPÉ FIXO (repete em todas as páginas) */
+        .rodape-esq {
+            position: fixed;
+            bottom: 0.55cm;
+            left: 1.00cm;
+            font-size: 8.5px;
+            color: #1f4e8c;
+        }
+        .rodape-dir {
+            position: fixed;
+            bottom: 0.55cm;
+            right: 1.00cm;
+            font-size: 8.5px;
+            color: #1f4e8c;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="rodape-esq">www.wavegt.com.br</div>
+    <div class="rodape-dir">comercial@wavegt.com.br</div>
+
+    <!-- CABEÇALHO: LOGO + TÍTULO -->
+    <table class="cabecalho">
+        <tr>
+            <td class="col-logo"><img src="{$unidade_image}" alt="Logo"></td>
+            <td class="col-titulo">BREAFING {$id}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO PESSOA -->
+    <table class="form form-2">
+        <tr>
+            <td class="pessoa-label">Pessoa:</td>
+            <td class="pessoa-value">{$pessoa_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Analista Responsável:</td>
+            <td>{$pessoa_responsavel_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Necessidade Principal:</td>
+            <td>{$descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Indicação:</td>
+            <td>{$responsavel_nome}</td>
+        </tr>
+    </table>
+
+    <!-- RESPONSÁVEL PELA ANALISE DE REQUISITOS -->
+    <div class="hdr">RESPONSÁVEL PELA ANALISE DE REQUISITOS</div>
+    <table class="form form-2">
+        <tr>
+            <td><span class="bold">Nome:</span> {$responsavel_nome}</td>
+            <td><span class="bold">Fone:</span> {$responsavel_fone}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Cargo:</span> {$responsavel_cargo}</td>
+            <td><span class="bold">E-mail:</span> {$responsavel_email}</td>
+        </tr>
+    </table>
+
+    <!-- EMPRESA -->
+    <div class="hdr">EMPRESA</div>
+    <table class="form form-2">
+        <tr>
+            <td><span class="bold">Segmento:</span> {$empresa_segmento}</td>
+            <td><span class="bold">Faturamento Anual</span> {$empresa_fatur_anual}</td>
+        </tr>
+        <tr>
+            <td colspan="2"><span class="bold">Filiais:</span> {$empresa_filiais}</td>
+        </tr>
+    </table>
+
+    <!-- INFRAESTRUTURA -->
+    <div class="hdr">INFRAESTRUTURA</div>
+    <table class="form form-4">
+        <tr>
+            <td>{$infra_empresa}</td>
+            <td>{$infra_responsavel}</td>
+            <td>{$infra_telefone}</td>
+            <td>{$infra_email}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Servidor:</span> {$infra_vps}</td>
+            <td><span class="bold">Servidor OS:</span> {$infra_servidor}</td>
+            <td><span class="bold">Terminal Windows:</span> {$terminal_os_windows}</td>
+            <td><span class="bold">Terminal Linux:</span> {$terminal_os_linux}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Impressora Térmica:</span> {$impressora_termica}</td>
+            <td><span class="bold">Impressora Jato:</span> {$impressora_jato}</td>
+            <td><span class="bold">Impressora Laser:</span> {$impressora_laser}</td>
+            <td><span class="bold">Impressora Matricial:</span> {$impressora_matricial}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Impressora Fiscal:</span> {$impressora_fiscal}</td>
+            <td><span class="bold">Balança digital:</span> {$balanca_digital}</td>
+            <td><span class="bold">Pin pad (PDV):</span> {$pin_pad}</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Provedor:</span> {$infra_provedor}</td>
+            <td>Contato</td>
+            <td colspan="2">Responsável</td>
+        </tr>
+    </table>
+
+    <!-- SITE E LOGOMARCA -->
+    <div class="hdr">SITE E LOGOMARCA</div>
+    <table class="form form-4">
+        <tr>
+            <td colspan="3"><span class="bold">Domínio:</span> {$site_dominio}</td>
+            <td><span class="bold">Cor Próxima:</span> {$site_cor}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Logomarca:</span> {$site_logo}</td>
+            <td><span class="bold">Formulário Orçamento:</span> {$site_formulario_orc}</td>
+            <td><span class="bold">Formulário Contato:</span> {$site_formulario_contato}</td>
+            <td><span class="bold">Whatsapp Flutuante:</span> {$site_whatsapp}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Menu de produtos:</span> {$site_menu_produto}</td>
+            <td><span class="bold">Marcas que trabalha:</span> {$site_marca_trabalha}</td>
+            <td><span class="bold">Quem somos:</span> {$site_quem_somos}</td>
+            <td><span class="bold">Destacar Missão:</span> {$site_missao}</td>
+        </tr>
+        <tr>
+            <td>Menu de serviços:</td>
+            <td><span class="bold">Banners:</span> {$site_banner}</td>
+            <td><span class="bold">Destacar produto:</span> {$site_produto_destaque}</td>
+            <td><span class="bold">Google analytics:</span> {$site_analytics}</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="lbl">Provedor que hospeda</td>
+            <td>{$site_hospedagem}</td>
+            <td class="lbl">Responsável</td>
+            <td>{$site_responsavel}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Publico Alvo</td>
+            <td>{$site_publico}</td>
+            <td class="lbl">Estrutura do Menu</td>
+            <td>{$site_estrutura_menu}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Enviado Logomarca</td>
+            <td>{$site_envio_logo}</td>
+            <td class="lbl">Redes Sociais</td>
+            <td>{$site_redesocial}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Destacar</td>
+            <td>&nbsp;</td>
+            <td class="lbl">Detalhe do destaque</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="lbl">Telefone destaque</td>
+            <td>{$site_fone_destaque}</td>
+            <td class="lbl">Whatsapp destaque</td>
+            <td>{$site_whatsapp_destaque}</td>
+        </tr>
+    </table>
+
+    <!-- SEGURANÇA E INFORMAÇÃO -->
+    <div class="hdr">SEGURANÇA E INFORMAÇÃO</div>
+    <table class="form form-4">
+        <tr>
+            <td><span class="bold">Tipo de banco:</span> {$dados_banco}</td>
+            <td><span class="bold">Frequência</span> {$dados_frequencia}</td>
+            <td><span class="bold">Local:</span> {$dados_local}</td>
+            <td><span class="bold">Responsável:</span> {$dados_responsavel}</td>
+        </tr>
+        <tr>
+            <td colspan="4"><span class="bold">Converter:</span> {$dados_converter}</td>
+        </tr>
+        <tr>
+            <td colspan="2">Gerador de energia</td>
+            <td colspan="2">Energia fotovoltaica</td>
+        </tr>
+    </table>
+
+    <!-- MARKETING DIGITAL -->
+    <div class="hdr">MARKETING DIGITAL</div>
+    <table class="form form-4">
+        <tr>
+            <td><span class="bold">Empresa:</span> {$mark_digital_empresa}</td>
+            <td><span class="bold">Responsável:</span> {$mark_digital_responsavel}</td>
+            <td><span class="bold">Telefone:</span> {$mark_digital_fone}</td>
+            <td><span class="bold">E-mail:</span> {$mark_digital_email}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Trafego:</span> {$mark_digital_trafego}</td>
+            <td><span class="bold">Google:</span> {$mark_digital_google}</td>
+            <td><span class="bold">Instagram:</span> {$mark_digital_instagram}</td>
+            <td><span class="bold">Facebook:</span> {$mark_digital_facebook}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Whatsapp:</span> {$mark_digital_whatsapp}</td>
+            <td><span class="bold">Creativo:</span> {$mark_digital_creativo}</td>
+            <td colspan="2"><span class="bold">Email Marketing:</span> {$mark_digital_emailmarketing}</td>
+        </tr>
+    </table>
+
+    <!-- E-COMMERCE -->
+    <div class="hdr">E-COMMERCE</div>
+    <table class="form form-4">
+        <tr>
+            <td>{$ecommerce_empresa}</td>
+            <td>{$ecommerce_responsavel}</td>
+            <td>{$ecommerce_fone}</td>
+            <td>{$ecommerce_email}</td>
+        </tr>
+        <tr>
+            <td>Integração mkt:</td>
+            <td><span class="bold">Integração frete:</span> {$ecommerce_frete}</td>
+            <td>Integração retaguarda:</td>
+            <td>Gatway pagamento:</td>
+        </tr>
+        <tr>
+            <td>{$ecommerce_marketplace}</td>
+            <td>&nbsp;</td>
+            <td>{$ecommerce_retaguarda}</td>
+            <td>{$ecommerce_gatewaypgto}</td>
+        </tr>
+    </table>
+
+    <!-- SISTEMA ERP -->
+    <div class="hdr" style="margin-top: 3.00cm;">SISTEMA ERP</div>
+    <table class="form form-4">
+        <tr>
+            <td>{$gestao_empresa}</td>
+            <td>{$gestao_responsavel}</td>
+            <td><span class="bold">Telefone:</span> {$gestao_fone}</td>
+            <td><span class="bold">E-mail:</span> {$gestao_email}</td>
+        </tr>
+    </table>
+    <table class="form form-8">
+        <tr>
+            <td class="lbl8">Gestão de produtos</td><td>{$gestao_produto}</td>
+            <td class="lbl8">Gestão de serviços</td><td>{$gestao_servico}</td>
+            <td class="lbl8">Gestão de transportes</td><td>{$gestao_transporte}</td>
+            <td>&nbsp;</td><td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="lbl8">Gestão financeira</td><td>{$gestao_financeiro}</td>
+            <td class="lbl8">Gestão de faturamentos</td><td>{$gestao_faturamento}</td>
+            <td class="lbl8">Gestão de compra</td><td>{$gestao_compra}</td>
+            <td class="lbl8">Gestão de estoque</td><td>{$gestao_estoque}</td>
+        </tr>
+        <tr>
+            <td class="lbl8">Gestão Comercial</td><td>&nbsp;</td>
+            <td class="lbl8">Gestão de entradas</td><td>&nbsp;</td>
+            <td class="lbl8">Gestão Contábil</td><td>{$gestao_contabil}</td>
+            <td class="lbl8">Gestão de produção</td><td>{$gestao_pcp}</td>
+        </tr>
+        <tr>
+            <td class="lbl8">Gestão veicular</td><td>{$gestao_veiculo}</td>
+            <td class="lbl8">Gestão de contratos</td><td>{$gestao_contrato}</td>
+            <td class="lbl8">Gestão de indicadores</td><td>&nbsp;</td>
+            <td class="lbl8">Gestão de pdv</td><td>{$gestao_pdv}</td>
+        </tr>
+        <tr>
+            <td class="lbl8">Nf de produtos</td><td>{$gestao_nf_nfe}</td>
+            <td class="lbl8">Nf de serviços</td><td>{$gestao_nf_nfs}</td>
+            <td class="lbl8">Nf de transporte</td><td>{$gestao_nf_cte}</td>
+            <td class="lbl8">Nf consumidor</td><td>{$gestao_nf_ce}</td>
+        </tr>
+        <tr>
+            <td class="lbl8">Tempo de serviços</td><td>{$gestao_servico_tempo}</td>
+            <td class="lbl8">Emissão de boletos</td><td>{$gestao_boleto}</td>
+            <td>&nbsp;</td><td>&nbsp;</td>
+            <td>&nbsp;</td><td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="lbl8">Gestão de documentos</td><td>{$gestao_documento}</td>
+            <td class="lbl8">Gestão de imoveis</td><td>{$gestao_imovel}</td>
+            <td class="lbl8">Gestão juridica</td><td>{$gestao_juridica}</td>
+            <td>&nbsp;</td><td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="lbl8">Integração Envia Peças</td><td>{$gestao_enviapecas}</td>
+            <td class="lbl8">Integração Intelipost</td><td>{$gestao_interlipost}</td>
+            <td class="lbl8">Integração Anymarket</td><td>{$gestao_anymarketing}</td>
+            <td class="lbl8">Integração buscaplaca</td><td>{$gestao_buscaplaca}</td>
+        </tr>
+        <tr>
+            <td class="lbl8">Outras integrações</td><td>{$gestao_integracao}</td>
+            <td class="lbl8">Usuários</td><td>{$gestao_numusuario}</td>
+            <td class="lbl8">Número de Nfs</td><td>{$gestao_numnfe}</td>
+            <td class="lbl8">Número de boletos</td><td>{$gestao_numboleto}</td>
+        </tr>
+    </table>
+
+    <!-- CONTABILIDADE -->
+    <div class="hdr">CONTABILIDADE</div>
+    <table class="form form-4">
+        <tr>
+            <td>{$contabilidade_empresa}</td>
+            <td><span class="bold">Responsável:</span> {$contabilidade_responsavel}</td>
+            <td>{$contabilidade_telefone}</td>
+            <td>{$contabilidade_email}</td>
+        </tr>
+        <tr>
+            <td><span class="bold">Transmissão Sped</span> {$transmissao_sped}</td>
+            <td><span class="bold">Transmissão Contabil</span> {$transmissao_contabel}</td>
+            <td colspan="2"><span class="bold">Transmissão (outras)</span> {$transmissao_outro}</td>
+        </tr>
+    </table>
+
+    <!-- CONSULTORIA GESTÃO -->
+    <div class="hdr">CONSULTORIA GESTÃO</div>
+    <table class="form form-4">
+        <tr>
+            <td>{$consultoria_empresa}</td>
+            <td><span class="bold">Responsável:</span> {$consultoria_responsavel}</td>
+            <td>{$consultoria_telefone}</td>
+            <td>{$consultoria_email}</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+
+    <!-- APLICATIVO MOBILE / FORÇA DE VENDAS -->
+    <div class="hdr">APLICATIVO MOBILE / FORÇA DE VENDAS</div>
+    <table class="form form-4">
+        <tr>
+            <td class="lbl">Android</td>
+            <td>{$app_android}</td>
+            <td class="lbl">IOS</td>
+            <td>{$app_ios}</td>
+        </tr>
+    </table>
+
+    <!-- RECURSOS HUMANOS -->
+    <div class="hdr">RECURSOS HUMANOS</div>
+    <table class="form form-4">
+        <tr>
+            <td>{$rh_empresa}</td>
+            <td>{$rh_responsavel}</td>
+            <td>{$rh_telefone}</td>
+            <td>{$rh_email}</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="lbl">Perfil comportamental</td>
+            <td colspan="3">{$rh_perfilcomportamental}</td>
+        </tr>
+    </table>
+
+    <!-- DEMONSTRAÇÃO -->
+    <div class="hdr">DEMONSTRAÇÃO</div>
+    <table class="form form-4">
+        <tr>
+            <td class="lbl">Pessoas</td>
+            <td colspan="3">{$demonst_pessoas}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Cargos</td>
+            <td colspan="3">{$demonst_cargos}</td>
+        </tr>
+    </table>
+    <table class="form form-6">
+        <tr>
+            <td class="lbl6">Data:</td>
+            <td>{$demonst_data}</td>
+            <td class="lbl6">Loco / Remoto</td>
+            <td>{$demonst_loco_remoto}</td>
+            <td class="lbl6">Intervalo</td>
+            <td>{$demonst_intervalo}</td>
+        </tr>
+    </table>
+
+    <!-- ORÇAMENTO -->
+    <div class="hdr">ORÇAMENTO</div>
+
+    <div class="cat-row">Sistema de gestão ERP</div>
+    <table class="form form-6">
+        <tr>
+            <td class="lbl6">Implantação</td><td>{$valor_implant_gestao}</td>
+            <td class="lbl6">Deslocamento</td><td>{$valor_desloc_gestao}</td>
+            <td class="lbl6">Manutenção</td><td>{$valor_manut_gestao}</td>
+        </tr>
+        <tr>
+            <td class="lbl6">Conversão</td><td>{$valor_conver_gestao}</td>
+            <td class="lbl6">Desenvolvimento</td><td>{$valor_desenv_gestao}</td>
+            <td class="lbl6">Previsão de entrega</td><td>{$implant_data_gestao}</td>
+        </tr>
+    </table>
+
+    <div class="cat-row">Site</div>
+    <table class="form form-6">
+        <tr>
+            <td class="lbl6">Implantação</td><td>{$valor_implant_site}</td>
+            <td class="lbl6">Deslocamento</td><td>{$valor_desloc_site}</td>
+            <td class="lbl6">Manutenção</td><td>{$valor_manut_site}</td>
+        </tr>
+        <tr>
+            <td class="lbl6">Conversão</td><td>{$valor_conver_site}</td>
+            <td class="lbl6">Desenvolvimento</td><td>{$valor_desenv_site}</td>
+            <td class="lbl6">Previsão de entrega</td><td>{$implant_data_site}</td>
+        </tr>
+    </table>
+
+    <div class="cat-row">Aplicativo Mobile</div>
+    <table class="form form-6">
+        <tr>
+            <td class="lbl6">Implantação</td><td>{$valor_implant_app}</td>
+            <td class="lbl6">Deslocamento</td><td>{$valor_desloc_app}</td>
+            <td class="lbl6">Manutenção</td><td>{$valor_manut_app}</td>
+        </tr>
+        <tr>
+            <td class="lbl6">Conversão</td><td>{$valor_conver_app}</td>
+            <td class="lbl6">Desenvolvimento</td><td>{$valor_desenv_app}</td>
+            <td class="lbl6">Previsão de entrega</td><td>{$implant_data_app}</td>
+        </tr>
+    </table>
+
+    <!-- OBS: nomes de variaveis de Deslocamento/Conversao trocados entre si aqui de proposito,
+         replicando exatamente a inconsistencia ja existente no PDF original -->
+    <div class="cat-row">Projeto Personalizado</div>
+    <table class="form form-6">
+        <tr>
+            <td class="lbl6">Implantação</td><td>{$valor_implant_projeto}</td>
+            <td class="lbl6">Deslocamento</td><td>{$valor_conver_projeto}</td>
+            <td class="lbl6">Manutenção</td><td>{$valor_manut_projeto}</td>
+        </tr>
+        <tr>
+            <td class="lbl6">Conversão</td><td>{$valor_desloc_projeto}</td>
+            <td class="lbl6">Desenvolvimento</td><td>{$valor_desenv_projeto}</td>
+            <td class="lbl6">Previsão de entrega</td><td>{$implant_data_projeto}</td>
+        </tr>
+    </table>
+
+    <!-- OBS: "Conversão" usa a mesma variavel valor_desloc_trafego (nao existe valor_conver_trafego
+         no PDF original) - replicado exatamente como esta na fonte -->
+    <div class="cat-row">Trafego pago, Google e mídia social</div>
+    <table class="form form-6">
+        <tr>
+            <td class="lbl6">Implantação</td><td>{$valor_implant_trafego}</td>
+            <td class="lbl6">Deslocamento</td><td>{$valor_desloc_trafego}</td>
+            <td class="lbl6">Manutenção</td><td>{$valor_manut_trafego}</td>
+        </tr>
+        <tr>
+            <td class="lbl6">Conversão</td><td>{$valor_desloc_trafego}</td>
+            <td class="lbl6">Desenvolvimento</td><td>{$valor_desenv_trafego}</td>
+            <td class="lbl6">Previsão de entrega</td><td>{$implant_data_trafego}</td>
+        </tr>
+    </table>
+
+    <div class="cat-row">Persona e Logomarca</div>
+    <table class="form form-6">
+        <tr>
+            <td class="lbl6">Implantação</td><td>{$valor_implant_logo}</td>
+            <td class="lbl6">Deslocamento</td><td>{$valor_desloc_logo}</td>
+            <td class="lbl6">Manutenção</td><td>{$valor_manut_logo}</td>
+        </tr>
+        <tr>
+            <td class="lbl6">Conversão</td><td>{$valor_conver_logo}</td>
+            <td class="lbl6">Desenvolvimento</td><td>{$valor_desenv_logo}</td>
+            <td class="lbl6">Previsão de entrega</td><td>{$implant_data_logo}</td>
+        </tr>
+    </table>
+
+    <div class="cat-row">Dashboard ou relatório personalizado</div>
+    <table class="form form-6">
+        <tr>
+            <td class="lbl6">Implantação</td><td>{$valor_implant_bi}</td>
+            <td class="lbl6">Deslocamento</td><td>{$valor_desloc_bi}</td>
+            <td class="lbl6">Manutenção</td><td>{$valor_manut_bi}</td>
+        </tr>
+        <tr>
+            <td class="lbl6">Conversão</td><td>{$valor_conver_bi}</td>
+            <td class="lbl6">Desenvolvimento</td><td>{$valor_desenv_bi}</td>
+            <td class="lbl6">Previsão de entrega</td><td>{$implant_data_bi}</td>
+        </tr>
+    </table>
+
+    <!-- ESCOPO DO PROJETO -->
+    <div class="hdr">ESCOPO DO PROJETO</div>
+    <div class="escopo-box">{$detalhe}</div>
+
+</body>
+</html>
+<!--[/main]-->
