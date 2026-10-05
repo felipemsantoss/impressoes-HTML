@@ -1,0 +1,290 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Espelho DANFE</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL NO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important; /* CORREÇÃO DOMPDF */
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS EXATAS DO SEU PRINT (RETRATO) */
+        @page {
+            size: 21.00cm 29.70cm; /* Tamanho físico A4 em pé */
+            margin: 1.00cm; /* Margens de 1.00cm conforme configurado no LibreOffice */
+        }
+
+        /* RESET E FONTES PADRONIZADAS EM 9PX */
+        body {
+            font-size: 9px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* RODAPÉ REAL E REPETÍVEL (ESTILO LIBREOFFICE) */
+        .footer {
+            position: fixed;
+            bottom: -35px;
+            left: 0px;
+            right: 0px;
+            height: 15px;
+            text-align: right;
+            font-size: 7.5px;
+            color: #7f8c8d;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 4px;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-prod- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS - CORREÇÃO DE COLAPSO DO DOMPDF */
+        table {
+            width: 100%;
+            border-collapse: separate !important; /* CORREÇÃO DOMPDF */
+            border-spacing: 0 !important; /* CORREÇÃO DOMPDF */
+            table-layout: fixed;
+            margin-bottom: 5px;
+        }
+        
+        td, th {
+            vertical-align: middle;
+            padding: 2px 3px;
+            word-wrap: break-word;
+            line-height: 1.15;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* AUXILIAR PARA TABELAS INTERNAS SEM BORDA (ALINHAMENTO DE IMPOSTOS) */
+        .inner-cell-table {
+            width: 100%;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            margin-bottom: 0 !important;
+            border: none !important;
+        }
+        .inner-cell-table td {
+            border: none !important;
+            padding: 1px 2px !important;
+        }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) - TRATAMENTO DE BORDAS SEPARATE */
+        .grid-table, .items-table {
+            border-top: 1px solid #dce4ec;
+            border-left: 1px solid #dce4ec;
+        }
+        .grid-table td, .grid-table th, .items-table td, .items-table th {
+            border-right: 1px solid #dce4ec;
+            border-bottom: 1px solid #dce4ec;
+        }
+        
+        /* CABEÇALHOS */
+        .section-header {
+            background-color: #f4f6f8;
+            color: #2c3e50;
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 3px 4px;
+        }
+
+        .lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-size: 9px;
+            font-weight: bold;
+        }
+        .val {
+            color: #111111;
+        }
+
+        /* TABELAS DE ITENS (PRODUTOS) */
+        .items-table th {
+            background-color: #2c3e50;
+            color: #ffffff;
+            font-size: 8px;
+            text-transform: uppercase;
+            border: 1px solid #2c3e50;
+            padding: 3px 2px;
+        }
+        .items-table td {
+            padding: 2px 3px;
+            font-size: 8px;
+        }
+        .items-table tfoot td {
+            background-color: #f4f6f8;
+            font-weight: bold;
+            padding: 3px 4px;
+            font-size: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- RODAPÉ FIXO -->
+    <div class="footer">
+        Impresso em: <span class="bold">{$data_hoje}</span>
+    </div>
+
+    <!-- CABEÇALHO DO DOCUMENTO -->
+    <table class="grid-table" style="margin-bottom: 6px;">
+        <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+        </colgroup>
+        <tr>
+            <td style="width: 50%; padding: 4px; vertical-align: top;">
+                <div style="font-size: 8px; font-weight: bold; color: #555555; text-transform: uppercase;">Emitente</div>
+                <div style="font-size: 11px; font-weight: bold; color: #2c3e50; margin-top: 2px;">{$pessoa_unidade_descricao}</div>
+                <div style="color: #666666; font-size: 8.5px; margin-top: 1px;">
+                    CNPJ: {$pessoa_unidade_cpf_cnpj} &bull; Fone: {$pessoa_unidade_fone1} &bull; E-mail: {$pessoa_unidade_email}
+                </div>
+            </td>
+            <td style="width: 50%; padding: 4px; text-align: right; border-left: 2px solid #2c3e50 !important; vertical-align: top;">
+                <div style="font-size: 11px; font-weight: bold; color: #7f8c8d; text-transform: uppercase;">Espelho DANFE</div>
+                <div style="font-size: 18px; font-weight: bold; color: #2c3e50; margin-top: 1px;">id - {$id}</div>
+                <div style="font-size: 14px; font-weight: bold; color: #2c3e50; margin-top: 1px;">Nº - {$codigo}</div>
+                <div style="font-size: 14px; font-weight: bold; color: #2c3e50; margin-top: 1px;">Pedido - {$cod_interno}</div>
+                <div style="color: #666666; font-size: 8.5px; margin-top: 1px;">
+                    Cadastro: {$cadastro} &bull; Tipo: {$tipo}
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 1: DADOS DO CLIENTE E OPERAÇÃO (4 Colunas cravadas) -->
+    <table class="grid-table">
+        <colgroup>
+            <col style="width: 18%;">
+            <col style="width: 32%;">
+            <col style="width: 18%;">
+            <col style="width: 32%;">
+        </colgroup>
+        <tr>
+            <td class="lbl" style="width: 18%;">Pessoa:</td>
+            <td class="val" style="width: 32%;"><span class="bold">{$pessoa_id} - {$pessoa_descricao}</span></td>
+            <td class="lbl" style="width: 18%;">Operação:</td>
+            <td class="val" style="width: 32%;">{$fatur_operacao_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Cnpj/Cpf:</td>
+            <td class="val">{$pessoa_cpf_cnpj}</td>
+            <td class="lbl">Ie:</td>
+            <td class="val">{$pessoa_pj_inscricao_estadual}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Telefone / E-mail:</td>
+            <td class="val">{$pessoa_fone1} &bull; {$pessoa_email}</td>
+            <td class="lbl">Vendedor:</td>
+            <td class="val">{$pessoa_responsavel_id} - {$pessoa_responsavel_descricao}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Endereço:</td>
+            <td class="val" colspan="3">{$logradouro} {$numero} {$complemento} {$bairro} &bull; <span class="bold">Cidade/UF:</span> {$local_municipio_descricao} / {$local_uf_descricao}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 3: LOGÍSTICA E PESOS (SEM VALORES) -->
+    <table class="grid-table" style="margin-bottom: 5px;">
+        <colgroup>
+            <col style="width: 18%;">
+            <col style="width: 32%;">
+            <col style="width: 18%;">
+            <col style="width: 32%;">
+        </colgroup>
+        <tr>
+            <td class="lbl" style="width: 18%;">Transportador:</td>
+            <td class="val" style="width: 32%;">{$pessoa_transportadora_descricao}</td>
+            <td class="lbl" style="width: 18%;">Tipo de Frete:</td>
+            <td class="val" style="width: 32%;">{$frete}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Volumes / Espécie:</td>
+            <td class="val">{$volume_qtde} &bull; {$volume_especie}</td>
+            <td class="lbl">Pesos (Bruto/Líq.):</td>
+            <td class="val">B: {$volume_peso_bruto} &bull; L: {$volume_peso_liquido}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Prazo Pagamento:</td>
+            <td class="val" colspan="3">{$financ_prazao_pgto_descricao}</td>
+        </tr>
+    </table>
+
+    <!-- BLOCO 4: ITENS DO FATURAMENTO (PRODUTOS) - SÓ QUANTIDADE E UNIDADE -->
+    <table class="items-table" style="margin-bottom: 5px;">
+        <colgroup>
+            <col style="width: 10%;">
+            <col style="width: 66%;">
+            <col style="width: 12%;">
+            <col style="width: 12%;">
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 10%;">Cód</th>
+                <th class="text-left" style="width: 66%;">Produto</th>
+                <th class="text-center" style="width: 12%;">Qtd</th>
+                <th class="text-center" style="width: 12%;">Und</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--[produtos]-->
+            <tr class="linha-prod-{$produto_id}">
+                <td class="text-center">{$produto_id}</td>
+                <td>
+                    <span class="bold">{$produto_descricao}</span>
+                </td>
+                <td class="text-center">{$qtde}</td>
+                <td class="text-center">{$sigla}</td>
+            </tr>
+            <!--[/produtos]-->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" class="text-right bold">T. Itens:</td>
+                <td class="text-center">{$qtde_sum}</td>
+                <td>&nbsp;</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- BLOCO 5: JUSTIFICATIVA -->
+    <table class="grid-table" style="margin-bottom: 0px;">
+        <colgroup>
+            <col style="width: 18%;">
+            <col style="width: 82%;">
+        </colgroup>
+        <tr>
+            <td class="lbl" style="width: 18%;">Justificativa:</td>
+            <td class="val" style="width: 82%;">{$complementar} {$justificativa}</td>
+        </tr>
+    </table>
+
+    <!-- ASSINATURA DO CLIENTE -->
+    <table style="margin-top: 50px; page-break-inside: avoid;">
+        <colgroup>
+            <col style="width: 25%;">
+            <col style="width: 50%;">
+            <col style="width: 25%;">
+        </colgroup>
+        <tr>
+            <td>&nbsp;</td>
+            <td class="text-center" style="border-top: 1px solid #333333; padding-top: 4px; font-size: 9px;">
+                <span class="bold">{$pessoa_descricao}</span>
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->
