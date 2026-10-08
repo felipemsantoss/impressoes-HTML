@@ -2,16 +2,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <!-- DECLARAÇÃO DUPLA COMPATÍVEL COM TODAS AS VERSÕES DO DOMPDF PARA FORÇAR UTF-8 -->
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="UTF-8">
-    <title>Proposta</title>
+    <title>Proposta de Venda</title>
     <style>
         /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL E CORREÇÃO DOMPDF */
         * {
             font-family: Arial, Helvetica, sans-serif !important;
             box-sizing: border-box !important; /* CORREÇÃO DOMPDF */
-            
         }
 
         /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO (PORTRAIT) */
@@ -22,7 +19,7 @@
 
         /* RESET E FONTES PADRONIZADAS EM 9PX */
         body {
-            font-size: 9px;
+            font-size: 10px;
             color: #333333;
             margin: 0;
             padding: 0;
@@ -36,13 +33,13 @@
             right: 0px;
             height: 15px;
             text-align: right;
-            font-size: 8px;
+            font-size: 10px;
             color: #7f8c8d;
             border-top: 1px dashed #e2e8f0;
             padding-top: 4px;
         }
 
-        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE DO DOMPDF */
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
         .linha-prod- { display: none !important; }
         .linha-parc- { display: none !important; }
 
@@ -92,7 +89,7 @@
         .lbl {
             background-color: #fbfcfd;
             color: #555555;
-            font-size: 8px;
+            font-size: 10px;
             font-weight: bold;
         }
         .val {
@@ -103,7 +100,7 @@
         .lbl-grid {
             background-color: #fbfcfd;
             color: #555555;
-            font-size: 8px;
+            font-size: 10px;
             font-weight: bold;
         }
         .val-grid {
@@ -114,31 +111,31 @@
         .items-table th {
             background-color: #2c3e50;
             color: #ffffff;
-            font-size: 9px;
+            font-size: 10px;
             text-transform: uppercase;
         }
         .items-table td {
             padding: 3px 4px;
-            font-size: 8px;
+            font-size: 10px;
         }
         .items-table tfoot td {
             background-color: #f4f6f8;
             font-weight: bold;
-            font-size: 9px;
+            font-size: 10px;
         }
 
         /* ESTILO DO TOTAL GERAL DA NOTA EM DESTAQUE E CENTRALIZADO */
         .total-lbl {
             background-color: #2c3e50 !important;
             color: #ffffff !important;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: bold;
             text-align: center !important;
         }
         .total-val {
             background-color: #2c3e50 !important;
             color: #ffffff !important;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: bold;
             text-align: right !important;
         }
@@ -146,11 +143,6 @@
         /* CORREÇÃO PARA INTERPRETAR QUEBRAS DE LINHA DO TEXTAREA NO DOMPDF */
         .preservar-linhas {
             white-space: pre-wrap !important;
-        }
-
-        /* EVITA QUE O BLOCO DE OBSERVAÇÃO SE SEPARE ENTRE PÁGINAS */
-        .observacao-container {
-            page-break-inside: avoid !important;
         }
     </style>
 </head>
@@ -226,9 +218,15 @@
             <td class="lbl-grid">Telefone:</td>
             <td class="val-grid">{$pessoa_fone1} {$pessoa_fone2}</td>
             <td class="lbl-grid">Veículo:</td>
-            <td class="val-grid" style="font-size: 8.5px;">
+            <td class="val-grid" style="font-size: 10px;">
                 <span class="bold">{$veiculo_marca_descricao} – {$veiculo_modelo_descricao} - {$veiculo_placa} - Km – {$veiculo_km_atual}</span>
             </td>
+        </tr>
+        <tr>
+            <td class="lbl-grid">Contato:</td>
+            <td class="val-grid">{$contato} {$contato_fone}</td>
+            <td class="lbl-grid">Contato E-mail:</td>
+            <td class="val-grid">{$contato_email}</td>
         </tr>
         <tr>
             <td class="lbl-grid">E-mail:</td>
@@ -281,7 +279,7 @@
             <!--[produtos]-->
             <tr class="linha-prod-{$produto_id}">
                 <td class="text-center">{$produto_id}</td>
-                <td><span class="bold">{$produto_descricao}</span> <span style="color: #7f8c8d; font-size: 8px;">{$produto_complemento}</span></td>
+                <td><span class="bold">{$produto_descricao}</span> <span style="color: #7f8c8d; font-size: 10px;">{$produto_complemento}</span></td>
                 <td class="text-center bold">{$qtde}</td>
                 <td class="text-center">{$sigla}</td>
                 <td class="text-right">{$preco}</td>
@@ -378,22 +376,16 @@
         </tbody>
     </table>
 
-    <!-- BLOCO 6: OBSERVAÇÕES (Envolvido em container que evita quebras de página órfãs) -->
-    <div class="observacao-container">
-        <table class="grid-table" style="margin-top: 15px; margin-bottom: 5px;">
-            <thead>
-                <tr>
-                    <th class="section-header" style="text-align: left;">Observação</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <!-- Escrito sem quebras de linha adicionais no código para preservar margens -->
-                    <td class="preservar-linhas" style="min-height: 25px; vertical-align: top; font-size: 8.5px; line-height: 1.3; padding: 4px 6px;">{$obs1}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <!-- BLOCO 6: OBSERVAÇÕES (Com a tag de fechamento encostada no código-fonte) -->
+    <table class="grid-table" style="margin-top: 15px; margin-bottom: 5px;">
+        <tr>
+            <td class="section-header">Observação</td>
+        </tr>
+        <tr>
+            <!-- Escrito sem quebras de linha ou recuos no código-fonte para preservar margens -->
+            <td class="preservar-linhas" style="min-height: 25px; vertical-align: top; font-size: 10px; line-height: 1.3; padding: 4px 6px;">{$obs1}</td>
+        </tr>
+    </table>
 
 </body>
 </html>
