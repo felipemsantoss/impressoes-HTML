@@ -1,0 +1,136 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Termo Aditivo</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CONFIGURAÇÃO DAS MARGENS FÍSICAS DA FOLHA A4 RETRATO */
+        @page {
+            size: A4 portrait;
+            margin: 2.00cm 1.50cm;
+        }
+
+        body {
+            font-size: 12px;
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.45;
+            background-color: #ffffff;
+        }
+
+        .text-justify {
+            text-align: justify;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        p {
+            margin: 0 0 10px 0;
+        }
+
+        /* NUMERO DA PAGINA CENTRALIZADO NO RODAPE (igual ao Word) */
+        .rodape-pagina {
+            position: fixed;
+            bottom: -1.20cm;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 10px;
+            color: #555555;
+        }
+        .rodape-pagina .numero:after {
+            content: counter(page);
+        }
+
+        /* ASSINATURAS NAO PODEM QUEBRAR ENTRE PAGINAS */
+        .assinaturas {
+            page-break-inside: avoid;
+        }
+        .assinaturas p {
+            margin: 0;
+        }
+
+        /* TRECHO DO WORD QUE AINDA NAO TEM VARIAVEL NO SISTEMA */
+        .pendente {
+            background-color: #fff200;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="rodape-pagina"><span class="numero"></span></div>
+
+    <!-- CABEÇALHO DA MARCA (Alinhado à Direita) -->
+    <div style="text-align: right; margin-bottom: 15px;">
+        <img src="{$unidade_image}" style="max-height: 35px;" alt="Logo">
+    </div>
+
+    <!-- TÍTULO -->
+    <div class="bold text-center" style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+        TERMO ADITIVO AO CONTRATO DE LOCAÇÃO
+    </div>
+    <div class="text-center" style="margin-bottom: 20px;">
+        (Substituição de Garantia Locatícia – Fiança CREDBEE)
+    </div>
+
+    <div class="text-justify">
+
+        <!-- QUALIFICAÇÃO DAS PARTES (base: bi_fatur_contrato)
+             LOCATÁRIO = pessoa (pessoa_descricao / pes_*) | IMOBILIÁRIA = parceiro (pes_parc_*)
+             FIADORA = texto fixo da Credbee, igual ao Word.
+             .pendente = texto do Word cuja variavel ainda nao existe (locador nao existe no sistema) -->
+        <p>Por este Termo Aditivo ao Contrato de Locação, de um lado, <span class="bold pendente">[NOME COMPLETO DO LOCADOR]</span>, <span class="pendente">[nacionalidade]</span>, <span class="pendente">[estado civil]</span>, <span class="pendente">[profissão]</span>, portador(a) da cédula de identidade RG nº <span class="pendente">[número]</span> <span class="pendente">[órgão expedidor/UF]</span>, inscrito(a) no CPF sob o nº <span class="pendente">[número]</span>, residente e domiciliado(a) na <span class="pendente">[endereço completo]</span>, doravante denominado LOCADOR, neste ato representado por sua bastante procuradora, a empresa <span class="bold">{$pessoa_parceiro_descricao}</span>, pessoa jurídica de direito privado, inscrita no CNPJ sob o nº {$pes_parc_cpf_cnpj}, CRECI <span class="pendente">[número]</span>, com sede na {$pes_parc_logradouro}, {$pes_parc_numero} {$pes_parc_complemento} - {$pes_parc_bairro} - {$pes_parc_local_municipio_descricao} - {$pes_parc_local_uf_sigla} - CEP: {$pes_parc_end_cep}; de outro lado, <span class="bold">{$pessoa_descricao}</span>, {$pes_nacionalidade}, <span class="pendente">[estado civil]</span>, {$pes_pessoa_profissao_descricao}, portador(a) da cédula de identidade RG nº {$pes_pf_rg}, inscrito(a) no CPF sob o nº {$pes_cpf_cnpj}, residente e domiciliado(a) na {$pes_logradouro}, {$pes_numero} {$pes_complemento} - {$pes_bairro} - {$pes_local_municipio_descricao} - {$pes_local_uf_sigla} - CEP: {$pes_end_cep}, doravante denominado LOCATÁRIO; e, na qualidade de fiadora, <span class="bold">CREDBEE SERVIÇOS DE COBRANÇA LTDA</span>, pessoa jurídica de direito privado, inscrita no CNPJ sob o nº 25.275.514/0001-80, com sede na Av. Brasil, 5566, Maringá-PR, doravante denominada FIADORA; todos qualificados no contrato de locação do imóvel <span class="bold"><!--[imoveis]-->{$logradouro}, {$numero} {$complemento} - {$bairro} - {$local_municipio_descricao} - {$local_uf_sigla} - CEP: {$cep} ({$imovel_tipo_descricao} - {$imovel_subtipo_descricao})<!--[/imoveis]--></span>, celebrado em <span class="pendente">[data]</span>, doravante denominado CONTRATO, resolvem de comum acordo alterar a garantia locatícia do CONTRATO, mediante as seguintes cláusulas:</p>
+
+        <!-- CLÁUSULA PRIMEIRA -->
+        <p style="margin-top: 15px;"><span class="bold">CLÁUSULA PRIMEIRA – DA SUBSTITUIÇÃO DA GARANTIA:</span> A garantia locatícia até então prestada por <span class="bold pendente">[NOME DA GARANTIA ANTERIOR / FIADOR ANTERIOR]</span> é substituída, a partir de <span class="bold">{$inicio}</span>, pela fiança prestada pela FIADORA, que passa a responder pelas obrigações do LOCATÁRIO previstas no CONTRATO, nos termos e limites deste Termo Aditivo.</p>
+
+        <!-- CLÁUSULA SEGUNDA -->
+        <p style="margin-top: 15px;"><span class="bold">CLÁUSULA SEGUNDA – DA FIANÇA CREDBEE:</span> O Locatário realizou a contratação da CredBee Serviços de Cobrança Ltda., pessoa jurídica de direito privado, inscrita no CNPJ sob n. 25.275.514/0001-80, com sede à Av. Guaíra, nº 140, Maringá - Pr, a qual, se compromete a efetuar o pagamento de eventuais débitos relativos ao aluguel e demais encargos da presente locação que venham a ser inadimplidos pelo Locatário, conforme condições e limitações constantes nos TERMOS E CONDIÇÕES DOS SERVIÇOS CREDBEE, que integram o presente Contrato como ANEXO I.</p>
+        <p><span class="bold">Parágrafo Primeiro.</span> As Partes declaram expressamente que estão cientes de todas as condições e limitações relativos à fiança prestada pela CredBee, notadamente no tocante: (i) ao valor máximo de sua responsabilidade; (ii) às limitações de sua responsabilidade; (iii) ao prazo de sua vigência; (iv) às condições para sua renovação; e (v) às hipóteses de sua exoneração.</p>
+        <p><span class="bold">Parágrafo Segundo.</span> O Locatário declara expressamente, ainda, que está ciente que em caso de exoneração da CredBee da condição de fiadora, caberá a ele promover no prazo máximo de 30 (trinta) dias a substituição da garantia locatícia prestada, sob pena de infração contratual e ajuizamentos da competente ação de despejo.</p>
+        <p><span class="bold">Parágrafo Terceiro.</span> A imobiliária ou interessado deverá providenciar a contratação do seguro obrigatório, nos moldes pactuados (art. 22, VIII, da Lei 8.245/91), devendo a imobiliária promover o envio da respectiva apólice através de inserção na plataforma digital da CredBee, sob pena de não cobertura de eventuais sinistros.</p>
+
+        <!-- CLÁUSULA TERCEIRA -->
+        <p style="margin-top: 15px;"><span class="bold">CLÁUSULA TERCEIRA – DO VALOR DO ALUGUEL:</span> O valor do aluguel mensal do imóvel passa a ser de <span class="bold">R$ {$valor_aluguel}</span> <span class="bold pendente">([valor por extenso])</span>, a partir de <span class="bold">{$inicio}</span>, acrescido dos encargos previstos no CONTRATO.</p>
+
+        <!-- CLÁUSULA QUARTA -->
+        <p style="margin-top: 15px;"><span class="bold">CLÁUSULA QUARTA – DAS DEMAIS CLÁUSULAS:</span> Permanecem inalteradas as demais cláusulas e condições do CONTRATO não alteradas pelo presente Termo Aditivo, que as partes ratificam.</p>
+
+        <p style="margin-top: 15px;">E, por estarem assim justos e contratados, assinam o presente Instrumento em 3 (três) vias de igual teor e forma, na presença de duas testemunhas, admitida a assinatura eletrônica em qualquer das modalidades previstas em lei, hipótese em que ficam dispensadas as testemunhas, nos termos do art. 784, §4º, do Código de Processo Civil.</p>
+
+        <p style="margin-top: 15px; margin-bottom: 40px;">Maringá-PR, <span class="bold">{$cadastro}</span>.</p>
+    </div>
+
+    <!-- ASSINATURAS -->
+    <div class="assinaturas">
+        <p>_______________________________________________</p>
+        <p class="bold">LOCADOR: <span class="pendente">[NOME COMPLETO DO LOCADOR]</span></p>
+        <p>Representado por sua procuradora {$pessoa_parceiro_descricao}</p>
+
+        <p style="margin-top: 40px;">_______________________________________________</p>
+        <p class="bold">LOCATÁRIO: {$pessoa_descricao}</p>
+
+        <p class="bold" style="margin-top: 40px;">TESTEMUNHAS:</p>
+        <p style="margin-top: 30px;">1. _______________________________________________</p>
+        <p>Nome: {$testemunha_1_nome} &nbsp;&nbsp; CPF: {$testemunha_1_cpf}</p>
+        <p style="margin-top: 30px;">2. _______________________________________________</p>
+        <p>Nome: {$testemunha_2_nome} &nbsp;&nbsp; CPF: {$testemunha_2_cpf}</p>
+    </div>
+
+</body>
+</html>
+<!--[/main]-->
