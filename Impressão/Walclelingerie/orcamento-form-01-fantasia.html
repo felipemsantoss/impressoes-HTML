@@ -110,6 +110,17 @@
             padding: 3px 4px;
         }
 
+        /* AJUSTE ESPECÍFICO PARA A TABELA DE PRODUTOS / SERVIÇOS (AUMENTO DE FONTE) */
+        .prod-table th {
+            font-size: 11px;
+        }
+        .prod-table td {
+            font-size: 11px;
+        }
+        .prod-table tfoot td {
+            font-size: 11px;
+        }
+
         .total-row td {
             background-color: #2c3e50 !important;
             color: #ffffff !important;
@@ -202,8 +213,20 @@
         </tr>
     </table>
 
+    <!-- PARTICIPANTES -->
+    <table class="grid-table">
+        <tr>
+            <td class="section-header">Participantes</td>
+        </tr>
+        <!--[participantes]-->
+        <tr>
+            <td class="val" style="padding: 4px;">&bull; {$pessoa_descricao_participante}</td>
+        </tr>
+        <!--[/participantes]-->
+    </table>
+
     <!-- BLOCO 3: ITENS DA PROPOSTA (PRODUTOS) -->
-    <table class="items-table" style="margin-bottom: 6px;">
+    <table class="items-table prod-table" style="margin-bottom: 6px;">
         <thead>
             <tr>
                 <th class="text-center" style="width: 8%;">Código</th>
@@ -218,7 +241,7 @@
             <!--[produtos]-->
             <tr class="linha-prod-{$produto_id}">
                 <td class="text-center">{$produto_id}</td>
-                <td><span class="bold">{$produto_descricao}</span> <span style="color: #7f8c8d; font-size: 8px;">{$produto_referencia_descricao}</span></td>
+                <td><span class="bold">{$produto_descricao}</span> <span style="color: #7f8c8d; font-size: 9px;">{$produto_referencia_descricao}</span></td>
                 <td class="text-center">{$qtde}</td>
                 <td class="text-center">{$sigla}</td>
                 <td class="text-right nowrap">{$preco}</td>
@@ -237,7 +260,7 @@
     </table>
 
     <!-- BLOCO 4: ITENS DA PROPOSTA (SERVIÇOS) -->
-    <table class="items-table" style="margin-bottom: 8px;">
+    <table class="items-table prod-table" style="margin-bottom: 8px;">
         <thead>
             <tr>
                 <th class="text-center" style="width: 8%;">Código</th>
