@@ -1,0 +1,284 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrato de Prestação de Serviços</title>
+    <style>
+        * {
+            font-family: "Times New Roman", Times, serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* margem superior grande: o cabecalho fixo da unidade fica dentro dela e repete em todas as paginas */
+        @page {
+            size: A4 portrait;
+            margin: 4.00cm 1.50cm 1.50cm 1.50cm;
+        }
+
+        body {
+            font-size: 11px;
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.35;
+        }
+
+        .bold { font-weight: bold; }
+        .text-center { text-align: center; }
+        .text-justify { text-align: justify; }
+
+        p {
+            margin: 0 0 9px 0;
+        }
+
+        /* CABECALHO FIXO (logo + dados da unidade) */
+        .cabecalho {
+            position: fixed;
+            top: -3.40cm;
+            left: 0;
+            right: 0;
+            height: 3.00cm;
+        }
+        .cabecalho table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .cabecalho td {
+            vertical-align: middle;
+            padding: 0;
+            font-size: 13px;
+            line-height: 1.2;
+        }
+        .cabecalho img {
+            max-width: 3.20cm;
+            max-height: 2.50cm;
+        }
+
+        /* MARCA D'AGUA COM O LOGO DA UNIDADE */
+        .marca-dagua {
+            position: fixed;
+            top: 5.00cm;
+            left: 1.50cm;
+            width: 15.00cm;
+            text-align: center;
+            opacity: 0.10;
+        }
+        .marca-dagua img {
+            width: 15.00cm;
+        }
+
+        .bloco-dados p {
+            margin: 0;
+        }
+
+        ul.lista {
+            margin: 0 0 9px 0;
+            padding-left: 25px;
+        }
+        ul.lista li {
+            margin-bottom: 6px;
+        }
+
+        /* TABELAS DE SERVICOS E PRODUTOS (mesmo formato do orcamento) */
+        /* bordas separadas por celula (topo/esquerda na tabela, direita/baixo em cada celula):
+           com border-collapse o DomPDF deixava o cabecalho aberto quando o laco vinha vazio */
+        table.itens {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-top: 1px solid #555555;
+            border-left: 1px solid #555555;
+            table-layout: fixed;
+            margin: 4px 0 10px 0;
+        }
+        table.itens th, table.itens td {
+            border-right: 1px solid #555555;
+            border-bottom: 1px solid #555555;
+            padding: 4px 8px;
+            font-size: 11px;
+            vertical-align: middle;
+        }
+        .titulo-tabela {
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+
+        .assinaturas {
+            page-break-inside: avoid;
+            margin-top: 60px;
+        }
+        .assinaturas table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        .assinaturas td {
+            vertical-align: top;
+            text-align: center;
+            font-size: 11px;
+            padding: 4px 0 0 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABECALHO DA UNIDADE (repete em todas as paginas) -->
+    <div class="cabecalho">
+        <table>
+            <tr>
+                <td style="width: 22%;"><img src="{$unidade_image}" alt="Logo"></td>
+                <td style="width: 78%;">
+                    {$pessoa_unidade_descricao}<br>
+                    CNPJ: {$pes_un_cpf_cnpj} CMC:96.340<br>
+                    {$pes_un_logradouro}, {$pes_un_numero} – {$pes_un_bairro} – CEP: {$pes_un_end_cep} – {$pes_un_local_municipio_descricao} – {$pes_un_local_uf_sigla}<br>
+                    TEL: {$pes_un_fone1} WhatsApp<br>
+                    www.ingaban.com.br – E-mail: {$pes_un_email}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="marca-dagua"><img src="{$unidade_image}" alt=""></div>
+
+    <!-- TITULO -->
+    <div class="bold text-center" style="font-size: 11px; margin-bottom: 18px;">
+        CONTRATO DE PRESTAÇÃO DE SERVIÇOS QUE ENTRE SI FAZEM, DE UM LADO
+    </div>
+
+    <!-- CONTRATADA (unidade) -->
+    <div class="bloco-dados" style="margin-bottom: 14px;">
+        <p>Contratada: <span class="bold">{$pessoa_unidade_descricao}</span></p>
+        <p>CNPJ: <span class="bold">{$pes_un_cpf_cnpj}</span></p>
+        <p>Endereço: <span class="bold">{$pes_un_logradouro} Nº {$pes_un_numero} – {$pes_un_bairro}</span></p>
+        <p>Cidade: <span class="bold">{$pes_un_local_municipio_descricao} – {$pes_un_local_uf_sigla}</span>. CEP: <span class="bold">{$pes_un_end_cep}</span></p>
+        <p>Telefone - WhatsApp: <span class="bold">{$pes_un_fone1}</span>.</p>
+        <p>Dados Bancários: PIX – CNPJ <span class="bold">{$pes_un_cpf_cnpj}</span></p>
+    </div>
+
+    <p class="bold" style="margin-bottom: 14px;">E de outro lado</p>
+
+    <!-- CONTRATANTE (pessoa) -->
+    <div class="bloco-dados" style="margin-bottom: 14px;">
+        <p>Contratante: <span class="bold">{$pessoa_descricao}</span></p>
+        <p>CNPJ: <span class="bold">{$pes_cpf_cnpj}</span></p>
+        <p>Endereço <span class="bold">{$pes_logradouro}, {$pes_numero} {$pes_complemento} – {$pes_bairro} – {$pes_local_municipio_descricao}/{$pes_local_uf_sigla}</span></p>
+        <p class="bold">Data Da Locação: {$inicio}</p>
+        <p>Cidade: <span class="bold">{$pes_local_municipio_descricao}/ {$pes_local_uf_sigla}</span> – Telefone: <span class="bold">{$pes_fone1}</span></p>
+        <p class="bold">Local do Evento: {$obs1}</p>
+        <p class="bold">Evento: {$obs2}</p>
+    </div>
+
+    <div class="text-justify">
+
+        <p><span class="bold">CLÁUSULA PRIMEIRA</span>: - Objeto – a INGABAN é legitima proprietária, para locação de banheiros químicos e lavatórios.</p>
+
+        <p><span class="bold">CLÁUSULA SEGUNDA</span>: - É de inteira responsabilidade da <span class="bold">CONTRATANTE</span>, a segurança e a conservação dos equipamentos locados, cabendo o ressarcimento a <span class="bold">CONTRATADA</span> de quaisquer danos causados pelo público ou empregado da contratante.</p>
+
+        <p><span class="bold">CLÁUSULA TERCEIRA: -</span> local da instalação: os banheiros, serão instalados nos dias em que ocorrerão os eventos, sendo o primeiro dia de evento em {$inicio}, nas dependências do {$obs1}, conforme cronograma a ser disponibilizado pela organização, na cidade de {$pes_local_municipio_descricao}/{$pes_local_uf_sigla}, para uso, tendo responsável para contratação <span class="bold">{$pessoa_descricao} {$pes_fone1}</span>.</p>
+
+        <p><span class="bold">PARÁGRAFO PRIMEIRO</span>: - Os banheiros estarão instalados em condição de uso, limpos, abastecidos e aplicados essência e produto químico, no local nas dependências {$obs1}, em até 2(duas) horas antes do início do evento, e retirado logo após o encerramento do evento.</p>
+
+        <p><span class="bold">PARÁGRAFO SEGUNDO</span>: - Para ocasião da entrega, será emitido nota fiscal de prestação de serviços de locação com coleta dos rejeitos.</p>
+
+        <!-- Quantidade de sanitarios = qtde dos produtos | valor = total dos servicos -->
+        <p style="margin-bottom: 4px;"><span class="bold">CLÁUSULA QUARTA</span>: - Preço – Pelos serviços de locação de {$produtos_qtde_sum} sanitários, conforme abaixo. A contratante pagará a {$pessoa_unidade_descricao} a importância de <span class="bold">R${$total_servico} ({$total_servico_extenso})</span> pagamento via pix.</p>
+
+        <div class="titulo-tabela">Serviços</div>
+        <table class="itens">
+            <colgroup>
+                <col style="width: 20%;">
+                <col style="width: 60%;">
+                <col style="width: 20%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th style="text-align: center;">Quantidade</th>
+                    <th style="text-align: left;">Serviço</th>
+                    <th style="text-align: right;">Total Bruto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--[servicos]-->
+                <tr>
+                    <td class="bold" style="text-align: center;">{$qtde}</td>
+                    <td>{$servico_descricao}</td>
+                    <td class="bold" style="text-align: right;">{$total}</td>
+                </tr>
+                <!--[/servicos]-->
+            </tbody>
+        </table>
+
+        <div class="titulo-tabela">Produtos</div>
+        <table class="itens">
+            <colgroup>
+                <col style="width: 20%;">
+                <col style="width: 60%;">
+                <col style="width: 20%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th style="text-align: center;">Quantidade</th>
+                    <th style="text-align: left;">Produto</th>
+                    <th style="text-align: right;">Total Bruto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--[produtos]-->
+                <tr>
+                    <td class="bold" style="text-align: center;">{$qtde}</td>
+                    <td>{$produto_descricao}</td>
+                    <td class="bold" style="text-align: right;">{$total}</td>
+                </tr>
+                <!--[/produtos]-->
+            </tbody>
+        </table>
+
+        <p class="bold">PARÁGRAFO PRIMEIRO: As especificações dos sanitários são:</p>
+        <ul class="lista">
+            <li><span class="bold">STANDARD:</span> caixa de dejetos com assento, suporte higiênico, identificação de gênero masculino/feminino, pontos de ventilação, abertura para circulação de ar, trinco da porta com identificação aberto/fechado) dimensões mínimas: de 2,20 m de altura; 1,20 m de largura e 1,16 m de comprimento; confeccionado em polietileno (100%)</li>
+            <li><span class="bold">STANDARD “PNE”:</span> caixa de dejetos com assento, suporte higiênico, identificação de gênero masculino/feminino, pontos de ventilação, abertura para circulação de ar, trinco da porta com identificação aberto/fechado; - dimensões mínimas: largura e profundidade adequadas 2,20 m de altura, 1,70 m de largura, 1,50m de profundidade conforme NBR 9050, com abertura da porta em aproximadamente 180°; - confeccionado em polietileno (100%)</li>
+            <li><span class="bold">LAVATÓRIO:</span> caixa de reservatório de água com capcidade de 200 litros, com duas pias, e duas saboneteiras acopladas, com altura 1,70 m de largura, 1,00m de profundidade confeccionado em fibra de vidro (100%).</li>
+        </ul>
+
+        <p class="bold">PARÁGRAFO SEGUNDO: As manutenções serão:</p>
+        <ul class="lista">
+            <li><span class="bold">MANUTENÇÃO</span>: as manutenções dos banheiros, será de 1(um) vez ao dia, durante o dia da locação, com coleta dos dejetos, que após será descartado em ETE da SANEPAR, limpeza e manutenção, aplicação de produtos químico e essência e reposição de 3(três) rolos de papel higiênico; no lavatório será esgotado água utilizada, e reposto áuga limpa no reservatório e abastecimento das saboneteiras, com sabonete líquido.</li>
+        </ul>
+
+        <p><span class="bold">CLÁUSULA QUINTA</span>: A Contratada INGABAN, entrega os banheiros e lavatórios limpos, com produtos químicos e abastecidos com papel higiênico em condição total de uso para o dia do evento.</p>
+
+        <p><span class="bold">CLÁUSULA SEXTA</span>: A locação refere-se ao período de {$inicio} a {$termino} de evento.</p>
+
+        <p><span class="bold">CLÁUSULA SÉTIMA:</span> Forma de Pagamento será via PIX <span class="bold">(CNPJ)</span> no ato da entrega em nome da CONTRATADA.</p>
+
+        <p><span class="bold">CLÁUSULA OITAVA:</span> Para dirimir quaisquer controvérsias oriundas do CONTRATO, as partes elegem o Foro da Comarca de Maringá no Estado do Paraná.</p>
+
+        <p style="margin-top: 14px;">E por estarem juntos e contratados, assinam o presente em (2) duas vias de igual teor e forma.</p>
+
+        <p style="margin-top: 14px;">Maringá, Estado do Paraná, {$cadastro}.</p>
+    </div>
+
+    <!-- ASSINATURAS -->
+    <div class="assinaturas">
+        <table>
+            <tr>
+                <td style="width: 45%; border-top: 1px solid #111111;">
+                    <span class="bold">{$pessoa_unidade_descricao}</span><br>
+                    <span class="bold">CNPJ: {$pes_un_cpf_cnpj}</span>
+                </td>
+                <td style="width: 10%;">&nbsp;</td>
+                <td style="width: 45%; border-top: 1px solid #111111;">
+                    <span class="bold">{$pessoa_descricao}</span><br>
+                    CNPJ: <span class="bold">{$pes_cpf_cnpj}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>
+<!--[/main]-->
