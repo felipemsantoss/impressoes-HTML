@@ -18,7 +18,7 @@
         }
 
         body {
-            font-size: 8.5px;
+            font-size: 10.5px;
             color: #111111;
             margin: 0;
             padding: 0;
@@ -68,7 +68,7 @@
         .section-header {
             background-color: #7f8c8d !important;
             color: #ffffff !important;
-            font-size: 9px;
+            font-size: 11px;
             font-weight: bold;
             text-transform: uppercase;
             text-align: center !important;
@@ -82,7 +82,7 @@
         .promo-header {
             background-color: #555555 !important;
             color: #ffffff !important;
-            font-size: 9px;
+            font-size: 11px;
             font-weight: bold;
             text-transform: uppercase;
             padding: 5px;
@@ -93,7 +93,7 @@
             background-color: #7f8c8d !important;
             color: #ffffff !important;
             font-weight: bold;
-            font-size: 9.5px;
+            font-size: 11.5px;
         }
         .total-row td {
             color: #ffffff !important;
@@ -104,7 +104,7 @@
         .grand-total-row {
             background-color: #555555 !important;
             color: #ffffff !important;
-            font-size: 11px;
+            font-size: 13px;
             font-weight: bold;
         }
         .grand-total-row td {
@@ -146,10 +146,10 @@
             </td>
             <!-- Coluna 2: Dados Emitente -->
             <td style="border: none; padding: 0; text-align: center; vertical-align: middle; line-height: 1.35; padding-left: 10px; padding-right: 10px;">
-                <div class="bold" style="font-size: 10px; text-transform: uppercase;">{$pessoa_unidade_descricao}</div>
+                <div class="bold" style="font-size: 12px; text-transform: uppercase;">{$pessoa_unidade_descricao}</div>
                 <div class="bold">CNPJ: {$pessoa_unidade_cpf_cnpj}</div>
                 <div class="bold">I.E.: {$pessoa_unidade_pj_inscricao_estadual}</div>
-                <div style="font-size: 7.5px; color: #555555;">
+                <div style="font-size: 9.5px; color: #555555;">
                     {$pessoa_unidade_logradouro}, {$pessoa_unidade_numero} {$pessoa_unidade_complemento}<br>
                     BAIRRO {$pessoa_unidade_bairro} &bull; {$pessoa_unidade_local_municipio_descricao} &bull; {$pessoa_unidade_local_uf_sigla} &bull; {$pessoa_unidade_cep}
                 </div>
@@ -158,7 +158,7 @@
     </table>
 
     <!-- TÍTULO CENTRALIZADO -->
-    <div class="bold text-center" style="font-size: 14px; color: #333333; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px;">
+    <div class="bold text-center" style="font-size: 16px; color: #333333; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px;">
         PROPOSTA COMERCIAL
     </div>
 
@@ -176,19 +176,19 @@
         </thead>
         <tbody>
             <tr>
-                <td style="font-size: 9px; line-height: 1.45; font-weight: bold; background-color: #fcfcfc;">
+                <td style="font-size: 11px; line-height: 1.45; font-weight: bold; background-color: #fcfcfc;">
                     {$pessoa_id} - {$pessoa_descricao}
                 </td>
-                <td style="font-size: 9px; line-height: 1.45; font-weight: bold; text-align: right; background-color: #fcfcfc;">
+                <td style="font-size: 11px; line-height: 1.45; font-weight: bold; text-align: right; background-color: #fcfcfc;">
                     {$p_unidade_pj_fantasia}
                 </td>
             </tr>
             <tr>
-                <td style="font-size: 8px; line-height: 1.35; vertical-align: top;">
+                <td style="font-size: 10px; line-height: 1.35; vertical-align: top;">
                     <span class="bold">Contato:</span> {$contato}<br>
                     <span class="bold">Telefone:</span> {$pessoa_fone1} {$pessoa_fone2}
                 </td>
-                <td style="font-size: 8px; line-height: 1.35; vertical-align: top;">
+                <td style="font-size: 10px; line-height: 1.35; vertical-align: top;">
                     <span class="bold">Vendedor:</span> {$pessoa_responsavel_descricao}<br>
                     <span class="bold">Telefone:</span> {$p_unidade_fone1}
                 </td>
@@ -226,7 +226,7 @@
                 <td class="text-center">
                     <img class="product-thumb" src="{$image}" onerror="this.style.display='none';" alt="Thumb">
                 </td>
-                <td><span class="bold">{$produto_descricao}</span> <span style="font-size: 7.5px; color: #555555;">{$produto_referencia_descricao}</span></td>
+                <td><span class="bold">{$produto_descricao}</span> <span style="font-size: 9.5px; color: #555555;">{$produto_referencia_descricao}</span></td>
                 <td class="text-center">{$qtde}</td>
                 <td class="text-right">{$preco}</td>
                 <td class="text-right bold">{$total_bruto}</td>
@@ -235,8 +235,8 @@
         </tbody>
         <tfoot>
             <tr class="total-row">
-                <td colspan="3" class="bold text-right" style="font-size: 8.5px;">TOTAL PRODUTOS</td>
-                <td colspan="3" class="bold text-right" style="font-size: 9px; padding-right: 8px;">{$subtotal_produto}</td>
+                <td colspan="3" class="bold text-right" style="font-size: 10.5px;">TOTAL PRODUTOS</td>
+                <td colspan="3" class="bold text-right" style="font-size: 11px; padding-right: 8px;">{$subtotal_produto}</td>
             </tr>
         </tfoot>
     </table>
@@ -280,8 +280,8 @@
         </tbody>
         <tfoot>
             <tr class="total-row">
-                <td colspan="3" class="bold text-right" style="font-size: 8.5px;">TOTAL SERVIÇOS</td>
-                <td colspan="3" class="bold text-right" style="font-size: 9px; padding-right: 8px;">{$subtotal_servico}</td>
+                <td colspan="3" class="bold text-right" style="font-size: 10.5px;">TOTAL SERVIÇOS</td>
+                <td colspan="3" class="bold text-right" style="font-size: 11px; padding-right: 8px;">{$subtotal_servico}</td>
             </tr>
         </tfoot>
     </table>
@@ -307,13 +307,13 @@
         </thead>
         <tbody>
             <tr>
-                <td class="preservar-linhas" style="min-height: 80px; vertical-align: top; padding: 10px; font-size: 9px; line-height: 1.45;">{$obs1}</td>
+                <td class="preservar-linhas" style="min-height: 80px; vertical-align: top; padding: 10px; font-size: 11px; line-height: 1.45;">{$obs1}</td>
             </tr>
         </tbody>
     </table>
 
     <!-- DATA E ASSINATURA -->
-    <div class="bold text-center" style="font-size: 10px; margin-top: 30px; margin-bottom: 40px; page-break-inside: avoid;">
+    <div class="bold text-center" style="font-size: 12px; margin-top: 30px; margin-bottom: 40px; page-break-inside: avoid;">
         Maringá, {$data_hoje}
     </div>
 
@@ -325,7 +325,7 @@
         </colgroup>
         <tr>
             <td style="border: none;">&nbsp;</td>
-            <td style="border: none; border-top: 1px solid #111111; text-align: center; padding-top: 4px; font-size: 9.5px; line-height: 1.35;">
+            <td style="border: none; border-top: 1px solid #111111; text-align: center; padding-top: 4px; font-size: 11.5px; line-height: 1.35;">
                 <span class="bold">{$pessoa_unidade_descricao}</span><br>
                 CNPJ: {$pessoa_unidade_cpf_cnpj}
             </td>
