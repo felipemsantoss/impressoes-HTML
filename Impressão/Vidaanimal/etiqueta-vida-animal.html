@@ -26,26 +26,18 @@
             background-color: #ffffff;
         }
 
-        /* GRADE DE 2 COLUNAS SEM BORDAS */
-        .etiquetas {
-            width: 8.00cm;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
-        .etiquetas > tbody > tr > td {
-            width: 4.00cm;
-            padding: 0.08cm 0.10cm 0 0.18cm;
-            vertical-align: top;
-            border: none;
-            overflow: hidden;
-        }
-
-        /* CAIXA DE ALTURA FIXA: TEXTO GRANDE DEMAIS É CORTADO EM VEZ DE GERAR PÁGINA NOVA */
+        /* POSIÇÃO DE CADA ETIQUETA NA BOBINA (MEDIDA NA IMPRESSÃO REAL):
+           A 2ª ETIQUETA COMEÇA ~4.40cm DEPOIS DA 1ª (ETIQUETA + ESPAÇO ENTRE ELAS).
+           CAIXA DE ALTURA FIXA: TEXTO GRANDE DEMAIS É CORTADO EM VEZ DE GERAR PÁGINA NOVA */
         .etq {
-            position: relative;
+            position: absolute;
+            top: 0.08cm;
+            width: 3.25cm;
             height: 1.85cm;
             overflow: hidden;
         }
+        .etq-1 { left: 0.34cm; }
+        .etq-2 { left: 4.73cm; }
 
         /* NOME DA UNIDADE (TEXTO FIXO: A VIEW DE PRODUTO NAO TRAZ DADOS DA UNIDADE) */
         .unidade {
@@ -58,7 +50,7 @@
 
         /* LINHA DO CÓDIGO DE BARRAS + DATA (IMAGEM E DATA NA MESMA LINHA, DATA ALINHADA NA BASE) */
         .linha-barra {
-            width: 3.70cm;
+            width: 3.25cm;
             margin-top: 1px;
             white-space: nowrap;
             line-height: 1.0;
@@ -67,7 +59,7 @@
         .barcode-img {
             display: inline-block;
             vertical-align: bottom;
-            width: 2.25cm;
+            width: 2.05cm;
             height: 0.48cm;
         }
 
@@ -103,7 +95,7 @@
             position: absolute;
             top: 1.08cm;
             left: 0;
-            width: 3.70cm;
+            width: 3.25cm;
             font-size: 6.6pt;
             line-height: 0.9;
             text-transform: uppercase;
@@ -115,33 +107,21 @@
 </head>
 <body>
 
-    <table class="etiquetas">
-        <colgroup>
-            <col style="width: 4.00cm;">
-            <col style="width: 4.00cm;">
-        </colgroup>
-        <tr>
-            <!-- ETIQUETA 1 -->
-            <td>
-                <div class="etq">
-                    <div class="unidade">VIDA ANIMAL NILDO</div>
-                    <div class="linha-barra"><img class="barcode-img" src="{$imagem_codigo_barras}" onerror="this.style.display='none';" alt=""><span class="data">{$data_hoje}</span></div>
-                    <div class="codigo-barra">{$cod_barra}</div>
-                    <div class="descricao">{$descricao}</div>
-                </div>
-            </td>
+    <!-- ETIQUETA 1 (ESQUERDA) -->
+    <div class="etq etq-1">
+        <div class="unidade">VIDA ANIMAL NILDO</div>
+        <div class="linha-barra"><img class="barcode-img" src="{$imagem_codigo_barras}" onerror="this.style.display='none';" alt=""><span class="data">{$data_hoje}</span></div>
+        <div class="codigo-barra">{$cod_barra}</div>
+        <div class="descricao">{$descricao}</div>
+    </div>
 
-            <!-- ETIQUETA 2 -->
-            <td>
-                <div class="etq">
-                    <div class="unidade">VIDA ANIMAL NILDO</div>
-                    <div class="linha-barra"><img class="barcode-img" src="{$imagem_codigo_barras}" onerror="this.style.display='none';" alt=""><span class="data">{$data_hoje}</span></div>
-                    <div class="codigo-barra">{$cod_barra}</div>
-                    <div class="descricao">{$descricao}</div>
-                </div>
-            </td>
-        </tr>
-    </table>
+    <!-- ETIQUETA 2 (DIREITA) -->
+    <div class="etq etq-2">
+        <div class="unidade">VIDA ANIMAL NILDO</div>
+        <div class="linha-barra"><img class="barcode-img" src="{$imagem_codigo_barras}" onerror="this.style.display='none';" alt=""><span class="data">{$data_hoje}</span></div>
+        <div class="codigo-barra">{$cod_barra}</div>
+        <div class="descricao">{$descricao}</div>
+    </div>
 
 </body>
 </html>
