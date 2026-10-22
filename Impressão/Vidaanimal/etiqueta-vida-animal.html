@@ -1,0 +1,148 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiqueta de Produto</title>
+    <style>
+        /* FONTE GLOBAL NO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            font-weight: normal !important;
+        }
+
+        /* BOBINA COM 2 ETIQUETAS LADO A LADO (8.00cm x 2.00cm = 2 x 4.00cm x 2.00cm) */
+        @page {
+            size: 8.00cm 2.00cm;
+            margin: 0 !important;
+        }
+
+        /* NÃO colocar height no html/body: evita o DOMPDF criar uma página extra */
+        html, body {
+            width: 8.00cm;
+            margin: 0 !important;
+            padding: 0 !important;
+            color: #000000;
+            background-color: #ffffff;
+        }
+
+        /* GRADE DE 2 COLUNAS SEM BORDAS */
+        .etiquetas {
+            width: 8.00cm;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        .etiquetas > tbody > tr > td {
+            width: 4.00cm;
+            padding: 0.08cm 0.10cm 0 0.18cm;
+            vertical-align: top;
+            border: none;
+            overflow: hidden;
+        }
+
+        /* CAIXA DE ALTURA FIXA: TEXTO GRANDE DEMAIS É CORTADO EM VEZ DE GERAR PÁGINA NOVA */
+        .etq {
+            position: relative;
+            height: 1.85cm;
+            overflow: hidden;
+        }
+
+        /* NOME DA UNIDADE */
+        .unidade {
+            font-size: 7.5pt;
+            line-height: 1.0;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        /* LINHA DO CÓDIGO DE BARRAS + DATA (IMAGEM E DATA NA MESMA LINHA, DATA ALINHADA NA BASE) */
+        .linha-barra {
+            width: 3.70cm;
+            margin-top: 1px;
+            white-space: nowrap;
+            line-height: 1.0;
+        }
+
+        .barcode-img {
+            display: inline-block;
+            vertical-align: bottom;
+            width: 2.25cm;
+            height: 0.48cm;
+        }
+
+        /* OCULTA A IMAGEM SE VIER EM BRANCO */
+        img[src=""], img:not([src]) {
+            display: none !important;
+        }
+
+        /* DATA: LARGURA FIXA MOSTRA SÓ O DD/MM/AAAA (CORTA A HORA DA VARIAVEL data_hoje) */
+        .data {
+            display: inline-block;
+            vertical-align: bottom;
+            margin-left: 0.08cm;
+            width: 1.08cm;
+            font-size: 5.8pt;
+            line-height: 1.0;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        /* NÚMERO DO CÓDIGO DE BARRAS */
+        .codigo-barra {
+            font-size: 6pt;
+            line-height: 1.0;
+            margin-top: 3pt;
+            letter-spacing: 0.1px;
+            white-space: nowrap;
+        }
+
+        /* DESCRIÇÃO DO PRODUTO (ATÉ 2 LINHAS)
+           POSIÇÃO ABSOLUTA: DESCRIÇÃO LONGA É CORTADA SEM EMPURRAR A ETIQUETA PARA OUTRA PÁGINA */
+        .descricao {
+            position: absolute;
+            top: 1.08cm;
+            left: 0;
+            width: 3.70cm;
+            font-size: 6.6pt;
+            line-height: 0.9;
+            text-transform: uppercase;
+            word-wrap: break-word;
+            height: 0.40cm;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <table class="etiquetas">
+        <colgroup>
+            <col style="width: 4.00cm;">
+            <col style="width: 4.00cm;">
+        </colgroup>
+        <tr>
+            <!-- ETIQUETA 1 -->
+            <td>
+                <div class="etq">
+                    <div class="unidade">{$pessoa_unidade_descricao}</div>
+                    <div class="linha-barra"><img class="barcode-img" src="{$imagem_codigo_barras}" onerror="this.style.display='none';" alt=""><span class="data">{$data_hoje}</span></div>
+                    <div class="codigo-barra">{$cod_barra}</div>
+                    <div class="descricao">{$descricao}</div>
+                </div>
+            </td>
+
+            <!-- ETIQUETA 2 -->
+            <td>
+                <div class="etq">
+                    <div class="unidade">{$pessoa_unidade_descricao}</div>
+                    <div class="linha-barra"><img class="barcode-img" src="{$imagem_codigo_barras}" onerror="this.style.display='none';" alt=""><span class="data">{$data_hoje}</span></div>
+                    <div class="codigo-barra">{$cod_barra}</div>
+                    <div class="descricao">{$descricao}</div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->
