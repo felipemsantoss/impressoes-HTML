@@ -32,12 +32,12 @@
         .etq {
             position: absolute;
             top: 0.08cm;
-            width: 3.25cm;
-            height: 1.85cm;
+            width: 3.10cm;
+            height: 1.90cm;
             overflow: hidden;
         }
-        .etq-1 { left: 0.34cm; }
-        .etq-2 { left: 4.73cm; }
+        .etq-1 { left: 0.52cm; }
+        .etq-2 { left: 4.88cm; }
 
         /* DESCRIÇÃO DO PRODUTO (1 LINHA, O QUE PASSAR DA LARGURA É CORTADO) */
         .descricao {
@@ -51,16 +51,24 @@
         /* LINHA DO CÓDIGO OUTRO (ESQUERDA) + PREÇO (DIREITA) */
         .linha-cod {
             position: relative;
-            height: 0.27cm;
-            margin-top: 2pt;
-            font-size: 7pt;
-            line-height: 1.0;
+            height: 0.36cm;
+            margin-top: 1.5pt;
             white-space: nowrap;
         }
+        .cod-outro {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            font-size: 7pt;
+            line-height: 1.0;
+        }
+        /* PREÇO MAIOR, ALINHADO NA BASE DA LINHA DO CÓDIGO */
         .preco {
             position: absolute;
-            top: 0;
-            right: 0.20cm;
+            bottom: 0;
+            right: 0.05cm;
+            font-size: 9.5pt;
+            line-height: 1.0;
         }
 
         /* SE O PREÇO VIER VAZIO DO BANCO, MOSTRA "0,00" */
@@ -73,7 +81,7 @@
             display: block;
             width: 2.40cm;
             height: 0.58cm;
-            margin-top: 2pt;
+            margin-top: 1.5pt;
         }
 
         /* OCULTA A IMAGEM SE VIER EM BRANCO */
@@ -85,7 +93,7 @@
         .codigo-barra {
             font-size: 7pt;
             line-height: 1.0;
-            margin-top: 2pt;
+            margin-top: 1.5pt;
             white-space: nowrap;
         }
     </style>
@@ -95,7 +103,7 @@
     <!-- ETIQUETA 1 (ESQUERDA) -->
     <div class="etq etq-1">
         <div class="descricao">{$descricao}</div>
-        <div class="linha-cod">{$cod_outro}<span class="preco">R$ <span class="price-value">{$preco_venda}</span></span></div>
+        <div class="linha-cod"><span class="cod-outro">{$cod_outro}</span><span class="preco">R$ <span class="price-value">{$preco_venda}</span></span></div>
         <img class="barcode-img" src="{$imagem_codigo_barras}" onerror="this.style.display='none';" alt="">
         <div class="codigo-barra">{$cod_barra}</div>
     </div>
@@ -103,7 +111,7 @@
     <!-- ETIQUETA 2 (DIREITA) -->
     <div class="etq etq-2">
         <div class="descricao">{$descricao}</div>
-        <div class="linha-cod">{$cod_outro}<span class="preco">R$ <span class="price-value">{$preco_venda}</span></span></div>
+        <div class="linha-cod"><span class="cod-outro">{$cod_outro}</span><span class="preco">R$ <span class="price-value">{$preco_venda}</span></span></div>
         <img class="barcode-img" src="{$imagem_codigo_barras}" onerror="this.style.display='none';" alt="">
         <div class="codigo-barra">{$cod_barra}</div>
     </div>
