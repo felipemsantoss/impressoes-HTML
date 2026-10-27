@@ -233,7 +233,7 @@
             </tr>
             <!--[/servicos]-->
             <tr style="font-weight: bold;">
-                <td style="text-align: right;">TOTAL GERAL MÃO DE OBRA</td>
+                <td style="text-align: right;">TOTAL MÃO DE OBRA</td>
                 <td style="text-align: right;">{$total_servico}</td>
             </tr>
         </tbody>
@@ -272,7 +272,7 @@
             </tr>
             <!--[/produtos]-->
             <tr style="font-weight: bold;">
-                <td colspan="5" style="text-align: right;">TOTAL GERAL PEÇAS</td>
+                <td colspan="5" style="text-align: right;">TOTAL PEÇAS</td>
                 <td style="text-align: right;">{$produtos_total_sum}</td>
             </tr>
         </tbody>
@@ -341,8 +341,8 @@
 
      <!-- SEÇÃO DE FECHAMENTO (SÓ ENVIADA PARA A PRÓXIMA PÁGINA SE NÃO COUBER COMPLETA) -->
     <div style="page-break-inside: avoid; width: 100%;">
-        <!-- Linha azul final de fechamento da seção de observações -->
-        <div style="background-color: #2a6099; height: 14px; border-left: 1px solid #2a6099; border-right: 1px solid #2a6099; color: #2a6099; font-size: 11px; padding: 2px 5px;">.</div>
+        <!-- Faixa azul com o título do bloco de fechamento, no mesmo estilo dos outros cabeçalhos -->
+        <div class="section-header" style="text-align: center; border-left: 1px solid #2a6099; border-right: 1px solid #2a6099;">TOTAL ORÇAMENTO/PRAZO DE ENTREGA</div>
 
         <!-- BLOCO 8: FECHAMENTO / METADADOS (Ocupa a página atual se houver espaço) -->
         <table class="grid-table" style="border-top: none !important;">
@@ -351,13 +351,13 @@
                 <col width="50%">
             </colgroup>
             <tr>
-                <td style="line-height: 1.45;">
+                <td style="line-height: 1.45; font-size: 13px;">
                     <span class="bold">ENVIADO ORÇAMENTO EM:</span> {$envio_data}<br>
                     <span class="bold">NOTA DE REMESSA:</span> {$codigo_nf}<br>
                     <span class="bold">ENTRADA DIA:</span> {$cadastro}
                 </td>
-                <td style="line-height: 1.45; border-left: 1px solid #2a6099;">
-                    <span class="bold">VALOR:</span> {$total_pedido}<br>
+                <td style="line-height: 1.45; font-size: 13px; border-left: 1px solid #2a6099;">
+                    <span class="bold">VALOR TOTAL PEÇAS E SERVIÇOS:</span> {$total_pedido}<br>
                     <span class="bold">PRAZO DE ENTREGA:</span> {$prazo_entrega_dia} ÚTEIS APÓS A APROVAÇÃO
                 </td>
             </tr>
@@ -369,7 +369,7 @@
         <table class="grid-table" style="border-top: none !important;">
             <!-- Linha divisória horizontal azul estilizada como cabeçalho de seção para a Imagem -->
             <tr>
-                <td class="section-header" style="color: #ffffff; font-weight: bold; border-bottom: 1px solid #2a6099;">IMAGEM</td>
+                <td class="section-header" style="color: #ffffff; font-weight: bold; text-align: center; border-bottom: 1px solid #2a6099;">IMAGEM</td>
             </tr>
             <!--[pedido_image]-->
             <!-- Cada imagem é renderizada em sua própria linha evitando quebra prematura de blocos gigantes -->
