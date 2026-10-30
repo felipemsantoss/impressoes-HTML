@@ -1,0 +1,118 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Guia de Encaminhamento</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* TAMANHO DA FOLHA DO BLOCO (MEDIDO PELA FOTO) */
+        @page {
+            size: 21.00cm 15.50cm;
+            margin: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            color: #111111;
+            background-color: #ffffff;
+        }
+
+        /* TODOS OS ELEMENTOS COM POSIÇÃO FIXA EM CM: O FORMULÁRIO NÃO MUDA COM O TAMANHO DO TEXTO */
+        .abs { position: absolute; }
+
+        .caixa {
+            position: absolute;
+            border: 1px solid #111111;
+            border-radius: 0.22cm;
+        }
+
+        .linha {
+            position: absolute;
+            border-bottom: 1px solid #111111;
+            height: 1px;
+        }
+
+        .rotulo {
+            position: absolute;
+            font-size: 10pt;
+            white-space: nowrap;
+        }
+
+        .valor {
+            position: absolute;
+            font-size: 10pt;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGO DO SUS -->
+    <div class="caixa" style="left: 0.90cm; top: 0.60cm; width: 3.75cm; height: 1.90cm;"></div>
+    <img class="abs" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAIAAAD2HxkiAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAFDklEQVR42u3crXLcVhyHYW3bGSEvUkmFukhqgJGFvEhGMWlQgzK5jhQ312HnBlK0RjLZJbHRBukGvEhsmYhKMxOtZ/shn9P4eajYmXlnM5O/f7NhGBKOU5YvPMKRrq+vqurMOxzjO08AIgQRAiIEEQIiBBECIgQRAiIEEQIiBBECIgQRAiIEEQIiBBECIgQRAiIEEQIiBBECIgQRAiIEEQIiBBECIgQRAiIEEQIiBBECIgQRAiIEEQIiBBECIgQRAiIEEQIiBBECIgQRAiIEEQIiBBECIgQRAiIEEQIiBBECIgQRAiIEEYIIARGCCAERgggBEYIIARGCCAERgggBEYIIARGCCAERgggBEYIIARGCCAERgggBEYIIARHCt2Q2DINXONLd3b1HOFJZFicnJ95BhOCfo4AIQYSACEGEgAghUrOi+MUrfOn9+z9evfp19FPbtm/evN3v916J/9D3WfajV/hS09xeXNRZln39KcuyxeLn1erGKyHCaa1WN8vl+WiHi8Uiz/OmufVKiHBCfd8/0mFZFjpEhE/U4evXv6VpOtrhbDZzSooIJ+9wvd5cXr4c7bCqzna7Xdu2HgoRTqjrukc6rOtah4hQh4jweXTYdV1d16Nfq6parzdd13koRDihtm13u91oh2maXl6+1CEi1CEifB4dzufz09PT0Q6Xy/OPH//s+95DIcIJbTabPM/Lsvj603w+Xy7PV6sbHSLCaTXN7aEOsyzTIX+XP2X6J969+71pmtFPRVF8+HDlifBLOLn1enPouDTLMseliHByjrwRoQ4RIUnS9/12+/nQUVtZFo7aEOHkHJciQh0iQpKk67rtdntoIaqu6/v7+4eHnYdChBN6eNgdOi5NkuTionZciggn58gbEUbR4X6/Xy7PD3W4Wt1YLkWE09puPx86Lk3TtKrOHJciwsk58kaEOkSEWNRHhDGwqI8IA3PkjQhj6dCiPiIM3KFFfUQYmCNvRKhDRIhFfUQYA0feiFCHiBCL+ogwBhb1EWF4jrxJzOAHZ1Efv4ThWdQXoQgDc+QtQhHqEBFiUV+ExMBxqQjRISLEor4IiYFFfRESniNvERJFhxb1RUhgFvVFSHiOvEWIDhEhFvVFSAws6ouQwBx5i5BYOrSoL0ICd2hRX4QE5shbhOgQEWJRX4TEwJG3CNEhIsSivgiJgUV9ERKeI+//LzP43w6L+n4JCc+ivggJzJG3CNEhIsSivgiJgeNSEaJDRIhFfRESA4v6IiQ8R94iJIoOLeqLkMAs6ouQ8Bx5ixAdIkIs6ouQGFjUFyGBOfIWIbF0aFFfhATu0KK+CAnMkbcI0SEixKK+CImBI28RokMRgkV9ERIDi/oiJDxH3k/MDD4jLOr7JSQ8i/oiJDBH3iJEhyIEi/pPYvbp051X4HF5/lOe54e++ounfxvhMAxeAQLyXxQgQhAhIEIQISBCeJ5+8ATHK8sXHuFI19dXVXXmHfwSgggBEYIIARGCCAERgggBEYIIARGCCAERgggBEYIIARGCCAERgghBhIAIQYSACEGEgAhBhIAIQYSACEGEgAhBhIAIQYSACEGEgAhBhIAIQYSACEGEgAhBhIAIQYSACEGEgAhBhIAIQYSACEGEgAhBhIAIQYSACEGEgAhBhIAIQYSACEGEgAhBhIAIQYSACEGEgAhBhIAIQYSACEGEgAhBhIAIQYQgQk8AIgQRAiIEEQIiBBECIoRn5y8kUBSK8m4cOAAAAABJRU5ErkJggg==" style="left: 1.04cm; top: 0.90cm; width: 1.32cm; height: 1.30cm;" alt="">
+    <div class="abs" style="left: 2.52cm; top: 1.22cm; font-size: 15pt; font-weight: bold; color: #222222; line-height: 1;">SUS</div>
+    <div class="abs" style="left: 3.74cm; top: 1.19cm; font-size: 4.5pt; line-height: 1.15; color: #222222;">Sistema<br>Único<br>de Saúde</div>
+
+    <!-- TÍTULO -->
+    <div class="caixa" style="left: 4.70cm; top: 0.60cm; width: 15.40cm; height: 1.90cm;"></div>
+    <div class="abs" style="left: 4.70cm; top: 0.70cm; width: 15.40cm; text-align: center; font-size: 9.5pt; line-height: 1.17;">
+        ESTADO DO PARANÁ<br>
+        Secretaria de Estado da Saúde<br>
+        Instituto de Saúde do Paraná
+    </div>
+    <div class="linha" style="left: 4.70cm; top: 1.86cm; width: 15.40cm;"></div>
+    <div class="abs" style="left: 4.70cm; top: 1.92cm; width: 15.40cm; text-align: center; font-size: 13pt; font-weight: bold; line-height: 1.2;">GUIA DE ENCAMINHAMENTO</div>
+
+    <!-- DADOS DO USUÁRIO E UNIDADE -->
+    <div class="caixa" style="left: 0.90cm; top: 2.58cm; width: 19.20cm; height: 2.85cm;"></div>
+    <div class="caixa" style="left: 1.05cm; top: 2.68cm; width: 14.20cm; height: 2.65cm;"></div>
+    <div class="rotulo" style="left: 1.25cm; top: 3.60cm;">NOME DO USUÁRIO:</div>
+    <div class="valor" style="left: 4.80cm; top: 3.58cm; width: 10.20cm;">{$pessoa_descricao}</div>
+    <div class="linha" style="left: 4.75cm; top: 3.99cm; width: 10.30cm;"></div>
+    <div class="rotulo" style="left: 1.25cm; top: 4.62cm;">PARA SERVIÇO DE:</div>
+    <div class="linha" style="left: 4.55cm; top: 5.01cm; width: 10.50cm;"></div>
+
+    <div class="caixa" style="left: 15.35cm; top: 2.68cm; width: 4.60cm; height: 2.65cm;"></div>
+    <div class="rotulo" style="left: 15.55cm; top: 2.78cm; font-size: 9pt;">UNIDADE</div>
+    <div class="rotulo" style="left: 17.85cm; top: 2.78cm; font-size: 9pt;">(CARIMBO)</div>
+
+    <!-- MOTIVO DO ENCAMINHAMENTO -->
+    <div class="caixa" style="left: 0.90cm; top: 5.50cm; width: 19.20cm; height: 9.40cm;"></div>
+    <div class="abs" style="left: 0.90cm; top: 5.72cm; width: 19.20cm; text-align: center; font-size: 11pt; font-weight: bold;">MOTIVO DO ENCAMINHAMENTO</div>
+    <div class="rotulo" style="left: 1.25cm; top: 6.36cm;">OBS.:</div>
+    <div class="abs" style="left: 2.32cm; top: 6.36cm; width: 17.50cm; font-size: 10pt; line-height: 1.22;">ESPECIFICAR OS DADOS SOBRE OS QUAIS DESEJA OPINIÃO, ANTECEDENTES DE IMPORTÂNCIA, TRATAMENTO JÁ EFETUADO E ÚLTIMOS EXAMES COMPLEMENTARES REALIZADOS.</div>
+
+    <!-- LINHAS PARA ESCREVER -->
+    <div class="linha" style="left: 1.10cm; top: 8.00cm; width: 18.80cm;"></div>
+    <div class="linha" style="left: 1.10cm; top: 8.76cm; width: 18.80cm;"></div>
+    <div class="linha" style="left: 1.10cm; top: 9.52cm; width: 18.80cm;"></div>
+    <div class="linha" style="left: 1.10cm; top: 10.28cm; width: 18.80cm;"></div>
+    <div class="linha" style="left: 1.10cm; top: 11.04cm; width: 18.80cm;"></div>
+    <div class="linha" style="left: 1.10cm; top: 11.80cm; width: 18.80cm;"></div>
+    <div class="linha" style="left: 1.10cm; top: 12.56cm; width: 18.80cm;"></div>
+
+    <!-- DATA E ASSINATURA -->
+    <div class="rotulo" style="left: 1.25cm; top: 14.08cm;">DATA</div>
+    <div class="linha" style="left: 2.25cm; top: 14.42cm; width: 0.80cm;"></div>
+    <div class="rotulo" style="left: 3.06cm; top: 13.92cm; font-size: 15pt; line-height: 1;">/</div>
+    <div class="linha" style="left: 3.30cm; top: 14.42cm; width: 0.80cm;"></div>
+    <div class="rotulo" style="left: 4.11cm; top: 13.92cm; font-size: 15pt; line-height: 1;">/</div>
+    <div class="linha" style="left: 4.35cm; top: 14.42cm; width: 0.80cm;"></div>
+
+    <div class="linha" style="left: 12.30cm; top: 14.00cm; width: 7.60cm;"></div>
+    <div class="abs" style="left: 12.30cm; top: 14.12cm; width: 7.60cm; text-align: center; font-size: 8.5pt; white-space: nowrap;">ASSINATURA E CARIMBO DO PROFISSIONAL</div>
+
+    <!-- CÓDIGO DO MODELO -->
+    <div class="abs" style="left: 0.90cm; top: 14.98cm; font-size: 5.5pt; font-weight: bold; font-style: italic;">Cód. 11. 2 - Mod. 172</div>
+
+</body>
+</html>
+<!--[/main]-->
