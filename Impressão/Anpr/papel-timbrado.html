@@ -1,0 +1,96 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Papel Timbrado</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* MARGEM SUPERIOR GRANDE: O TIMBRE FICA DENTRO DELA E REPETE EM TODAS AS PÁGINAS */
+        @page {
+            size: A4 portrait;
+            margin: 5.60cm 0.90cm 1.50cm 0.90cm;
+        }
+
+        body {
+            font-size: 11px;
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+        /* TIMBRE DA ASSOCIAÇÃO */
+        .timbre {
+            position: fixed;
+            top: -4.05cm;
+            left: 0;
+            right: 0;
+            height: 3.90cm;
+            color: #2b4aa8;
+        }
+        .timbre-nome {
+            font-size: 18.8pt;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+            line-height: 1.15;
+        }
+        .timbre-duplo {
+            margin-top: 0.05cm;
+            height: 0.10cm;
+            border-top: 1.5px solid #2b4aa8;
+            border-bottom: 1.5px solid #2b4aa8;
+        }
+        .timbre-centro {
+            margin-top: 0.22cm;
+            font-size: 11.6pt;
+            font-weight: bold;
+            font-style: italic;
+            white-space: nowrap;
+        }
+        .timbre-faixa {
+            margin-top: 0.18cm;
+            padding: 0.20cm 0.08cm;
+            background-color: #c9d6ee;
+            font-size: 10.2pt;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .timbre-rodape {
+            position: relative;
+            margin-top: 0.14cm;
+            height: 0.40cm;
+            font-size: 9pt;
+            font-weight: bold;
+            font-style: italic;
+        }
+        .timbre-cnpj {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TIMBRE (REPETE EM TODAS AS PÁGINAS) -->
+    <div class="timbre">
+        <div class="timbre-nome">ASSOCIAÇÃO NORTE PARANAENSE DE REABILITAÇÃO</div>
+        <div class="timbre-duplo"></div>
+        <div class="timbre-centro">CENTRO INTEGRADO REGIONAL DE REABILITAÇÃO E OFICINA ORTOPÉDICA DR TOLEDO</div>
+        <div class="timbre-faixa">Rua Walter Kraiser, 50 - Telefone: (44) 3226-1649 - contato@anpr.com.br - Bairro Aeroporto - Maringá - PR</div>
+        <div class="timbre-rodape">
+            CNES: 2586525
+            <span class="timbre-cnpj">CNPJ 79.140.828/0001-03</span>
+        </div>
+    </div>
+
+</body>
+</html>
+<!--[/main]-->
