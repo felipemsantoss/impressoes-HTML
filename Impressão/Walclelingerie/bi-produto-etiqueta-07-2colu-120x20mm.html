@@ -1,0 +1,96 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiquetas de Código de Barras</title>
+    <style>
+        /* CONFIGURAÇÃO GLOBAL DE SINTAXE E ENCODING */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+            font-weight: normal !important; /* ABSOLUTAMENTE NADA EM NEGRITO */
+        }
+
+        /* BOBINA ZEBRA COM 2 ETIQUETAS LADO A LADO:
+           FOLHA TODA COM 12.00cm x 2.00cm, CADA ETIQUETA COM METADE (6.00cm) */
+        @page {
+            size: 12.00cm 2.00cm;
+            margin: 0 !important;
+        }
+
+        /* NÃO COLOCAR HEIGHT NO HTML/BODY: EVITA O DOMPDF CRIAR UMA PÁGINA EXTRA */
+        html, body {
+            width: 12.00cm;
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 8px;
+            color: #000000;
+            background-color: #ffffff;
+        }
+
+        /* CADA ETIQUETA COM POSIÇÃO FIXA NA FOLHA (O DOMPDF IGNORA LARGURA DE COLUNA DE TABELA EM ETIQUETA PEQUENA).
+           POSIÇÕES MEDIDAS NA IMPRESSÃO REAL: A 1ª ETIQUETA FÍSICA FICA DE 1.09cm A 5.09cm DA PÁGINA E A 2ª DE 5.39cm A 9.39cm.
+           O CONTEÚDO DE CADA UMA (3.50cm) FICA CENTRALIZADO NA SUA ETIQUETA.
+           CAIXA DE ALTURA FIXA: TEXTO GRANDE DEMAIS É CORTADO EM VEZ DE GERAR PÁGINA NOVA */
+        .etq {
+            position: absolute;
+            top: 0.50cm;
+            width: 3.50cm;
+            height: 1.48cm;
+            overflow: hidden;
+            text-align: center;
+        }
+        .etq-1 { left: 1.25cm; }
+        .etq-2 { left: 5.64cm; }
+
+        /* DESCRIÇÃO DO PRODUTO (ATÉ 3 LINHAS, O QUE PASSAR É CORTADO) */
+        .linha {
+            height: 0.67cm;
+            overflow: hidden;
+            font-size: 8px;
+            line-height: 1.05;
+            word-wrap: break-word;
+        }
+
+        /* CÓDIGO DE BARRAS */
+        .barcode-img {
+            display: block;
+            width: 3.00cm;
+            height: 0.50cm;
+            margin: 0.05cm auto 0 auto;
+        }
+
+        .cod-legivel {
+            font-size: 8px;
+            text-align: center;
+            width: 100%;
+            margin-top: 1px;
+            letter-spacing: 0.3px;
+        }
+
+        /* TRUQUE DE SEGURANÇA: OCULTA O ELEMENTO SE A IMAGEM ESTIVER EM BRANCO OU NÃO FOR ENCONTRADA */
+        img[src=""], img:not([src]) {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ETIQUETA 1 -->
+    <div class="etq etq-1">
+        <div class="linha">{$descricao}</div>
+        <img class="barcode-img" src="{$imagem_codigo_barras}" onerror="this.style.display='none';" alt="Código de Barras">
+        <div class="cod-legivel">{$cod_barra}</div>
+    </div>
+
+    <!-- ETIQUETA 2 -->
+    <div class="etq etq-2">
+        <div class="linha">{$descricao}</div>
+        <img class="barcode-img" src="{$imagem_codigo_barras}" onerror="this.style.display='none';" alt="Código de Barras">
+        <div class="cod-legivel">{$cod_barra}</div>
+    </div>
+
+</body>
+</html>
+<!--[/main]-->
