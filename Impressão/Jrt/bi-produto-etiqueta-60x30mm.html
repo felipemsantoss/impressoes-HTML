@@ -1,0 +1,41 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiqueta de Produto</title>
+    <style>
+        * { font-family: Arial, Helvetica, sans-serif !important; box-sizing: border-box !important; font-weight: normal !important; }
+
+        /* ETIQUETA ÚNICA DE 6.00cm x 3.00cm (MESMO TAMANHO DO PDF DE MODELO) */
+        @page { size: 6.00cm 3.00cm; margin: 0 !important; }
+
+        /* NÃO COLOCAR HEIGHT NO HTML/BODY: EVITA O DOMPDF CRIAR UMA PÁGINA EXTRA */
+        html, body { width: 6.00cm; margin: 0 !important; padding: 0 !important; color: #000000; background-color: #ffffff; }
+
+        /* TODOS OS BLOCOS COM POSIÇÃO FIXA EM CM E ALTURA TRAVADA (O QUE PASSAR É CORTADO, NÃO GERA OUTRA PÁGINA) */
+        .bloco { position: absolute; left: 0.40cm; overflow: hidden; white-space: nowrap; }
+
+        /* LINHA 1: NOME DA EMPRESA (TEXTO FIXO) */
+        .unidade { top: 0.10cm; width: 5.30cm; height: 0.50cm; font-size: 11pt; line-height: 1.1; }
+
+        /* LINHA 2: CÓDIGO DE BARRAS GERADO PELO COD_OUTRO (MESMO NÚMERO QUE SAI EMBAIXO) */
+        .barcode-img { position: absolute; left: 0.40cm; top: 0.62cm; width: 3.30cm; height: 0.62cm; }
+
+        /* LINHA 3: CÓDIGO (COD_OUTRO) */
+        .codigo { top: 1.30cm; width: 5.30cm; height: 0.42cm; font-size: 9.5pt; line-height: 1.1; }
+
+        /* LINHA 4: DESCRIÇÃO DO PRODUTO (ATÉ 3 LINHAS) */
+        .descricao { top: 1.72cm; width: 5.30cm; height: 1.00cm; font-size: 10pt; line-height: 0.95; white-space: normal; word-wrap: break-word; }
+
+        img[src=""], img:not([src]) { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="bloco unidade">ORIGINAL AUTO PARTS</div>
+    <img class="barcode-img" src="{$imagem_cod_outro}" onerror="this.style.display='none';" alt="Código de Barras">
+    <div class="bloco codigo">{$cod_outro}</div>
+    <div class="bloco descricao">{$descricao}</div>
+</body>
+</html>
+<!--[/main]-->
