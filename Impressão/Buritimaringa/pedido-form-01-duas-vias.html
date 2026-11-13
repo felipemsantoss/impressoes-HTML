@@ -1,0 +1,450 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Pedido Comercial Duas Vias</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL NO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* FOLHA A4 COM MARGENS MÍNIMAS: AS DUAS VIAS DIVIDEM A MESMA PÁGINA */
+        @page {
+            size: A4 portrait;
+            margin: 18px 22px 18px 22px;
+        }
+
+        body {
+            font-size: 8px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* CADA VIA TEM ALTURA TRAVADA (METADE DA FOLHA): O QUE PASSAR É CORTADO E NUNCA GERA SEGUNDA PÁGINA */
+        .via {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 525px;
+            overflow: hidden;
+        }
+        .via-1 { top: 0; }
+        .via-2 { top: 562px; }
+
+        /* LINHA PONTILHADA DE CORTE ENTRE AS VIAS */
+        .corte {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            top: 543px;
+            border-top: 1px dashed #7f8c8d;
+            text-align: center;
+            font-size: 7px;
+            color: #7f8c8d;
+            padding-top: 1px;
+        }
+
+        /* TRUQUE DE MÁGICA: ESCONDE LINHAS VAZIAS DIRETAMENTE NO DOMPDF */
+        .linha-prod- { display: none !important; }
+        .linha-parc- { display: none !important; }
+
+        /* ESTRUTURA GERAL DAS TABELAS (ENXUTA) */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-bottom: 3px;
+        }
+
+        td, th {
+            vertical-align: middle;
+            padding: 1px 3px;
+            word-wrap: break-word;
+            line-height: 1.1;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .bold { font-weight: bold; }
+        .nowrap { white-space: nowrap; }
+
+        /* GRADE ESTRUTURADA (FORM STYLE) */
+        .grid-table td {
+            border: 1px solid #dce4ec;
+        }
+        .lbl {
+            background-color: #fbfcfd;
+            color: #555555;
+            font-size: 7px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .val {
+            color: #111111;
+        }
+
+        /* TABELAS DE ITENS (PRODUTOS / PARCELAS) */
+        .items-table th {
+            background-color: #2c3e50;
+            color: #ffffff;
+            font-size: 7.5px;
+            text-transform: uppercase;
+            border: 1px solid #2c3e50;
+            padding: 2px 3px;
+        }
+        .items-table td {
+            border: 1px solid #dce4ec;
+            padding: 1px 3px;
+            font-size: 8px;
+        }
+        .items-table tfoot td {
+            background-color: #f4f6f8;
+            font-weight: bold;
+        }
+
+        /* TOTAL GERAL EM DESTAQUE */
+        .total-lbl {
+            background-color: #2c3e50 !important;
+            color: #ffffff !important;
+            font-size: 8px;
+            font-weight: bold;
+            border-color: #2c3e50 !important;
+            text-align: center;
+        }
+        .total-val {
+            background-color: #2c3e50 !important;
+            color: #ffffff !important;
+            font-size: 10px;
+            font-weight: bold;
+            border-color: #2c3e50 !important;
+            text-align: right;
+        }
+        .preservar-linhas {
+            white-space: pre-wrap !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== PRIMEIRA VIA (EMPRESA) ==================== -->
+    <div class="via via-1">
+
+        <!-- CABEÇALHO: LOGO, UNIDADE E NÚMERO DO PEDIDO -->
+        <table style="margin-bottom: 3px; border-bottom: 2px solid #2c3e50;">
+            <tr>
+                <td style="width: 18%; padding-bottom: 2px;">
+                    <img src="{$unidade_image}" style="max-width: 100px; max-height: 30px;" alt="Logo da Empresa">
+                </td>
+                <td style="width: 52%; padding-bottom: 2px;">
+                    <span class="bold" style="font-size: 9px;">{$pessoa_unidade_descricao}</span><br>
+                    {$pessoa_unidade_cpf_cnpj} &bull; {$p_unidade_fone1}
+                </td>
+                <td style="width: 30%; text-align: right; padding-bottom: 2px;">
+                    <span style="font-size: 7px; color: #7f8c8d; font-weight: bold;">PEDIDO COMERCIAL &bull; 1ª VIA</span><br>
+                    <span style="font-size: 13px; font-weight: bold; color: #2c3e50;">Nº {$id}</span>
+                </td>
+            </tr>
+        </table>
+
+        <!-- DADOS DO CLIENTE (6 COLUNAS PARA ECONOMIZAR LINHAS) -->
+        <table class="grid-table">
+            <tr>
+                <td class="lbl" style="width: 8%;">Cliente:</td>
+                <td class="val bold" style="width: 40%;">{$pessoa_id} - {$pessoa_descricao}</td>
+                <td class="lbl" style="width: 8%;">Cnpj/Cpf:</td>
+                <td class="val" style="width: 20%;">{$pessoa_cpf_cnpj}</td>
+                <td class="lbl" style="width: 7%;">Data:</td>
+                <td class="val bold" style="width: 17%;">{$cadastro}</td>
+            </tr>
+            <tr>
+                <td class="lbl">Endereço:</td>
+                <td class="val">{$logradouro}, {$numero} {$complemento} {$bairro} &ndash; {$local_municipio_descricao}/{$local_uf_descricao} {$cep}</td>
+                <td class="lbl">Insc. Est.:</td>
+                <td class="val">{$pessoa_pj_inscricao_estadual}</td>
+                <td class="lbl">Status:</td>
+                <td class="val">{$global_status_descricao}</td>
+            </tr>
+            <tr>
+                <td class="lbl">Telefone:</td>
+                <td class="val">{$pessoa_fone1} {$pessoa_fone2}</td>
+                <td class="lbl">Vendedor:</td>
+                <td class="val" colspan="3">{$pessoa_responsavel_id} - {$pessoa_responsavel_descricao}</td>
+            </tr>
+        </table>
+
+        <!-- PRODUTOS -->
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width: 8%;">Código</th>
+                    <th style="text-align: left; width: 56%;">Produto</th>
+                    <th class="text-center" style="width: 7%;">Qtd</th>
+                    <th class="text-center" style="width: 6%;">Und</th>
+                    <th class="text-right nowrap" style="width: 11%;">Unitário</th>
+                    <th class="text-right nowrap" style="width: 12%;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--[produtos]-->
+                <tr class="linha-prod-{$produto_id}">
+                    <td class="text-center">{$produto_id}</td>
+                    <td><span class="bold">{$produto_descricao}</span> <span style="color: #7f8c8d;">{$produto_complemento}</span></td>
+                    <td class="text-center">{$qtde}</td>
+                    <td class="text-center">{$sigla}</td>
+                    <td class="text-right nowrap">{$preco}</td>
+                    <td class="text-right bold nowrap">{$total_bruto}</td>
+                </tr>
+                <!--[/produtos]-->
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2" class="text-right">TOTAL DE ITENS:</td>
+                    <td class="text-center">{$qtde_sum}</td>
+                    <td colspan="2" class="text-right nowrap">SUBTOTAL:</td>
+                    <td class="text-right nowrap">{$subtotal_produto}</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- OBSERVAÇÕES E CÓDIGOS -->
+        <table class="grid-table">
+            <tr>
+                <td class="lbl" style="width: 9%; vertical-align: top;">Obs 1:</td>
+                <td class="val preservar-linhas" style="width: 41%; vertical-align: top;">{$obs1}</td>
+                <td class="lbl" style="width: 9%; vertical-align: top;">Obs 2:</td>
+                <td class="val preservar-linhas" style="width: 41%; vertical-align: top;">{$obs2}</td>
+            </tr>
+            <tr>
+                <td class="lbl">Cód. Interno:</td>
+                <td class="val">{$cod_interno}</td>
+                <td class="lbl">Cód. Externo:</td>
+                <td class="val">{$cod_externo}</td>
+            </tr>
+        </table>
+
+        <!-- RESUMO FINANCEIRO (2 LINHAS) -->
+        <table class="grid-table">
+            <tr>
+                <td class="lbl" style="width: 9%;">Total Bruto:</td>
+                <td class="val" style="width: 14%;">{$subtotal_produto}</td>
+                <td class="lbl" style="width: 9%;">Descontos:</td>
+                <td class="val" style="width: 14%;">{$desconto_produto} &ndash; {$desc_perc_produto}%</td>
+                <td class="lbl" style="width: 9%;">Subst. Trib.:</td>
+                <td class="val" style="width: 15%;">{$total_st_valor}</td>
+                <td class="lbl" style="width: 12%;">Frete:</td>
+                <td class="val" style="width: 18%;">{$total_frete}</td>
+            </tr>
+            <tr>
+                <td class="lbl">Forma Pgto:</td>
+                <td class="val">{$financ_forma_pgto_descricao}</td>
+                <td class="lbl">Prazo Pgto:</td>
+                <td class="val">{$financ_prazo_pgto_descricao}</td>
+                <td class="lbl">Peso B. / L.:</td>
+                <td class="val">{$volume_peso_bruto} / {$volume_peso_liquido}</td>
+                <td class="total-lbl">TOTAL GERAL:</td>
+                <td class="total-val">{$total_pedido}</td>
+            </tr>
+        </table>
+
+        <!-- PARCELAS E ASSINATURA LADO A LADO -->
+        <table style="margin-bottom: 0;">
+            <tr>
+                <td style="width: 58%; padding: 0; vertical-align: top;">
+                    <table class="items-table" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 16%;">Parcela</th>
+                                <th class="text-center" style="width: 26%;">Vencimento</th>
+                                <th class="text-right" style="width: 24%;">Valor</th>
+                                <th style="text-align: left; width: 34%;">Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--[parcelas]-->
+                            <tr class="linha-parc-{$parcela}">
+                                <td class="text-center">{$parcela}</td>
+                                <td class="text-center bold">{$vencimento}</td>
+                                <td class="text-right bold">{$valor}</td>
+                                <td>{$financ_forma_pgto_descricao_parcela}</td>
+                            </tr>
+                            <!--[/parcelas]-->
+                        </tbody>
+                    </table>
+                </td>
+                <td style="width: 4%; padding: 0;"></td>
+                <td style="width: 38%; padding: 0; vertical-align: bottom; text-align: center;">
+                    <div style="margin-top: 28px; border-top: 1px solid #333333; padding-top: 2px;">
+                        <span class="bold">{$pessoa_descricao}</span>
+                    </div>
+                    <div style="font-size: 6.5px; color: #7f8c8d; margin-top: 3px;">Impresso em: {$data_hoje}</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- LINHA DE CORTE ENTRE AS VIAS -->
+    <div class="corte">corte aqui</div>
+
+    <!-- ==================== SEGUNDA VIA (CLIENTE): LAÇOS NO SINGULAR (produto / parcela) PORQUE O MOTOR SÓ PREENCHE A 1ª OCORRÊNCIA DE CADA TAG ==================== -->
+    <div class="via via-2">
+
+        <!-- CABEÇALHO: LOGO, UNIDADE E NÚMERO DO PEDIDO -->
+        <table style="margin-bottom: 3px; border-bottom: 2px solid #2c3e50;">
+            <tr>
+                <td style="width: 18%; padding-bottom: 2px;">
+                    <img src="{$unidade_image}" style="max-width: 100px; max-height: 30px;" alt="Logo da Empresa">
+                </td>
+                <td style="width: 52%; padding-bottom: 2px;">
+                    <span class="bold" style="font-size: 9px;">{$pessoa_unidade_descricao}</span><br>
+                    {$pessoa_unidade_cpf_cnpj} &bull; {$p_unidade_fone1}
+                </td>
+                <td style="width: 30%; text-align: right; padding-bottom: 2px;">
+                    <span style="font-size: 7px; color: #7f8c8d; font-weight: bold;">PEDIDO COMERCIAL &bull; 2ª VIA</span><br>
+                    <span style="font-size: 13px; font-weight: bold; color: #2c3e50;">Nº {$id}</span>
+                </td>
+            </tr>
+        </table>
+
+        <!-- DADOS DO CLIENTE (6 COLUNAS PARA ECONOMIZAR LINHAS) -->
+        <table class="grid-table">
+            <tr>
+                <td class="lbl" style="width: 8%;">Cliente:</td>
+                <td class="val bold" style="width: 40%;">{$pessoa_id} - {$pessoa_descricao}</td>
+                <td class="lbl" style="width: 8%;">Cnpj/Cpf:</td>
+                <td class="val" style="width: 20%;">{$pessoa_cpf_cnpj}</td>
+                <td class="lbl" style="width: 7%;">Data:</td>
+                <td class="val bold" style="width: 17%;">{$cadastro}</td>
+            </tr>
+            <tr>
+                <td class="lbl">Endereço:</td>
+                <td class="val">{$logradouro}, {$numero} {$complemento} {$bairro} &ndash; {$local_municipio_descricao}/{$local_uf_descricao} {$cep}</td>
+                <td class="lbl">Insc. Est.:</td>
+                <td class="val">{$pessoa_pj_inscricao_estadual}</td>
+                <td class="lbl">Status:</td>
+                <td class="val">{$global_status_descricao}</td>
+            </tr>
+            <tr>
+                <td class="lbl">Telefone:</td>
+                <td class="val">{$pessoa_fone1} {$pessoa_fone2}</td>
+                <td class="lbl">Vendedor:</td>
+                <td class="val" colspan="3">{$pessoa_responsavel_id} - {$pessoa_responsavel_descricao}</td>
+            </tr>
+        </table>
+
+        <!-- PRODUTOS -->
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width: 8%;">Código</th>
+                    <th style="text-align: left; width: 56%;">Produto</th>
+                    <th class="text-center" style="width: 7%;">Qtd</th>
+                    <th class="text-center" style="width: 6%;">Und</th>
+                    <th class="text-right nowrap" style="width: 11%;">Unitário</th>
+                    <th class="text-right nowrap" style="width: 12%;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--[produto]-->
+                <tr class="linha-prod-{$produto_id}">
+                    <td class="text-center">{$produto_id}</td>
+                    <td><span class="bold">{$produto_descricao}</span> <span style="color: #7f8c8d;">{$produto_complemento}</span></td>
+                    <td class="text-center">{$qtde}</td>
+                    <td class="text-center">{$sigla}</td>
+                    <td class="text-right nowrap">{$preco}</td>
+                    <td class="text-right bold nowrap">{$total_bruto}</td>
+                </tr>
+                <!--[/produto]-->
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2" class="text-right">TOTAL DE ITENS:</td>
+                    <td class="text-center">{$qtde_sum}</td>
+                    <td colspan="2" class="text-right nowrap">SUBTOTAL:</td>
+                    <td class="text-right nowrap">{$subtotal_produto}</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- OBSERVAÇÕES E CÓDIGOS -->
+        <table class="grid-table">
+            <tr>
+                <td class="lbl" style="width: 9%; vertical-align: top;">Obs 1:</td>
+                <td class="val preservar-linhas" style="width: 41%; vertical-align: top;">{$obs1}</td>
+                <td class="lbl" style="width: 9%; vertical-align: top;">Obs 2:</td>
+                <td class="val preservar-linhas" style="width: 41%; vertical-align: top;">{$obs2}</td>
+            </tr>
+            <tr>
+                <td class="lbl">Cód. Interno:</td>
+                <td class="val">{$cod_interno}</td>
+                <td class="lbl">Cód. Externo:</td>
+                <td class="val">{$cod_externo}</td>
+            </tr>
+        </table>
+
+        <!-- RESUMO FINANCEIRO (2 LINHAS) -->
+        <table class="grid-table">
+            <tr>
+                <td class="lbl" style="width: 9%;">Total Bruto:</td>
+                <td class="val" style="width: 14%;">{$subtotal_produto}</td>
+                <td class="lbl" style="width: 9%;">Descontos:</td>
+                <td class="val" style="width: 14%;">{$desconto_produto} &ndash; {$desc_perc_produto}%</td>
+                <td class="lbl" style="width: 9%;">Subst. Trib.:</td>
+                <td class="val" style="width: 15%;">{$total_st_valor}</td>
+                <td class="lbl" style="width: 12%;">Frete:</td>
+                <td class="val" style="width: 18%;">{$total_frete}</td>
+            </tr>
+            <tr>
+                <td class="lbl">Forma Pgto:</td>
+                <td class="val">{$financ_forma_pgto_descricao}</td>
+                <td class="lbl">Prazo Pgto:</td>
+                <td class="val">{$financ_prazo_pgto_descricao}</td>
+                <td class="lbl">Peso B. / L.:</td>
+                <td class="val">{$volume_peso_bruto} / {$volume_peso_liquido}</td>
+                <td class="total-lbl">TOTAL GERAL:</td>
+                <td class="total-val">{$total_pedido}</td>
+            </tr>
+        </table>
+
+        <!-- PARCELAS E ASSINATURA LADO A LADO -->
+        <table style="margin-bottom: 0;">
+            <tr>
+                <td style="width: 58%; padding: 0; vertical-align: top;">
+                    <table class="items-table" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 16%;">Parcela</th>
+                                <th class="text-center" style="width: 26%;">Vencimento</th>
+                                <th class="text-right" style="width: 24%;">Valor</th>
+                                <th style="text-align: left; width: 34%;">Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--[parcela]-->
+                            <tr class="linha-parc-{$parcela}">
+                                <td class="text-center">{$parcela}</td>
+                                <td class="text-center bold">{$vencimento}</td>
+                                <td class="text-right bold">{$valor}</td>
+                                <td>{$financ_forma_pgto_descricao_parcela}</td>
+                            </tr>
+                            <!--[/parcela]-->
+                        </tbody>
+                    </table>
+                </td>
+                <td style="width: 4%; padding: 0;"></td>
+                <td style="width: 38%; padding: 0; vertical-align: bottom; text-align: center;">
+                    <div style="margin-top: 28px; border-top: 1px solid #333333; padding-top: 2px;">
+                        <span class="bold">{$pessoa_descricao}</span>
+                    </div>
+                    <div style="font-size: 6.5px; color: #7f8c8d; margin-top: 3px;">Impresso em: {$data_hoje}</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>
+<!--[/main]-->
