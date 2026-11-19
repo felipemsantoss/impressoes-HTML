@@ -1,0 +1,339 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrato de Credenciamento e Prestação de Serviços de Cuidado</title>
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* MARGENS GRANDES EM CIMA E EMBAIXO: O CABECALHO (FAIXA + LOGO) E O RODAPE (LOGO + DADOS DA UNIDADE)
+           FICAM DENTRO DELAS E REPETEM EM TODAS AS PAGINAS */
+        @page {
+            size: A4 portrait;
+            margin: 3.70cm 2.00cm 3.60cm 2.00cm;
+        }
+
+        body {
+            font-size: 10.5pt;
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.35;
+        }
+
+        .bold { font-weight: bold; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+
+        p {
+            margin: 0 0 4px 0;
+            text-align: justify;
+        }
+
+        /* TRECHOS QUE MUDAM DE CONTRATO PARA CONTRATO E AINDA NAO TEM VARIAVEL */
+        .pendente { background-color: #fff3a0; }
+
+        /* FAIXAS AZUIS NO TOPO E NO PE DA FOLHA (OFFSET NEGATIVO PARA OCUPAR A LARGURA TODA) */
+        .faixa-topo {
+            position: fixed;
+            top: -3.70cm;
+            left: -2.00cm;
+            right: -2.00cm;
+            height: 0.85cm;
+            background-color: #1f2a5c;
+        }
+        .faixa-rodape {
+            position: fixed;
+            bottom: -3.60cm;
+            left: -2.00cm;
+            right: -2.00cm;
+            height: 0.85cm;
+            background-color: #1f2a5c;
+        }
+
+        /* LOGO DO CABECALHO */
+        .cabecalho {
+            position: fixed;
+            top: -2.65cm;
+            left: 0;
+            right: 0;
+            height: 2.00cm;
+            text-align: center;
+        }
+        .cabecalho img {
+            max-width: 7.50cm;
+            max-height: 1.80cm;
+        }
+
+        /* RODAPE: LOGO | DADOS DA UNIDADE */
+        .rodape {
+            position: fixed;
+            bottom: -2.55cm;
+            left: 0;
+            right: 0;
+            height: 1.70cm;
+        }
+        .rodape table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        .rodape td {
+            vertical-align: middle;
+            padding: 0;
+        }
+        .rodape img {
+            max-width: 4.50cm;
+            max-height: 1.10cm;
+        }
+        .rodape .dados-unidade {
+            border-left: 1px solid #333333;
+            padding: 2px 0 2px 0.60cm;
+            font-size: 6.5pt;
+            line-height: 1.35;
+            color: #333333;
+        }
+
+        /* MARCA D'AGUA (LETRA "E" DO INSTITUTO, JA CLARINHA NA PROPRIA IMAGEM) */
+        .marca-dagua {
+            position: fixed;
+            top: 3.40cm;
+            left: 1.20cm;
+            width: 13.30cm;
+        }
+        .marca-dagua img {
+            width: 13.30cm;
+        }
+
+        /* TITULO */
+        .titulo {
+            font-family: "Times New Roman", Times, serif !important;
+            font-size: 17pt;
+            line-height: 1.20;
+            color: #1f2a5c;
+            text-align: center;
+            text-transform: uppercase;
+            margin: 0 0 16px 0;
+        }
+
+        /* TITULOS DAS PARTES E DAS CLAUSULAS */
+        .secao {
+            font-size: 11.5pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 14px 0 8px 0;
+        }
+
+        /* DADOS DO ASSISTIDO E DO RESPONSAVEL */
+        .dado {
+            font-size: 8.5pt;
+            margin: 0 0 8px 0;
+            text-align: left;
+        }
+        .dado .lbl {
+            font-size: 9.5pt;
+            font-weight: bold;
+        }
+
+        /* ALINEAS a), b), c)... */
+        .alinea {
+            padding-left: 10px;
+        }
+
+        /* TABELA DE SERVICOS DA CLAUSULA 5.1 (MESMO FORMATO DO CONTRATO DA INGABAN) */
+        /* bordas separadas por celula (topo/esquerda na tabela, direita/baixo em cada celula):
+           com border-collapse o DomPDF deixava o cabecalho aberto quando o laco vinha vazio */
+        table.itens {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-top: 1px solid #555555;
+            border-left: 1px solid #555555;
+            table-layout: fixed;
+            margin: 4px 0 8px 0;
+        }
+        table.itens th, table.itens td {
+            border-right: 1px solid #555555;
+            border-bottom: 1px solid #555555;
+            padding: 4px 8px;
+            font-size: 10pt;
+            vertical-align: middle;
+        }
+        .titulo-tabela {
+            font-size: 10pt;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+
+        .assinaturas {
+            page-break-inside: avoid;
+            margin-top: 34px;
+        }
+        .assinaturas p {
+            text-align: left;
+            margin: 0 0 26px 0;
+        }
+        .testemunhas {
+            page-break-inside: avoid;
+            margin-top: 10px;
+        }
+        .testemunhas p {
+            text-align: left;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FAIXAS, CABECALHO, RODAPE E MARCA D'AGUA (REPETEM EM TODAS AS PAGINAS) -->
+    <div class="faixa-topo"></div>
+    <div class="faixa-rodape"></div>
+
+    <div class="marca-dagua"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAL8AAAD9CAYAAADteqZhAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAeSUlEQVR42u2d327bWJLGf3VI0YIhGIZhGEYjCPZiHyTAbCe51CvMxW5PP1E6mYu8gi87PbPAPMheDBpBEBiGIQiCQVPkqb04pEQr8h/ZEkVK9QHp7iR2m+L5Tp2v6tQfwfAgfh5+QvAACAoIoOjC1wlS+50iEBN+3YdcIefO9/34f5aFb/I4FEdOzL8u/moL9AKIvQJ4M/xMTI6gOHxJP529IsUlEYVTXF/wThGnaFIj/uEaHydTNK9+4yANT+O84FOAlH7WY+oFX27I+UIWtjmM/I9bc51R2+OY0nN90kRxfdBY0USQfuBfa5cvV3zmIGf+KwubI/NudmLZpthb8s/JrjV54RKHHoL2Qfqg8a59bkVvahvjpjoxwqbQ2eL/fvGrkX+X8Hb4cWbdtUZ2xR+uWaZ0bclz0FTQDLjRUlZR82oUxz8u/sfI31XCl27nwOEPFXe4i5Z9nX6GoCmQFkSp4DMpXW9PhOIoiHZOLnWe/O+HH2rqHZgRXgbt1uuthlc0dZB6XJaR3AQfopKOgqCdl0udJf/b4ce5oIFYkWOQgVn4zcklwd8oLhN8qpBqjUBd9B86R/5g6WUma8Af7beG365DLUhW8x9yZmEFKddJWus/dIL8d+PwBQJHijsxK99uuaRIJvhsLpWqSzppRci19eR/P/xAQVTF4Y+DvDEt38UTopRO6eI9RIWCCNa8MepKof5ErSb//KG19ZZe0RuY38au9r13b4vvWqa2X7Kt5ZTIgdzjMofPq40hCxtDViCr1v5dfl+suEG40+EQcIJ+lXaSfvaB+4o7bxnpS30rqQuOX67PWKDFRbr/axxTEtcnTYBDRZJqAffhxKj+u3ZZ91SjkijqlhsQyRX9t7SR+AKxh7MWObITQW9S+pNglbQW5dhsyG/u73jqMqFMnDskGAi7x1jhxPG4r4JmrSB/Pf3AoSct0fVe0BEwVsjDZU87HLX3ww8/nB62GZ7q5OqlR8aK277mfzf8WNJeEoc/B5JtH7UOJgrjulPU5vj145vBLvwq4iuMpVzPrZH/zfAzEXmZa6jHoCdbXCAv6AS4rmLVQncTvhY3g5Zp2fuc27RI/K1Fe34efqokhDvg9gwYbFPapPRHPTIflZp617Ic67JSEaYkLiE73Je8p2XE3wr53w8/lCUYLnHoT1t88ZNbDi4jci+wN3nu4cQtEDxRWbhTS+8+2rbs3IBx+6aQLjvJGyX/uzIfR9AjRU63JHO8IpeKTDxCsefFHfXCnnAq9FyfdLADvsLkloPLHlMfUSw9zRsj//zSSo5BT7dlCaowF8AfF79Y+GPhVFgMq8psE3QlaVByhaunGDdpjvggcKbI0ZbeSnbLwdeY3Au6F8Ua61q3WpFLm+XRRJEJ6KSi9WPGTfaJ+I7C+x0sytiWPErIDgXtl/XO24ggZSBjwU80WHxAnnyiy+4TX/Jbkj+N+Jtxmuv1wGU6yiYbAMwqzsJt+7RWpL/6TbvsNvGDxlcks64FTfl0zM6Hel6Sx8UOn5QnR6Log5uiShKsEt7qtcbr6l0ku0580KzNBRX74ECDElHc+TtdiZibKZtcO/nfDX+rjsGtanxBv3kk35dOBIbVsdYYbrhWV0BOt2nxbzn4WhDlzqI6hiYsf03qHClyZhrfsBeWv0b8/haJj6Dfqp4zRnxDI+SvClAU+WmLxL9WSE3qGBojf3BwoST+VvJAFL1RuO5yGrKhY+R/WxaiEJLUtnXd7R1cYsQ3NEX+N8PP+HCvNwCOt+izXyuS26ABQ2Pkj8jJ6TlBt+bghup+PwIxq29YGc9KUQ1yR4lDFZbb4s69VuCLpSYbmrD8ldwRdMD2yg8RdFxV6BgMjZC/DXKnhEV3DM2Rv8rpPuB2m50WEPS6wOW2fIYGLb9HQkhzi9EdfEp/pDiz+oZmyB9G/oBQnG7zgQUd9ch8jjUkMzRq+WXQgoZH4whvuTuGZsj/fvihmrOxbas/1hU69RoMLya/htDmUQtaV1iEx9Ac+asClTAcYnsok9fM6huaI3+w+mzd6juYYFbf0BT522L1QxcuGdttrqEx8rfF6ocuXGb1DQ2Rvz1WP8T2H292YTCsifxVMXoLIjyZ5esbGiN/NTzCbzFrs2b3xyZ5DI2RX/AoLmnD+BrBT2yZDI2Q/83wM4ojojhuwfOVksf0vqEB8sfkTOm5ciqHSR7D/pBfUMqxNFsfR2OSx9AY+d8MP1NO7GvBqErJFUzyGJohf5A8iaMFUR7B35jkMTRG/prkaQOsON3QHPkdRUskDwA3tjyGRshfG1nfEr0vlr5saFL2sO4BYs+Epqb3DY2RX1tj9aEaEm0wNGb5fbD8W4fHZRbgNGwacaX3QxZnO5xdRczyG5qz/NISqx+exWcNDIc3GPnbpfcpozw2WsjQiOwJ11tbm6yyIHl8Zjbf0IjlDy3HHSCtkD3O2pMYmuJalcLcgnLFClayaGiG/GU+T2KvwrB35HehZLHfomeynB5DM+QPkR61ft+G/SM/gKKtkj1FG9KLDPtBfsG1hvwp/UyN/IZmHN52yR6bumJokPzt0vsOtakrhsZkj5lZw36S3+NaRH7JLZXZ0Bj5Hb41zq7iM+vGbGhS9hgMRn6DYc80P317DQaz/AaDkd9gMPIbDEZ+g2HnyC9I3KKdaM1pDY1a/lalMxv5DSZ7DAYjv8GwGcRA1jbpY+gGam3tKXAojpy4MynpsaK5IEb+FRe7gvJjKp7sieeiKBIMaBzhSUmyiMJ3yfIblpBcSwLrwj9rPU0PSwc91tp7LKNne2JM7o4LPCC78sjIyN8xvB1+nC1lsGgae1xf0L5CIqGjndOlFDCE9+BT16G3sdfkr2RMjfIDhz9U3KGicbUZxOj9FOrnCmmXRsfG+0p6RSrN2hc4UhgI6oLcsYKaZ2BUEPHPi/828ref9HqkuBO1hl3rgL8lGUcUnXroeL9JbxZ+TW7vqMfUT+kZ+duCN8PPROQUeCJ8X3HnRvr1a30P1xFF5waKtI388bpo+fPwE0pOTuxibk8UOTbSr1/ueOSbAL9f/K1zD98q8vs1Pc/74Qc8HnDJAdlPWEh3U3LnSvCdbS+5c6R4N/yIojj0SPGnWP7SRuyUIpfAxKH83tH5aTtF/uDYKiDHCqcPfa2iN4L42sDr2VyAlH7WI/NuBZkU0hxcElHUBnu7vuCr38fVydaWka/PgaI3Di6BXBG+dFDu7Bz53w1/q6I5ZwpHSxYs9bjM4VOdzf3SKmVhhgJHGNWUrJSg9fPwE0ECSBlXAsLP+uHmoLxfQKDvcbHDJx761S1yWx1bwV8D4/CZtNPE3xny1yz+aSC+5KATQSdaVod5QPBU5Pxy8etan2HVSEcZfk2l9E6qTCKB2OP6tQ2x1VNC0HEgvKbVu/t9ze/OyP/iRaIP6gqiP6UcZ1pZ3TYu1rJnKjdELviJr50YpZzqA30Np8OmE+cykPEtybhH5iM8XY3o7IvmTytLqjj+6KATtmxD1ORUBjpmlm9EtQnicEK45AVzFjJBUyAFbhTJC4SIgikJ/9jRlvE7Qf5dOYafKqfKhLw0bPjqhKj8CI2rdV1wuOehmuD75AWRD6fkXd9HUP7Z0QjO3kZ79gX3bfZyU+QhEnPX4Z4728H38QhdPiWN/Ia9OQE3AbsAMhj524A2NdAyGPmbRmJVU4bGyG/W1rDPlt/alhhM9hgMRn6DwchvMBj5DYadw15GespkMWDecG9ZgLXKwS+IAOlUE1ZDJ8m/viLzec/NeeJW+L2fVV1VxSTLvj98pctiiryq7no7/EC9h9su5bcb+bdGeb1xcP0S6r8ZfiYmR/A4fEl4XSwOSUDjemGLPnCxVv39AbcAviyOyRRJq6qwd8MP+A626Dbybx8e5FrQkbJ609d6R2XPlCk91ycdAP16z02dWesXnSyurKw6nG8ayQV/E+HTlGTSY+rfDX+zU6EDkHfD3/5ziz9/csvBZczURyhfLn5ZycITmlGVbcLdAPSI7V/aZSBjwU8Uck+Emr9g5K9be0GvCtzY4yieSIxg5cHjmJK4PunAw6DF3RAyQUcp/UlVDgiWerzP5M8E/aaQP7W+tiJ96YTGofsaR3QoVDsvBCetnGnbBHuk+QUdp/Svekx9RPHo4lekryaiaOjHM+jii1bkCDgqHfuJIuO3w48A/PFEuWforOWXKw+jp0REFix938NJlxs93fM+coUrQnsVwHWu0atZ/ifo+9DaTicO4csDwwsWuirHGvrwDHYzw19jgXNFbyC6Usj+Mvz7k/0fw8uxac3sPe4rMAF5MJrzdviRmCkFsXPoqSL/QUclzmpSUA4d/nWEPy2IXUxOJYcM3ZU9JfE1A7n3SK+svQutBgeCnrG3OUdBCiky8YidAh21/E8i/l1r788FPWevk+00FvTc1U6Bn4efjKUdIv+TiB9uQRWHDg643QuJswKOD7h9JWgiqMmgjpD/UeK/H37g3fADZYrZqVn7e5E4/CvClMil098N7SH/o8T/efip7BRGDPIaOLYleHh9BD0PQ/SwDdBW8j/F4pft8RINxLfC+ad6AsiZwFmB4y/Dv/Nm+NleyjrIH+LML4xRoJeCf5D4Cjj0yOFfm8x51gY4cuh5CA4UtgHaYPkFvVYYO/RB4ocp53Jmr/xFGBxw+8oTWSRo2+QXdFzgru9L0qoR/8yIvz5H+IDb/wiRIG9+wJbIn6X0rxS3lPhhRtaM+Ef2qte7bg7/yqF9c4SbJ78X9FuPqc+XpAe9L0OZYUaWEX9z/pq8CnKyujcxbJz8ilwqkkcUP1y/1zU+FspswhE+Azn1CP9lkaCNk38U0nDlB7lTi+Obc9ssjiP8WW6RoI2SP1O4En4swHgz/BxS00Ic/9RebeMnwJFFgjZIfo/7zj1TtyNyguXRn7A4/raQHJC9tpygtZNfrgTNlvW4eTf8iMOTkJ6/YBymYT1nQFzlBIHyzjbAvXgSUctb4JEgP0zu+3n4CUVxcMzzSw29oqkrJwmWf3bfzXNSPXfZhCrGUiV+MGohYTCUjv7X8O/WOuX55I+uwN9TaB3ydQS/is7PCMOOZ13P6hPTH0FK7WurRoR3p5S7QzuBAPQ0QpOU5MpR+DfDz7YB6uR/bCyRoNdhArhbKncC+YrTJ9B2IuhN1cNGSve4ahn4kjYeP04pv9PIqs8e1wqUjnD/loOvPab+/fBDJ1umzFtRKo6C+3zPVfBIGaPk4P+9LH0hPMyUCD0GPb3/+xndkox7ZD5Y6M13L7vbwtDNWhi2vMHVpuFDvyRJH6unbhveDz9QEFXreKyIA7368sJN/IjV999DPP++6E7PRdyeLPMRyqazaUFERMGUpLEjt75RS4vhc9w4wo8F7WTTq3X4AYq8Cn6AjLrSKaK6NI0ojhz+VBEn6OU6ennHjzi5qSxp7Bp2oicOxHeLpAfSSon/84FWJU2gvrjli8w9cjUlue6TDhR3sl/+gZ46tD/l4LLNMmihYdmJIieVmlAYyxpa2d+76A4ulftb6pV9dY6Xk76drfiqZ6pOg4Jo7CjG4UZ6rzbB4IDbQ0G/Fbi0badA5UuG9vKc1aOIodHXy/X+veQvU5XzqrHqPTgpdeQVoQflSqSvpqMI8+koy2RLM6eBjMHv2yZwirxy6GhKfN2GU2DeqU8htKY8kbvSdKLIRNY0wGSZw+tvOfh3TO7vkyxlCu3ZU/tuht48xWxoRBXWrKaj3JVbpOva2c9zkrU6Zo/3yCfwgl4pMq4CBU32D11sT1nmhSWLwZNbkj8jcv+/a5LS8RKrP4rIl6Yq15ETX8bkTOnd255k3lI8Y0riEopDgT5wKJBU01EWMAK9atoKVT+rjCxcT+mN+qT7kpLtyuzQE+BK0Mm74YeNy9cqfLnYnnLp7kS+xU/g5Uss/6NW/ym7uDq4yp18pEGzPTnWLui/gXxbR3B9vFGE7ytu39I2sjApR8bVebzOjVC9XwUK4ip8efIAI64URvpAH6h1WP5xj8xPn5EtUCe9QFyS/lifJx1i5mkOW4sQlVIoLe86Th5eoJ1CMj8JdCKBePnb4W+z2WMF0UoOcp0flRLokx7HFGXc/l5DONZ7UmvWSn5BRw5d6UMtdlYuSfJSqZBQpjG0ITr0fvgBj1wrbuLw5+xNLpHGwHHwfyQXdOLQNCO66ZH5dyWhZe6v1bjELFS5YBQPHXp4wO1AH88KyArcZYRfete0NvKHHSb5Kp702+FHPFNyei7mtnIS13LstokCv1/8WkanNFP4U5Bj0BP26pIsbARBy8mUkitkbm6kcoGsPto1pJhUHJPDFWM02S0HXyNy/rEh53tG/oJoJHiecmU812y+6rW5852VK60ZUoR1JKGa7ZS9zRvSWJBY4XBBPdwJYjxztsKsRnxKb3Ne/tzBWZ68toz4joKc2EX4s0312ixaupe+XPxSLjA56HdBv5Y5TIb1wHvcV39PjfjayR88+8fH4lTE90TugNtXmwoDpvSftBG3KYO+XPyKhBMzvSX5U9Br4+16iA+a3dcSZ+3kT+lPHnM+Fom/SafvvpYobdwEU3pVqsS1x/3ZNn+lU0IKuZRHWtuvlfyCjh8jW5PELyead6bo4l8Xf50l71UOMcgVPJwbYlhYdfRS0Endv9o4+StH9yGyReQNER8Un7Gm3I2mHeI/Ln4JjVuCQ/znOpoA7wvxq0zNJtMqHPCgvn4//IDDU0Z0rFZ2JYeYb4p8t1PgwajO10D85jOBHxT6VealQxu73Sxv9C6/7MB08nAPIuT03EGofbAOdnNkHvdd8Jl7YRnrixzeB4hYNaFq8lo/35W5u39c/EJOj4jcF7grjzMpFKz9dbgsbCaqcx/ih+SODwPjzs1Ivcwhrk5RwgCPb2HM0L5VkIVTnVDemgdr/7etPs8DZYyCQ48UMZ2/Joe4MioF0XhKb1JmM+583UC9pltoT6VffJ/V1yB5TroYeWkzfr/4dVZGOSW+LohHu7oJ2l7eGi9/6CoP3xo/bVIKLW6CA7KyrXu333sog41GIWVGW1vTHS+3+hB63Bia2gQRhS9wI0cxAhkIOqBTSXOSC34MlNnBwWP8o6ELq7VZ/nJO7qHRs9lNAJSdlXVC6HBXdZ07oqV3LIKOPe4mZLkya0jQhVD1fcfrVom/z15GdcNZVpHloCNgJEEKHZYloYdb9g/utJ50ZRrzH1uO3ryY/OXu7W/rgfwWf3bbHOO6FAVyhTGh6AjFJQ49FHyiSH/DJ8OssXAoa1QKIkIDg6SzzW/jpQcZcmhRnnZuBKBWVRYyIKlaPOESQZOqkqpuSCRsEPdQZKb2tZmgHrhJ6WdVY+HKNH7pmIV/EvlDr32PbDHaILhEbeM9iGVZj+ESTbOQC7+U3GXS3fK/W/YnHtd56/4w12p4O/ytPE796y1r/v97SnGNwfASuMWdsNhBbTvkd4nJLkOj5G8L4aqBagZDg+QHxfW3/1DeLL+hefILfuuyJwyaMxgaJn87ZI/0FbFByoZmye9xbeg+4MqYta2QoRnyhxx+n7fjwdRyiwzNWv6CqCXF1tpXhDfDz7ZKhiYsv0PwbWm6NJjSczHWCdDQAPnnN6rt6D3ZJx2Y7jc0JntCx4Z2WH9FDh3FbLCBwbBR8mv4w7QlzzcQsFJKQ1OWvzXhzgpHBc4cX8PmyU8Id7bF8qPI8ZTEHF9DU5qfvEUDF8ppfZj1N2yW/KFqSBB8a9rqKXJcEJv1N2xa9oSRQB7Xpp6SZv0N9+Ln4afZrxeTX3FkJK1qqGrW37AM74a/IaED/Mq5YPdY/ogemQcmbbP+gre4v4E3w8/8Zfh3fKhMPg2lt2sgfyhWFqRl7bQVOYnwsd35msyJySmIneB/Isw98Gux/CXRSOlP2vbBy9m3Zv33mPiBnZoccPtKys6C1TyvtZA/J6bHtG3SB8Ktb78gMud3z/B++KHU95I4/OJ8uGtZF/n/dfFXQrNRaaH1d+dTei4y53evHNuQeqNHZWsdN+eD3pQz0NZD/gApj5O2TRjX+IDbE2fO795Y/LJb3KkiZ0tIfA2rt0F/kPx/XPyCDzn+4xa+k+MIb/Jnh1FFdAocAmcsGehXWv30OQ0PHi1gLx3fURtfjiI/mfzZXeI7Cgpi59DXihzdQ+BnWf0nkT84vpkvh4m1De6A2zOH8m740RizY8R/bPC5ojceSZ/b5uZR8v/r4q9E4QbtuqXvauDQY1DT/zuAKob/GPED+aMr5fkjj57ct0chb6n1B/RU0L63Xj+dJ/48hp+9foj4JRezl7SeetJ3/n7xa9XOua3WH0V+KgdmmwPcYeLPY/gPtsn3Kf0rRV7UyXulbVPgckHbugGcw5/nxM5R2AboNPEf5qUilzFTn7+wwvXJ5P/94lcUV0V+fEvfY3LA7StPZBGgHSU+MFFk4tAXD8xYyfLnxMRMPch1i99nEiJAdgHWdrwdfkRWI76/5eDSI7PBfY2RP0R+FA0TArMWv9dBhD9TLAGurQh5OgoweCLxZ3KnWFNDD3nujtWwW1+3+QWHSeDu0uMoiHdyrlRXiV9O/Txalq5wn9zxuO+CrsXqr2z5azsQwWctdn6r5zxy6HlhTnDHiS/5OuXOi8j/j4v/wYW5jdctlz8Ag8oJ7jE1GbQlLObprGDx8ci3mHxtcudF5Id5lweP+057oz91J/hVRBGbH9A86pVXDj2/L0/nHqt/JWgma4jurI38c/mjWcujP7MNoMhrgb4ilgvUqGPrZ5VXwGCFb594ZCSwkbG0Lx599W74EQ+E6MoqO3qrrvCVR0YeMUd4gzInIsfhifBHZfnpKsY2u+Xga0Tu//fivzfyjC+eyfXl4pfq8uuqA/q/OrNOHf68IDY/YEPWvse0LnPOVuSa97jvm9D5a7X81S7vMSVoanlNSwfdLYsiCP57gUstHLoe0itSCmKeY+1LUupXj6SK24jcWSv5qw/uERTX+vj/EoxuObjuMfURxbNTZI30FendySOJaQ8R/1JhLLDxdVjruNufh59C/Add5fKiVaeAlrMJmnj5Xdf0MXkwdxQvJn3li4GOBG3k3ctmrMDKt3dtwkTQqwKXK47cpNAP6wuhn+uUpOyhKscvlbqCjhW5BOHLGi+yGiX/jmwABL1O6Y8ici+w95ugWtOSNDFwoshgHf5dID6XTZ+2sumX1eUNQGiBN0rpj3pkvizn3Bs5tETa9EsrP1ijkdkK8TdK/h3aALNNAIxDOSc7vQmqdfNzaTN4uZ5fHmgAvdqWfyVNvcgd2AAzSxU2gaS1P9uJjfB2+LGK2CBoXFr5IzYQuq6iOkHj/21La9mgJXlJ7LeF2yAHRoKfaK2jXdc2QriJLWbSBmQg6GCd0mbxFFXkUtDJtt+VNPWDFu4BXu3GBpghAxmHjUCuVcAXR0HUOke5fqNdRW0OyI6A4w1ImzsGwyPfQj4Ya01PbjX54Yd6zXMeaE3R7Y3AjSJpRnLTI/MOrT53oydDRXJdvvAxcEhwYjeek6XoTUb/e0zuBd3ozW0ryV9tAEXIid0Bt2cbPF5bsxkETRWXCT5VSLX24mUpUaTcLo6I4gnEYoHkUv5/FYF++C/XF7zz0Bek3+TJK+h1gbtuWwqJbOOHLmT8nShywn7BK5q60Fa78hfuTMEpiHxZLVdZ6UU5ktT/TJFEURcW1SWblS+ryhyfuRb6QrLNH15zhPuKO2/HghnWhNEtB9dtkjmtIn+1AQoipvT2RQbtOLqTKStteIi5DFIEHQi6av63oRVkCikhXcmOlTY9zNvhRzxCTs/1SU+7Uxm231D0xsFl15IBpW0PNM8n8UR48wVaLnEUrsBPhO6lgUtbH2xeIAEgx6AnJoVaAw9yHTr3hTXa9oXVTpG/wrvhR4q5FFpL7rjh+aSvslxjpj5CG8u930vy16WQAkW4HDthyXAyw+ZJv0v1DdKlh62iQpSbwE4CI/3ekP/+k6CJpKy9QiboSGHsiap0lJ2rZJMuP/yydFzwR4IcGn+fQ4aqVmE/ivhlVz5IVYgR0sEoCzFkYKfB06x8Sn+yb6WasmsfaF5oLZU16xOKaNZSbL0jy54TiklGCvkuS5u9Iv/iRgBmm0GRgcMf7ulGyIAbjxuHbNHwZva5P5Hsywedz3+aiaPE4Y8IBR3Jjn7sCUharzArjUArsyyN/A0gdJYLW0ARpiQuITssJVJnN0OZY5MCN8Fplbozax3ojPx3MY8YeRx+thn6pAlwGCqf2lIc8gPRc8VlHrmpCl/qi2pkN/KvvBmqxDpXRj5q/WuSejlgeIGbDKtKrvisqvjyuEyRrE50kzJG/oY2RHWfsFgUHrpSRBSVE32nxPBxK+684NP574NkUZj5KRXRK7Ib0V+O/wfbYXrvwMuftQAAAABJRU5ErkJggg==" alt=""></div>
+
+    <div class="cabecalho"><img src="{$site_cabecalho_01}" alt="Logo"></div>
+
+    <div class="rodape">
+        <table>
+            <tr>
+                <td class="text-center" style="width: 50%;"><img src="{$site_cabecalho_01}" alt="Logo"></td>
+                <td class="dados-unidade" style="width: 50%;">
+                    CNPJ: {$pes_un_cpf_cnpj}<br>
+                    Endereço: {$pes_un_logradouro}, n. {$pes_un_numero} {$pes_un_complemento}<br>
+                    {$pes_un_bairro} &ndash; {$pes_un_local_municipio_descricao}/{$pes_un_local_uf_sigla} &ndash; {$pes_un_end_cep}<br>
+                    E-mail: {$pes_un_email}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- TITULO -->
+    <div class="titulo">
+        Contrato de Credenciamento<br>
+        e Prestação de Serviços de Cuidado
+    </div>
+
+    <p>Pelo presente instrumento particular, de um lado:</p>
+
+    <!-- CONTRATANTE = UNIDADE -->
+    <div class="secao">Contratante</div>
+    <p><span class="bold">{$pessoa_unidade_descricao}</span>, pessoa jurídica de direito privado, inscrita no CNPJ/MF sob o nº {$pes_un_cpf_cnpj}, com sede na {$pes_un_logradouro}, nº {$pes_un_numero} {$pes_un_complemento}, {$pes_un_bairro}, CEP {$pes_un_end_cep}, na cidade de {$pes_un_local_municipio_descricao}/{$pes_un_local_uf_sigla}, neste ato representada na forma de seu contrato social.</p>
+
+    <!-- CREDENCIADA = PESSOA DO CONTRATO (MEI) -->
+    <div class="secao">Credenciada</div>
+    <p class="dado"><span class="lbl">RAZÃO SOCIAL:</span> {$pessoa_descricao}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="lbl">CNPJ:</span> {$pes_cpf_cnpj}</p>
+    <p class="dado"><span class="lbl">ENDEREÇO:</span> {$pes_logradouro}, Nº: {$pes_numero} {$pes_complemento}, {$pes_bairro}. {$pes_local_municipio_descricao}-{$pes_local_uf_sigla}. CEP: {$pes_end_cep}</p>
+    <p class="dado"><span class="lbl">REPRESENTANTE LEGAL:</span> {$pessoa_responsavel_descricao}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="lbl">CPF:</span> {$pes_resp_cpf_cnpj}</p>
+    <p class="dado"><span class="lbl">TELEFONE:</span> {$pes_fone1} {$pes_fone2}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="lbl">E-MAIL:</span> {$pes_email}</p>
+
+    <p class="bold">As partes acima qualificadas, considerando que a CREDENCIADA exerce atividade empresarial própria e regular no ramo de cuidados a pessoas idosas e enfermas, com meios próprios, e considerando que a CONTRATANTE organiza e coordena demandas assistenciais de famílias que com ela contratam, resolvem celebrar o presente Contrato de Credenciamento e Prestação de Serviços, de natureza civil, que se regerá pelos artigos 593 e seguintes do Código Civil e pelas cláusulas a seguir.</p>
+
+    <div class="secao">CLÁUSULA PRIMEIRA &ndash; DO OBJETO</div>
+    <p><span class="bold">1.1.</span> O presente contrato tem por objeto o credenciamento da CREDENCIADA para a prestação de serviços de cuidado a pessoas idosas e enfermas, em domicílios indicados pela CONTRATANTE, mediante aceite prévio, expresso e específico de cada oferta de atendimento, na forma da Cláusula Segunda.</p>
+    <p><span class="bold">1.2.</span> Este contrato não gera para a CONTRATANTE obrigação de ofertar atendimentos, nem para a CREDENCIADA obrigação de aceitá-los, não havendo direito a volume mínimo de serviços, a periodicidade ou a continuidade de qualquer espécie.</p>
+    <div class="secao">CLÁUSULA SEGUNDA &ndash; DA CONTRATAÇÃO DE CADA ATENDIMENTO</div>
+    <p><span class="bold">2.1.</span> Cada atendimento, ou cada conjunto de plantões relativo a um mesmo assistido e a um período determinado não superior a 30 (trinta) dias, será objeto de oferta escrita da CONTRATANTE, encaminhada por meio de aplicativo, plataforma ou mensagem eletrônica, da qual constarão a identificação do assistido, o endereço, as datas, os horários, o escopo das atividades e o valor proposto, conforme o modelo do Anexo I.</p>
+    <p><span class="bold">2.2.</span> Recebida a oferta, a CREDENCIADA poderá aceitá-la, recusá-la ou apresentar contraproposta quanto ao valor, no prazo de ______ horas, entendendo-se o silêncio como recusa.</p>
+    <p><span class="bold">2.3.</span> A recusa é livre e não sujeita a CREDENCIADA a qualquer penalidade, advertência, descredenciamento, redução do volume de ofertas futuras ou consequência de qualquer natureza, e não constitui descumprimento contratual.</p>
+    <p><span class="bold">2.4.</span> A CONTRATANTE manterá registro de todas as ofertas encaminhadas e das respectivas respostas, ficando o registro à disposição da CREDENCIADA para consulta a qualquer tempo.</p>
+    <p><span class="bold">2.5.</span> Aceita a oferta, a CREDENCIADA obriga-se à execução do atendimento nos termos aceitos, respondendo pelos prejuízos decorrentes de sua não realização injustificada.</p>
+    <p><span class="bold">2.6.</span> O término do período abrangido por oferta de conjunto de plantões não gera direito nem obrigação de renovação, dependendo cada novo período de nova oferta e de novo aceite.</p>
+    <div class="secao">CLÁUSULA TERCEIRA &ndash; DA NATUREZA CIVIL E DA AUSÊNCIA DE VÍNCULO EMPREGATÍCIO</div>
+    <p><span class="bold">3.1.</span> A relação ora ajustada é de natureza estritamente civil e não configura relação de emprego, por ausência de subordinação jurídica e de pessoalidade, prestando a CREDENCIADA os serviços por conta própria e assumindo os riscos de sua atividade, ainda que a prestação ocorra de forma contínua, nos termos dos artigos 3º e 442-B da Consolidação das Leis do Trabalho.</p>
+    <p><span class="bold">3.2.</span> A CREDENCIADA está expressamente autorizada a prestar serviços a outros tomadores, inclusive a empresas concorrentes da CONTRATANTE e diretamente a particulares, sem que isso configure infração contratual ou fundamento para descredenciamento.</p>
+    <p><span class="bold">3.3.</span> A CREDENCIADA poderá fazer-se substituir, na execução de atendimento já aceito, por outra profissional habilitada, mediante comunicação prévia à CONTRATANTE, desde que a substituta integre o cadastro da CONTRATANTE ou apresente, antes do atendimento, a documentação comprobatória de sua qualificação, permanecendo a CREDENCIADA responsável pela execução e pelos danos eventualmente causados.</p>
+    <p><span class="bold">3.4.</span> A CONTRATANTE não exerce poder diretivo ou disciplinar sobre a CREDENCIADA, não lhe fixa jornada de trabalho, não controla horário de entrada e de saída, não lhe aplica advertência ou suspensão, não lhe impõe metas de produtividade e não lhe exige justificativa por ausências ou recusas.</p>
+    <p><span class="bold">3.5.</span> O descumprimento das obrigações contratuais resolve-se exclusivamente por notificação escrita e, se for o caso, pela rescisão deste contrato, sendo vedada a aplicação de qualquer medida de natureza disciplinar.</p>
+    <p><span class="bold">3.6.</span> A CREDENCIADA declara que mantém inscrição regular no Cadastro Nacional da Pessoa Jurídica, com atividade econômica compatível com o objeto deste contrato, e que dispõe de meios próprios para a execução dos serviços, sendo livre para prestar, e quando for o caso prestando, serviços a outros tomadores e a particulares, obrigando-se a comunicar à CONTRATANTE qualquer alteração das condições de regularidade aqui declaradas.</p>
+    <div class="secao">CLÁUSULA QUARTA &ndash; DA EXECUÇÃO DOS SERVIÇOS</div>
+    <p><span class="bold">4.1.</span> A CREDENCIADA executa os serviços com plena autonomia técnica, observado o plano de cuidados definido entre a CONTRATANTE e a família do assistido, ao qual terá acesso previamente à aceitação de cada oferta.</p>
+    <p><span class="bold">4.2.</span> Os serviços compreendem o auxílio nas necessidades diárias, higiene, alimentação, mobilidade, companhia e administração de medicamentos, esta restrita às atividades compatíveis com a capacitação da profissional e sempre mediante prescrição válida de profissional habilitado, sendo vedada a realização de procedimentos privativos de profissionais legalmente habilitados, tais como aplicação de medicamentos injetáveis, punção venosa, passagem ou troca de sondas, aspiração de vias aéreas, administração parenteral e curativos de maior complexidade.</p>
+    <p><span class="bold">4.3.</span> Havendo impedimento superveniente à execução de atendimento já aceito, a CREDENCIADA comunicará a CONTRATANTE com a maior antecedência possível e poderá indicar profissional substituta na forma do item 3.3.</p>
+    <p><span class="bold">4.4.</span> Em situação de urgência ou emergência, a profissional acionará o serviço de emergência adequado, público ou privado, conforme o fluxo definido no plano de cuidados ou, na falta dessa definição, o serviço público de emergência, e comunicará imediatamente a família e o responsável da CONTRATANTE.</p>
+    <div class="secao">CLÁUSULA QUINTA &ndash; DO PREÇO E DO PAGAMENTO</div>
+    <p><span class="bold">5.1.</span> O valor devido por cada atendimento será aquele constante da oferta aceita ou da contraproposta acolhida, podendo variar conforme a complexidade da assistência, o local, o horário e a negociação entre as partes, não havendo tabela de aplicação obrigatória.</p>
+    <p><span class="bold">5.2.</span> Os atendimentos executados no mês serão pagos até o dia ______ do mês subsequente, mediante apresentação da respectiva nota fiscal de serviços pela CREDENCIADA.</p>
+    <p><span class="bold">5.3.</span> O valor ajustado remunera integralmente os serviços e não contempla, por não ter natureza trabalhista, qualquer parcela a título de décimo terceiro, férias, adicionais, repouso semanal remunerado, vale-transporte ou vale-alimentação.</p>
+    <p><span class="bold">5.4.</span> É vedada a concessão de adiantamento, vale ou empréstimo à CREDENCIADA, bem como a realização de desconto por ausência, atraso ou recusa de atendimento.</p>
+    <p><span class="bold">5.5.</span> Os tributos incidentes sobre a atividade da CREDENCIADA e as contribuições previdenciárias devidas por ela e por seus eventuais colaboradores são de sua exclusiva responsabilidade.</p>
+    <div class="secao">CLÁUSULA SEXTA &ndash; DOS MEIOS E DOS CUSTOS PRÓPRIOS</div>
+    <p><span class="bold">6.1.</span> Correm por conta exclusiva da CREDENCIADA as despesas de deslocamento, alimentação, vestuário, materiais de uso pessoal e equipamentos de proteção individual de uso pessoal necessários à execução dos serviços.</p>
+    <p><span class="bold">6.2.</span> A CONTRATANTE não fornece uniforme à CREDENCIADA, que se apresentará com vestuário próprio adequado à atividade, sendo facultativo o porte de credencial de identificação destinada exclusivamente a viabilizar o acesso ao domicílio do assistido.</p>
+    <p><span class="bold">6.3.</span> A CREDENCIADA é responsável pela sua própria capacitação e atualização técnica, sendo facultativa a participação em cursos, treinamentos ou reuniões eventualmente oferecidos pela CONTRATANTE, cuja ausência não gera qualquer consequência contratual.</p>
+    <div class="secao">CLÁUSULA SÉTIMA &ndash; DAS OBRIGAÇÕES DA CREDENCIADA</div>
+    <p><span class="bold">7.1.</span> Constituem obrigações da CREDENCIADA:</p>
+    <p class="alinea">a) executar com zelo e diligência os atendimentos aceitos, observado o plano de cuidados;</p>
+    <p class="alinea">b) manter regular a sua situação cadastral e fiscal e apresentar os documentos comprobatórios quando solicitados;</p>
+    <p class="alinea">c) comprovar a qualificação técnica das profissionais que atuarem em seu nome;</p>
+    <p class="alinea">d) observar os limites técnicos previstos no item 4.2;</p>
+    <p class="alinea">e) registrar no prontuário ou no relatório do atendimento as atividades realizadas e as intercorrências verificadas;</p>
+    <p class="alinea">f) manter sigilo sobre as informações do assistido e de sua família;</p>
+    <p class="alinea">g) comunicar as intercorrências na forma do item 4.4;</p>
+    <p class="alinea">h) responder pelos danos que causar por culpa ou dolo na execução dos serviços.</p>
+    <div class="secao">CLÁUSULA OITAVA &ndash; DAS OBRIGAÇÕES DA CONTRATANTE</div>
+    <p><span class="bold">8.1.</span> Constituem obrigações da CONTRATANTE:</p>
+    <p class="alinea">a) encaminhar ofertas de atendimento com informações completas e corretas quanto ao local, ao escopo, ao horário e ao valor;</p>
+    <p class="alinea">b) disponibilizar previamente o plano de cuidados;</p>
+    <p class="alinea">c) efetuar os pagamentos nas condições ajustadas;</p>
+    <p class="alinea">d) abster-se de interferir na forma de execução dos serviços;</p>
+    <p class="alinea">e) abster-se de exigir exclusividade, disponibilidade permanente ou justificativa por recusas.</p>
+    <div class="secao">CLÁUSULA NONA &ndash; DA CONFIDENCIALIDADE E DA PROTEÇÃO DE DADOS</div>
+    <p><span class="bold">9.1.</span> A CREDENCIADA obriga-se a manter sigilo absoluto sobre as informações clínicas, familiares e patrimoniais a que tiver acesso em razão dos atendimentos, obrigação que subsiste após o término deste contrato.</p>
+    <p><span class="bold">9.2.</span> As partes tratarão os dados pessoais e sensíveis obtidos em razão deste contrato nos limites das finalidades de execução contratual e de tutela da saúde do assistido, observada a Lei 13.709/2018.</p>
+    <div class="secao">CLÁUSULA DÉCIMA &ndash; DA VEDAÇÃO DE CONTRATAÇÃO DIRETA COM O ASSISTIDO</div>
+    <p><span class="bold">10.1.</span> Enquanto vigente o contrato entre a CONTRATANTE e a família do assistido, e pelo prazo de 6 (seis) meses contados de seu término, a CREDENCIADA não celebrará contrato direto com aquela família para a assistência ao mesmo assistido, sob pena de multa não compensatória de R$ ____________ (______________________).</p>
+    <p><span class="bold">10.2.</span> A vedação prevista no item 10.1 restringe-se aos assistidos apresentados pela CONTRATANTE e não implica exclusividade, não alcançando a clientela própria da CREDENCIADA, os assistidos que lhe forem apresentados por outros tomadores e quaisquer outros contratos por ela livremente celebrados.</p>
+    <div class="secao">CLÁUSULA DÉCIMA PRIMEIRA &ndash; DA VIGÊNCIA E DA RESCISÃO</div>
+    <p><span class="bold">11.1.</span> O presente contrato vigora por prazo indeterminado a partir de {$inicio}.</p>
+    <p><span class="bold">11.2.</span> Qualquer das partes poderá resilir o contrato a qualquer tempo, imotivadamente e sem qualquer ônus ou multa, mediante comunicação escrita com antecedência de 15 (quinze) dias, ficando ressalvada a execução dos atendimentos já aceitos e não realizados.</p>
+    <p><span class="bold">11.3.</span> O contrato poderá ser rescindido de imediato em caso de descumprimento grave de suas obrigações, de perda das condições de regularidade previstas no item 3.6 ou de conduta que exponha a risco a integridade do assistido.</p>
+    <div class="secao">CLÁUSULA DÉCIMA SEGUNDA &ndash; DAS DISPOSIÇÕES FINAIS</div>
+    <p><span class="bold">12.1.</span> A tolerância de qualquer das partes quanto ao descumprimento de obrigação aqui prevista não importa novação, renúncia ou alteração do pactuado.</p>
+    <p><span class="bold">12.2.</span> A eventual declaração de nulidade de qualquer disposição deste contrato não atingirá as demais, que permanecerão plenamente válidas e eficazes.</p>
+    <p><span class="bold">12.3.</span> As comunicações entre as partes serão feitas por escrito, inclusive por mensagem eletrônica, para os contatos indicados neste instrumento ou posteriormente informados, considerando-se recebidas na data do envio.</p>
+    <p><span class="bold">12.4.</span> As partes elegem o foro da Comarca da Região Metropolitana de Maringá, Estado do Paraná, para dirimir as controvérsias oriundas deste contrato, com renúncia a qualquer outro, por mais privilegiado que seja.</p>
+
+    <!-- FECHO, ASSINATURAS E TESTEMUNHAS SEMPRE JUNTOS NA MESMA PAGINA -->
+    <div style="page-break-inside: avoid;">
+    <p style="margin-top: 14px;">E por estarem assim justas e contratadas, as partes firmam o presente instrumento em 2 (duas) vias de igual teor e forma, na presença das testemunhas abaixo.</p>
+    <p class="text-right">{$pes_un_local_municipio_descricao}, {$cadastro}.</p>
+
+    <!-- ASSINATURAS -->
+    <div class="assinaturas">
+        <p>_______________________________<br><span class="bold">{$pessoa_unidade_descricao}</span> (CONTRATANTE)<br>CNPJ nº {$pes_un_cpf_cnpj}</p>
+        <p>_______________________________<br><span class="bold">{$pessoa_descricao}</span> (CREDENCIADA)<br>CNPJ nº {$pes_cpf_cnpj}</p>
+    </div>
+
+    <div class="testemunhas">
+        <p>Testemunha 1:_______________________________</p>
+        <p>CPF: ____________________</p>
+        <p style="margin-top: 12px;">Testemunha 2:_______________________________</p>
+        <p>CPF: ____________________</p>
+    </div>
+    </div>
+
+    <!-- ANEXO I EM PÁGINA PRÓPRIA -->
+    <div style="page-break-before: always;"></div>
+    <div class="titulo" style="font-size: 14pt;">Anexo I<br>Modelo de Oferta de Atendimento e Aceite</div>
+    <p class="dado"><span class="lbl">Oferta nº</span> ______&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="lbl">Data e hora do envio:</span> ____/____/________ às ______h______</p>
+    <p class="dado"><span class="lbl">Assistido (código de identificação):</span> ______________________________________</p>
+    <p class="dado"><span class="lbl">Endereço do atendimento:</span> ______________________________________________</p>
+    <p class="dado"><span class="lbl">Data do atendimento:</span> ____/____/________</p>
+    <p class="dado"><span class="lbl">Turno:</span> (&nbsp;&nbsp;) 07h00 às 19h00&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;) 19h00 às 07h00&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;) 24 horas</p>
+    <p class="dado">Ou, em caso de conjunto de plantões: período de ____/____/________ a ____/____/________ (máximo de 30 dias), dias e turnos: ______________________________</p>
+    <p class="dado"><span class="lbl">Escopo das atividades:</span> ____________________________________________</p>
+    <p class="dado"><span class="lbl">Valor proposto:</span> R$ ____________</p>
+    <div class="secao">Resposta da CREDENCIADA:</div>
+    <p class="dado">(&nbsp;&nbsp;) Aceito&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;) Recuso&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;) Contraproponho o valor de R$ ____________</p>
+    <p class="dado"><span class="lbl">Data e hora da resposta:</span> ____/____/________ às ______h______</p>
+    <p>A recusa não acarreta qualquer consequência contratual, nos termos do item 2.3 do contrato.</p>
+
+</body>
+</html>
+<!--[/main]-->
