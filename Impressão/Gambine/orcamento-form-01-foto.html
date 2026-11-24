@@ -13,7 +13,7 @@
         /* RESET E FONTES */
         body {
             font-family: Arial, Helvetica, sans-serif;
-            font-size: 9px;
+            font-size: 11px;
             color: #333333;
             margin: 0;
             padding: 0;
@@ -27,7 +27,7 @@
             right: 0px;
             height: 15px;
             text-align: right;
-            font-size: 8px;
+            font-size: 10px;
             color: #7f8c8d;
             border-top: 1px dashed #e2e8f0;
             padding-top: 4px;
@@ -70,7 +70,7 @@
         .section-header {
             background-color: #f4f6f8;
             color: #000000;
-            font-size: 9px;
+            font-size: 11px;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -80,7 +80,7 @@
         .lbl {
             background-color: #fbfcfd;
             color: #555555;
-            font-size: 8px;
+            font-size: 10px;
             font-weight: bold;
             width: 15%;
         }
@@ -93,7 +93,7 @@
         .items-table th {
             background-color: #90a4ae;
             color: #000000;
-            font-size: 9px;
+            font-size: 11px;
             text-transform: uppercase;
             border: 1px solid #90a4ae;
             padding: 3px 4px;
@@ -113,7 +113,7 @@
         .total-row td {
             background-color: #90a4ae !important;
             color: #ffffff !important;
-            font-size: 11px;
+            font-size: 13px;
             padding: 4px 5px;
             border-color: #90a4ae !important;
         }
@@ -136,8 +136,8 @@
                 <img src="{$site_cabecalho_01}" style="max-width: 120px; max-height: 45px;" alt="Logo da Empresa">
             </td>
             <td style="width: 50%; text-align: right; vertical-align: middle;">
-                <div style="font-size: 10px; color: #000000; text-transform: uppercase; font-weight: bold;">Orçamento Comercial</div>
-                <div style="font-size: 18px; font-weight: bold; color: #000000;">Nº {$id}</div>
+                <div style="font-size: 12px; color: #000000; text-transform: uppercase; font-weight: bold;">Orçamento Comercial</div>
+                <div style="font-size: 20px; font-weight: bold; color: #000000;">Nº {$id}</div>
             </td>
         </tr>
     </table>
@@ -161,7 +161,7 @@
         <!-- Linha do Endereço da Unidade expandida para 100% de largura -->
         <tr>
             <td class="lbl">Endereço Unidade:</td>
-            <td class="val" colspan="3" style="font-size: 8.5px;">
+            <td class="val" colspan="3" style="font-size: 10.5px;">
                 {$pessoa_unidade_logradouro}, {$pessoa_unidade_numero} {$pessoa_unidade_complemento} &bull; CEP: {$pessoa_unidade_cep} &bull; {$pessoa_unidade_local_municipio_descricao} - {$pessoa_unidade_local_uf_sigla}
             </td>
         </tr>
@@ -183,10 +183,16 @@
             <td class="lbl">Telefone / E-mail:</td>
             <td class="val">{$pessoa_fone1} {$pessoa_fone2} &bull; {$pessoa_email}</td>
             <td class="lbl">Veículo:</td>
-            <td class="val" style="font-size: 8.5px;">
+            <td class="val" style="font-size: 10.5px;">
                 <span class="bold">{$veiculo_marca_descricao} - {$veiculo_modelo_descricao}</span><br>
                 Placa: {$veiculo_placa} &bull; KM: {$veiculo_km_atual}
             </td>
+        </tr>
+        <tr>
+            <td class="lbl">Contato:</td>
+            <td class="val">{$contato} {$contato_fone}</td>
+            <td class="lbl">Contato E-mail:</td>
+            <td class="val">{$contato_email}</td>
         </tr>
     </table>
 
@@ -220,7 +226,7 @@
             <!--[produtos]-->
             <tr class="linha-prod-{$produto_id}">
                 <td class="text-center">{$produto_id}</td>
-                <td><span class="bold">{$produto_descricao}</span> <span style="color: #7f8c8d; font-size: 8px;">{$produto_referencia_descricao}</span></td>
+                <td><span class="bold">{$produto_descricao}</span> <span style="color: #7f8c8d; font-size: 10px;">{$produto_referencia_descricao}</span></td>
                 <td class="text-center">{$qtde}</td>
                 <td class="text-center">{$sigla}</td>
                 <td class="text-right nowrap">{$preco}</td>
@@ -276,7 +282,7 @@
         </tr>
         <tr>
             <!-- Escrito sem quebras de linha ou recuos no código-fonte para preservar margens -->
-            <td class="preservar-linhas" style="min-height: 25px; vertical-align: top; font-size: 9px; line-height: 1.3; padding: 4px 6px;">{$obs1}</td>
+            <td class="preservar-linhas" style="min-height: 25px; vertical-align: top; font-size: 11px; line-height: 1.3; padding: 4px 6px;">{$obs1}</td>
         </tr>
     </table>
     
@@ -322,8 +328,8 @@
         <tr>
             <td class="lbl" style="vertical-align: middle;">Prazo Pagamento:</td>
             <td class="val" style="vertical-align: middle;">{$financ_prazo_pgto_descricao}</td>
-            <td class="bold bg-gray-dark" style="font-size: 11px; padding: 5px; vertical-align: middle; color: #000000; background-color: #90a4ae;">Total Geral:</td>
-            <td class="bold bg-gray-dark text-right" style="font-size: 12px; padding: 5px; vertical-align: middle; color: #ffffff; background-color: #90a4ae;">{$total_pedido}</td>
+            <td class="bold bg-gray-dark" style="font-size: 13px; padding: 5px; vertical-align: middle; color: #000000; background-color: #90a4ae;">Total Geral:</td>
+            <td class="bold bg-gray-dark text-right" style="font-size: 14px; padding: 5px; vertical-align: middle; color: #ffffff; background-color: #90a4ae;">{$total_pedido}</td>
         </tr>
     </table>
 
@@ -370,7 +376,7 @@
         <tr>
             <td style="width: 30%;"></td>
             <td style="width: 40%; text-align: center; border-top: 1px solid #333333; padding-top: 4px;">
-                <span class="bold" style="font-size: 10px;">{$pessoa_descricao}</span>
+                <span class="bold" style="font-size: 12px;">{$pessoa_descricao}</span>
             </td>
             <td style="width: 30%;"></td>
         </tr>
