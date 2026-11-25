@@ -1,0 +1,252 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Prévia Cotação Tokio Marine</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL NO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 1.20cm 1.20cm 1.20cm 1.20cm;
+        }
+
+        body {
+            font-size: 9.5px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        td, th {
+            vertical-align: middle;
+            word-wrap: break-word;
+        }
+
+        .bold { font-weight: bold; }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+
+        /* MARCA D'ÁGUA "DOCUMENTO DE SIMULAÇÃO" (VERMELHO CLARINHO E INCLINADO) */
+        .marca-dagua {
+            position: fixed;
+            top: 11.90cm;
+            left: 2.00cm;
+            width: 12.00cm;
+            text-align: center;
+            font-size: 44px;
+            font-weight: bold;
+            line-height: 1.25;
+            color: #e03131;
+            opacity: 0.07;
+            transform: rotate(-30deg);
+        }
+
+        /* CABEÇALHO */
+        .cabecalho td { padding: 0; vertical-align: top; }
+        .seguradora {
+            font-size: 16px;
+            font-weight: bold;
+            color: #222222;
+            margin-top: 6px;
+        }
+        .subtitulo {
+            font-size: 10px;
+            color: #6c757d;
+            margin-top: 6px;
+        }
+        .contrato-num {
+            font-size: 11.5px;
+            font-weight: bold;
+            color: #222222;
+        }
+        .cotacao {
+            font-size: 9px;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+        .gerado {
+            font-size: 8px;
+            color: #9aa0a6;
+            margin-top: 3px;
+        }
+        .linha-laranja {
+            border-top: 2px solid #e8590c;
+            margin: 9px 0 13px 0;
+        }
+
+        /* AVISO AMARELO */
+        .aviso {
+            background-color: #fff3cd;
+            border: 1px solid #ffe69c;
+            border-radius: 4px;
+            color: #856404;
+            font-size: 9px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.55;
+            padding: 6px 45px;
+            margin-bottom: 13px;
+        }
+
+        /* TÍTULOS DAS SEÇÕES (FUNDO CINZA COM BARRA LARANJA NA ESQUERDA) */
+        .secao {
+            background-color: #f5f6f8;
+            border-left: 3px solid #e8590c;
+            color: #333333;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 6px 8px;
+            margin-bottom: 10px;
+        }
+
+        /* DADOS DA COTAÇÃO */
+        .dados td {
+            border: 1px solid #dcdfe3;
+            padding: 6px 5px;
+            font-size: 9.5px;
+            color: #333333;
+        }
+        .dados .lbl { font-weight: bold; color: #222222; }
+
+        /* TABELAS DE COBERTURAS E PARCELAMENTO */
+        .grade th {
+            background-color: #f1f3f5;
+            border: 1px solid #dcdfe3;
+            color: #555555;
+            font-size: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: left;
+            padding: 7px 5px;
+        }
+        .grade td {
+            border: 1px solid #dcdfe3;
+            font-size: 9.5px;
+            color: #333333;
+            padding: 4px 5px;
+            line-height: 1.4;
+        }
+
+        /* RODAPÉ */
+        .rodape {
+            border-top: 1px solid #e3e5e8;
+            margin-top: 20px;
+            padding-top: 7px;
+            font-size: 8px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MARCA D'ÁGUA -->
+    <div class="marca-dagua">DOCUMENTO DE<br>SIMULAÇÃO</div>
+
+    <!-- CABEÇALHO -->
+    <table class="cabecalho">
+        <tr>
+            <td style="width: 60%;">
+                <div class="seguradora">TOKIO MARINE SEGURADORA</div>
+                <div class="subtitulo">Simulação de Seguro Incêndio / Conteúdo Imobiliário</div>
+            </td>
+            <td style="width: 40%; text-align: right;">
+                <div class="contrato-num">Contrato nº {$fatur_contrato_id}</div>
+                <div class="cotacao">Cotação: {$cot_numero}</div>
+                <div class="gerado">Gerado em {$data_hoje}</div>
+            </td>
+        </tr>
+    </table>
+    <div class="linha-laranja"></div>
+
+    <!-- AVISO -->
+    <div class="aviso">ATENÇÃO: ESTE DOCUMENTO É APENAS UMA PRÉVIA DEMONSTRATIVA E NÃO POSSUI VALOR DE APÓLICE NEM GARANTE COBERTURA SECURITÁRIA ANTES DA TRANSMISSÃO E EMISSÃO OFICIAL.</div>
+
+    <!-- DADOS DA COTAÇÃO & IMÓVEL (SEGURADO = PESSOA DO CONTRATO / LOCAL DO RISCO = IMÓVEL DO CONTRATO) -->
+    <div class="secao">Dados da Cotação &amp; Imóvel</div>
+    <table class="dados" style="margin-bottom: 22px;">
+        <tr>
+            <td class="lbl" style="width: 20%;">Segurado:</td>
+            <td style="width: 40%;">{$pes_descricao}</td>
+            <td class="lbl" style="width: 20%;">CPF/CNPJ:</td>
+            <td style="width: 20%;">{$pes_cpf_cnpj}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Local do Risco:</td>
+            <td colspan="3">{$logradouro}, nº {$numero} {$complemento} &mdash; {$bairro}, {$local_municipio_descricao}/{$local_uf_sigla} (CEP: {$cep})</td>
+        </tr>
+        <tr>
+            <td class="lbl">Vigência:</td>
+            <td>{$cot_inicio_vigencia} até {$cot_fim_vigencia}</td>
+            <td class="lbl">Valor em Risco:</td>
+            <td class="bold text-right">R$ {$cot_valor_em_risco}</td>
+        </tr>
+    </table>
+
+    <!-- COBERTURAS (ESQUERDA) E PARCELAMENTO (DIREITA) -->
+    <table>
+        <tr>
+            <td style="width: 48.8%; vertical-align: top; padding: 0;">
+                <div class="secao">Coberturas Contratadas</div>
+                <table class="grade">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Cód</th>
+                            <th style="width: 50%;">Cobertura</th>
+                            <th style="width: 35%;">Importância</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--[coberturas]-->
+                        <tr>
+                            <td class="text-center">{$codigo}</td>
+                            <td>{$nome_cobertura}</td>
+                            <td class="text-right">R$ {$valor_importancia_segurada}</td>
+                        </tr>
+                        <!--[/coberturas]-->
+                    </tbody>
+                </table>
+            </td>
+            <td style="width: 2.4%; padding: 0;"></td>
+            <td style="width: 48.8%; vertical-align: top; padding: 0;">
+                <div class="secao">Opções de Parcelamento</div>
+                <table class="grade">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;">Qtde</th>
+                            <th style="width: 40%;">Valor Parcela</th>
+                            <th style="width: 40%;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--[parcelas]-->
+                        <tr>
+                            <td class="bold text-center" style="padding-top: 6px; padding-bottom: 6px;">{$quantidade}x</td>
+                            <td class="text-right">R$ {$valor_premio_parcela}</td>
+                            <td class="bold text-right">R$ {$valor_premio_total}</td>
+                        </tr>
+                        <!--[/parcelas]-->
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- RODAPÉ -->
+    <div class="rodape">Documento gerado automaticamente pela Plataforma CredBee para fins de conferência prévia.</div>
+
+</body>
+</html>
+<!--[/main]-->
