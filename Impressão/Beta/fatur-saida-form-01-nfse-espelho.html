@@ -1,0 +1,581 @@
+<!--[main]-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- DECLARAÇÃO DUPLA COMPATÍVEL COM TODAS AS VERSÕES DO DOMPDF PARA FORÇAR UTF-8 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <title>Espelho DANFSe</title>
+    <style>
+        /* CONFIGURAÇÃO EXATA E INVOCÁVEL DA FONTE GLOBAL E CORREÇÃO DOMPDF */
+        * {
+            font-family: Arial, Helvetica, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+
+        /* FOLHA A4 RETRATO: MARGEM DE BAIXO RESERVA O CANHOTO DE CIENTIFICAÇÃO */
+        @page {
+            size: A4 portrait;
+            margin: 20px 22px 70px 22px;
+        }
+
+        body {
+            font-size: 8px;
+            color: #000000;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* MARCA D'ÁGUA DIAGONAL "SEM VALOR FISCAL" (MESMA DO ESPELHO DANFE) */
+        .watermark {
+            position: fixed;
+            top: 30%;
+            left: 5%;
+            width: 100%;
+            text-align: center;
+            z-index: -1000; /* Senta atrás de todas as tabelas */
+            opacity: 0.08; /* Tom suave e semi-transparente */
+            color: #ff0000; /* Vermelho */
+            font-size: 70px;
+            font-weight: bold;
+            transform: rotate(-35deg); /* Rotação diagonal */
+            transform-origin: 50% 50%;
+            pointer-events: none;
+        }
+
+        /* ESCONDE A LINHA VAZIA DO LAÇO DE SERVIÇOS */
+        .linha-serv- { display: none !important; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        td {
+            vertical-align: top;
+            padding: 1px 3px;
+            word-wrap: break-word;
+            line-height: 1.2;
+        }
+
+        .bold { font-weight: bold; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+
+        /* RÓTULO (NEGRITO PEQUENO) E VALOR, IGUAL AO DANFSe */
+        .lbl {
+            display: block;
+            font-size: 7px;
+            font-weight: bold;
+        }
+        .val {
+            display: block;
+            font-size: 8px;
+        }
+
+        /* TÍTULO DE BLOCO (PRESTADOR, TOMADOR, TRIBUTAÇÃO...) */
+        .titulo-bloco {
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            vertical-align: middle;
+        }
+
+        /* LINHA SEPARADORA ENTRE OS BLOCOS */
+        .bloco {
+            border-top: 1px solid #000000;
+            margin-top: 2px;
+            padding-top: 1px;
+        }
+
+        /* CABEÇALHO */
+        .marca-nfse {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f4e79;
+            letter-spacing: -1px;
+        }
+        .marca-nfse-sub {
+            font-size: 7px;
+            color: #4a6a8a;
+            line-height: 1.1;
+        }
+        .danfse-titulo {
+            font-size: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .aviso-chave {
+            font-size: 7px;
+            line-height: 1.3;
+            text-align: center;
+            border: 1px solid #000000;
+            padding: 5px 4px;
+        }
+
+        /* DESCRIÇÃO DO SERVIÇO E INFORMAÇÕES COMPLEMENTARES */
+        .descricao td {
+            padding: 0 3px;
+            font-size: 8px;
+            line-height: 1.3;
+        }
+        .preservar-linhas {
+            white-space: pre-wrap !important;
+            font-size: 8px;
+            line-height: 1.3;
+        }
+
+        .faixa-centro {
+            text-align: center;
+            font-size: 7.5px;
+            line-height: 1.2;
+        }
+
+        /* CANHOTO DE CIENTIFICAÇÃO FIXO NO PÉ DA PÁGINA */
+        .canhoto {
+            position: fixed;
+            bottom: -55px;
+            left: 0;
+            right: 0;
+            height: 38px;
+        }
+        .canhoto table {
+            border: 1px solid #000000;
+            height: 38px;
+        }
+        .canhoto td {
+            border-right: 1px solid #000000;
+            padding: 4px 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MARCA D'ÁGUA DIAGONAL (SEM VALOR FISCAL) -->
+    <div class="watermark">SEM VALOR FISCAL</div>
+
+    <!-- CANHOTO DE CIENTIFICAÇÃO (PÉ DA PÁGINA) -->
+    <div class="canhoto">
+        <table>
+            <tr>
+                <td style="width: 19%;"><span class="lbl">DATA CIENTIFICAÇÃO:</span></td>
+                <td style="width: 30%;"><span class="lbl">IDENTIFICAÇÃO E ASSINATURA</span></td>
+                <td style="width: 51%; border-right: none;">
+                    <span class="lbl">Nº NFS-e / CHAVE NFS-e</span>
+                    <span class="val">{$codigo} / {$nfe_chave}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- CABEÇALHO -->
+    <table>
+        <tr>
+            <td style="width: 28%; vertical-align: middle;">
+                <table>
+                    <tr>
+                        <td style="width: 46%; padding: 0; vertical-align: middle;"><span class="marca-nfse">NFS-e</span></td>
+                        <td style="width: 54%; padding: 0; vertical-align: middle;"><span class="marca-nfse-sub">Nota Fiscal de<br>Serviço eletrônica</span></td>
+                    </tr>
+                </table>
+            </td>
+            <td style="width: 36%; vertical-align: middle;">
+                <div class="danfse-titulo">DANFSe v2.0</div>
+                <div class="danfse-titulo">Documento Auxiliar da NFS-e</div>
+            </td>
+            <td style="width: 36%; vertical-align: middle;">
+                <span class="val" style="font-size: 9px;">Município: {$pessoa_unidade_local_municipio_descricao} / {$pessoa_unidade_local_uf_sigla}</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- IDENTIFICAÇÃO DA NFS-e (ESQUERDA) E AVISO DE AUTENTICIDADE (DIREITA, NO LUGAR DO QR CODE) -->
+    <table class="bloco">
+        <tr>
+            <td style="width: 75%; padding: 0;">
+                <table>
+                    <tr>
+                        <td colspan="3">
+                            <span class="lbl">CHAVE DE ACESSO DA NFS-e</span>
+                            <span class="val">{$nfe_chave}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 33%;">
+                            <span class="lbl">NÚMERO DA NFS-e</span>
+                            <span class="val">{$codigo}</span>
+                        </td>
+                        <td style="width: 33%;">
+                            <span class="lbl">COMPETÊNCIA DA NFS-e</span>
+                            <span class="val">{$cadastro}</span>
+                        </td>
+                        <td style="width: 34%;">
+                            <span class="lbl">DATA E HORA DA EMISSÃO DA NFS-e</span>
+                            <span class="val">{$cadastro}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="lbl">NÚMERO DA DPS</span>
+                            <span class="val">{$codigo_rps}</span>
+                        </td>
+                        <td>
+                            <span class="lbl">SÉRIE DA DPS</span>
+                            <span class="val">-</span>
+                        </td>
+                        <td>
+                            <span class="lbl">DATA E HORA DA EMISSÃO DA DPS</span>
+                            <span class="val">{$cadastro}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="lbl">EMITENTE DA NFS-e</span>
+                            <span class="val">Prestador</span>
+                        </td>
+                        <td>
+                            <span class="lbl">SITUAÇÃO DA NFS-e</span>
+                            <span class="val">-</span>
+                        </td>
+                        <td>
+                            <span class="lbl">FINALIDADE</span>
+                            <span class="val">-</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td style="width: 25%; vertical-align: middle; padding: 4px 0 4px 6px;">
+                <div class="aviso-chave">A autenticidade desta NFS-e pode ser verificada pela consulta da chave de acesso no portal nacional da NFS-e</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- PRESTADOR / FORNECEDOR (UNIDADE QUE EMITIU A NOTA) -->
+    <table class="bloco">
+        <tr>
+            <td style="width: 25%; vertical-align: middle;"><span class="titulo-bloco">Prestador / Fornecedor</span></td>
+            <td style="width: 25%;">
+                <span class="lbl">CNPJ / CPF / NIF</span>
+                <span class="val">{$pessoa_unidade_cpf_cnpj}</span>
+            </td>
+            <td style="width: 25%;">
+                <span class="lbl">Indicador Municipal (Inscrição)</span>
+                <span class="val">{$pessoa_unidade_pj_inscricao_municipal}</span>
+            </td>
+            <td style="width: 25%;">
+                <span class="lbl">Telefone</span>
+                <span class="val">{$pessoa_unidade_fone1}</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <span class="lbl">Nome / Nome Empresarial</span>
+                <span class="val">{$pessoa_unidade_descricao}</span>
+            </td>
+            <td>
+                <span class="lbl">Município / Sigla UF</span>
+                <span class="val">{$pessoa_unidade_local_municipio_descricao} / {$pessoa_unidade_local_uf_sigla}</span>
+            </td>
+            <td>
+                <span class="lbl">CEP</span>
+                <span class="val">{$pessoa_unidade_cep}</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <span class="lbl">Endereço</span>
+                <span class="val">{$pessoa_unidade_logradouro}, {$pessoa_unidade_numero}, {$pessoa_unidade_bairro}</span>
+            </td>
+            <td colspan="2">
+                <span class="lbl">E-mail</span>
+                <span class="val">{$pessoa_unidade_email}</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- TOMADOR / ADQUIRENTE (CLIENTE DA NOTA) -->
+    <table class="bloco">
+        <tr>
+            <td style="width: 25%; vertical-align: middle;"><span class="titulo-bloco">Tomador / Adquirente</span></td>
+            <td style="width: 25%;">
+                <span class="lbl">CNPJ / CPF / NIF</span>
+                <span class="val">{$pessoa_cpf_cnpj}</span>
+            </td>
+            <td style="width: 25%;">
+                <span class="lbl">Indicador Municipal (Inscrição)</span>
+                <span class="val">{$pessoa_pj_inscricao_municipal}</span>
+            </td>
+            <td style="width: 25%;">
+                <span class="lbl">Telefone</span>
+                <span class="val">{$pessoa_fone1}</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <span class="lbl">Nome / Nome Empresarial</span>
+                <span class="val">{$pessoa_descricao}</span>
+            </td>
+            <td>
+                <span class="lbl">Município / Sigla UF</span>
+                <span class="val">{$local_municipio_descricao} / {$local_uf_descricao}</span>
+            </td>
+            <td>
+                <span class="lbl">CEP</span>
+                <span class="val">{$cep}</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <span class="lbl">Endereço</span>
+                <span class="val">{$logradouro}, {$numero}, {$bairro}</span>
+            </td>
+            <td colspan="2">
+                <span class="lbl">E-mail</span>
+                <span class="val">{$pessoa_email}</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- DESTINATÁRIO E INTERMEDIÁRIO -->
+    <div class="bloco faixa-centro">
+        DESTINATÁRIO DA OPERAÇÃO NÃO IDENTIFICADO NA NFS-e<br>
+        INTERMEDIÁRIO DA OPERAÇÃO NÃO IDENTIFICADO NA NFS-e
+    </div>
+
+    <!-- SERVIÇO PRESTADO -->
+    <table class="bloco">
+        <tr>
+            <td style="width: 25%; vertical-align: middle;"><span class="titulo-bloco">Serviço Prestado</span></td>
+            <td style="width: 25%;">
+                <span class="lbl">Código de Tributação Nacional / Municipal</span>
+                <span class="val">-</span>
+            </td>
+            <td style="width: 25%;">
+                <span class="lbl">Código da NBS</span>
+                <span class="val">-</span>
+            </td>
+            <td style="width: 25%;">
+                <span class="lbl">Local da Prestação / Sigla UF / País</span>
+                <span class="val">{$pessoa_unidade_local_municipio_descricao} / {$pessoa_unidade_local_uf_sigla} / -</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4" style="padding-top: 3px;"><span class="lbl">Descrição do Serviço</span></td>
+        </tr>
+    </table>
+
+    <!-- DESCRIÇÃO DO SERVIÇO: UMA LINHA POR SERVIÇO DO MOVIMENTO -->
+    <table class="descricao">
+        <!--[servicos]-->
+        <tr class="linha-serv-{$servico_id}">
+            <td>{$servico_descricao} Qtde: {$qtde} Valor: {$preco} Total: {$total}</td>
+        </tr>
+        <!--[/servicos]-->
+    </table>
+
+    <!-- TRIBUTAÇÃO MUNICIPAL (ISSQN) -->
+    <table class="bloco" style="margin-top: 8px;">
+        <tr>
+            <td style="width: 25%; vertical-align: middle;"><span class="titulo-bloco">Tributação Municipal (ISSQN)</span></td>
+            <td style="width: 25%;">
+                <span class="lbl">Tipo de Tributação do ISSQN</span>
+                <span class="val">-</span>
+            </td>
+            <td colspan="2" style="width: 50%;">
+                <span class="lbl">Município / Sigla UF / País de Incidência do ISSQN</span>
+                <span class="val">{$pessoa_unidade_local_municipio_descricao} / {$pessoa_unidade_local_uf_sigla} / -</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="lbl">Benefício Municipal</span>
+                <span class="val">-</span>
+            </td>
+            <td>
+                <span class="lbl">Cálculo do BM</span>
+                <span class="val">-</span>
+            </td>
+            <td>
+                <span class="lbl">Total Deduções/Reduções</span>
+                <span class="val">-</span>
+            </td>
+            <td>
+                <span class="lbl">Desconto Incondicionado</span>
+                <span class="val">R$ {$desconto_servico}</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="lbl">BC ISSQN</span>
+                <span class="val">R$ {$total_servico}</span>
+            </td>
+            <td>
+                <span class="lbl">Alíquota Aplicada</span>
+                <span class="val">-</span>
+            </td>
+            <td>
+                <span class="lbl">Retenção do ISSQN</span>
+                <span class="val">-</span>
+            </td>
+            <td>
+                <span class="lbl">ISSQN Apurado</span>
+                <span class="val">R$ {$total_issqn_valor}</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- TRIBUTAÇÃO FEDERAL (EXCETO CBS) -->
+    <table class="bloco">
+        <tr>
+            <td style="width: 25%; vertical-align: middle;"><span class="titulo-bloco">Tributação Federal (exceto CBS)</span></td>
+            <td style="width: 25%;">
+                <span class="lbl">IRRF</span>
+                <span class="val">R$ {$total_irrf_valor}</span>
+            </td>
+            <td style="width: 25%;">
+                <span class="lbl">Contribuição Previdenciária - Retida</span>
+                <span class="val">-</span>
+            </td>
+            <td style="width: 25%;">
+                <span class="lbl">CSLL</span>
+                <span class="val">R$ {$total_csll_valor}</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="lbl">PIS - Débito Apuração Própria</span>
+                <span class="val">R$ {$total_pis_valor}</span>
+            </td>
+            <td>
+                <span class="lbl">COFINS - Débito Apuração Própria</span>
+                <span class="val">R$ {$total_cofins_valor}</span>
+            </td>
+            <td colspan="2">
+                <span class="lbl">Descrição Contrib. Sociais - Retidas</span>
+                <span class="val">-</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- TRIBUTAÇÃO IBS / CBS (AINDA SEM VARIÁVEIS NO SISTEMA) -->
+    <table class="bloco">
+        <tr>
+            <td style="width: 25%; vertical-align: middle;"><span class="titulo-bloco">Tributação IBS / CBS</span></td>
+            <td style="width: 25%;">
+                <span class="lbl">CST / cClassTrib</span>
+                <span class="val">- / -</span>
+            </td>
+            <td colspan="2" style="width: 50%;">
+                <span class="lbl">Indicador de Operação / Código IBGE Incidência / Município Incidência / Sigla UF</span>
+                <span class="val">- / - / - / -</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="lbl">Exclusões e Reduções da Base de Cálculo</span>
+                <span class="val">-</span>
+            </td>
+            <td>
+                <span class="lbl">Base de Cálculo Após Exclusões e Reduções</span>
+                <span class="val">-</span>
+            </td>
+            <td>
+                <span class="lbl">Red. Alíquota IBS / Red. Alíquota CBS</span>
+                <span class="val">- / -</span>
+            </td>
+            <td>
+                <span class="lbl">Alíquota - IBS UF / IBS Mun</span>
+                <span class="val">- / -</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="lbl">Alíq. Efetiva Municipal - IBS</span>
+                <span class="val">-</span>
+            </td>
+            <td>
+                <span class="lbl">Valor Apurado Municipal - IBS</span>
+                <span class="val">-</span>
+            </td>
+            <td>
+                <span class="lbl">Alíq. Efetiva Estadual - IBS</span>
+                <span class="val">-</span>
+            </td>
+            <td>
+                <span class="lbl">Valor Apurado Estadual - IBS</span>
+                <span class="val">-</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="lbl">Valor Total Apurado - IBS</span>
+                <span class="val">-</span>
+            </td>
+            <td>
+                <span class="lbl">Alíquota - CBS</span>
+                <span class="val">-</span>
+            </td>
+            <td>
+                <span class="lbl">Alíquota Efetiva - CBS</span>
+                <span class="val">-</span>
+            </td>
+            <td>
+                <span class="lbl">Valor Total Apurado - CBS</span>
+                <span class="val">-</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- VALOR TOTAL DA NFS-e -->
+    <table class="bloco">
+        <tr>
+            <td style="width: 25%; vertical-align: middle;"><span class="titulo-bloco">Valor Total da NFS-e</span></td>
+            <td style="width: 25%;">
+                <span class="lbl">VALOR DA OPERAÇÃO / SERVIÇO</span>
+                <span class="val">R$ {$total_servico}</span>
+            </td>
+            <td style="width: 25%;">
+                <span class="lbl">Desconto Incondicionado</span>
+                <span class="val">R$ {$desconto_servico}</span>
+            </td>
+            <td style="width: 25%;">
+                <span class="lbl">Desconto Condicionado</span>
+                <span class="val">-</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="lbl">Total das Retenções (ISSQN / Federais)</span>
+                <span class="val">-</span>
+            </td>
+            <td>
+                <span class="lbl">VALOR LÍQUIDO DA NFS-e</span>
+                <span class="val bold">R$ {$total_nf}</span>
+            </td>
+            <td>
+                <span class="lbl">Total do IBS/CBS</span>
+                <span class="val">-</span>
+            </td>
+            <td>
+                <span class="lbl">VALOR LÍQUIDO DA NFS-e + IBS/CBS</span>
+                <span class="val">-</span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- INFORMAÇÕES COMPLEMENTARES -->
+    <table class="bloco">
+        <tr>
+            <td><span class="titulo-bloco">Informações Complementares</span></td>
+        </tr>
+        <tr>
+            <td class="preservar-linhas" style="padding-top: 4px;">{$obs1}
+{$complementar}</td>
+        </tr>
+    </table>
+
+</body>
+</html>
+<!--[/main]-->
