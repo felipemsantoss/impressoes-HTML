@@ -107,9 +107,14 @@
             margin-top: 6px;
         }
 
+        /* TRECHO DO PDF QUE AINDA NAO TEM VARIAVEL NO SISTEMA */
+        .pendente {
+            background-color: #fff200;
+        }
+
         .assinaturas {
             page-break-inside: avoid;
-            margin-top: 60px;
+            margin-top: 20px;
         }
         .assinaturas table {
             width: 100%;
@@ -135,8 +140,8 @@
                     {$pessoa_unidade_descricao}<br>
                     CNPJ: {$pes_un_cpf_cnpj} CMC:96.340<br>
                     {$pes_un_logradouro}, {$pes_un_numero} – {$pes_un_bairro} – CEP: {$pes_un_end_cep} – {$pes_un_local_municipio_descricao} – {$pes_un_local_uf_sigla}<br>
-                    TEL: {$pes_un_fone1} WhatsApp<br>
-                    www.ingaban.com.br – E-mail: {$pes_un_email}
+                    TEL: (44) 3026-6464 WhatsApp<br>
+                    E-mail: Ingaban10@gmail.com
                 </td>
             </tr>
         </table>
@@ -155,7 +160,7 @@
         <p>CNPJ: <span class="bold">{$pes_un_cpf_cnpj}</span></p>
         <p>Endereço: <span class="bold">{$pes_un_logradouro} Nº {$pes_un_numero} – {$pes_un_bairro}</span></p>
         <p>Cidade: <span class="bold">{$pes_un_local_municipio_descricao} – {$pes_un_local_uf_sigla}</span>. CEP: <span class="bold">{$pes_un_end_cep}</span></p>
-        <p>Telefone - WhatsApp: <span class="bold">{$pes_un_fone1}</span>.</p>
+        <p>Telefone - WhatsApp: <span class="bold">(44) 3026-6464</span>.</p>
         <p>Dados Bancários: PIX – CNPJ <span class="bold">{$pes_un_cpf_cnpj}</span></p>
     </div>
 
@@ -168,7 +173,8 @@
         <p>Endereço <span class="bold">{$pes_logradouro}, {$pes_numero} {$pes_complemento} – {$pes_bairro} – {$pes_local_municipio_descricao}/{$pes_local_uf_sigla}</span></p>
         <p class="bold">Data Da Locação: {$inicio}</p>
         <p>Cidade: <span class="bold">{$pes_local_municipio_descricao}/ {$pes_local_uf_sigla}</span> – Telefone: <span class="bold">{$pes_fone1}</span></p>
-        <p class="bold">Local do Evento / Evento: {$obs1}</p>
+        <p class="bold">Local do Evento: {$obs1}</p>
+        <p class="bold">Evento: {$obs2}</p>
     </div>
 
     <div class="text-justify">
@@ -183,8 +189,8 @@
 
         <p><span class="bold">PARÁGRAFO SEGUNDO</span>: - Para ocasião da entrega, será emitido nota fiscal de prestação de serviços de locação com coleta dos rejeitos.</p>
 
-        <!-- Quantidade de sanitarios = qtde dos produtos | valor = total dos servicos -->
-        <p style="margin-bottom: 4px;"><span class="bold">CLÁUSULA QUARTA</span>: - Preço – Pelos serviços de locação de {$produtos_qtde_sum} sanitários, conforme abaixo. A contratante pagará a {$pessoa_unidade_descricao} a importância de <span class="bold">R${$total_servico} ({$total_servico_extenso})</span> pagamento via pix.</p>
+        <!-- Quantidade de sanitarios = qtde dos servicos | valor = total dos servicos -->
+        <p style="margin-bottom: 4px;"><span class="bold">CLÁUSULA QUARTA</span>: - Preço – Pelos serviços de locação de {$servicos_qtde_sum} sanitários, conforme abaixo. A contratante pagará a {$pessoa_unidade_descricao} a importância de <span class="bold">R${$total_servico} ({$total_servico_extenso})</span> pagamento via pix.</p>
 
         <div class="titulo-tabela">Serviços</div>
         <table class="itens">
@@ -211,30 +217,6 @@
             </tbody>
         </table>
 
-        <div class="titulo-tabela">Produtos</div>
-        <table class="itens">
-            <colgroup>
-                <col style="width: 20%;">
-                <col style="width: 60%;">
-                <col style="width: 20%;">
-            </colgroup>
-            <thead>
-                <tr>
-                    <th style="text-align: center;">Quantidade</th>
-                    <th style="text-align: left;">Produto</th>
-                    <th style="text-align: right;">Total Bruto</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!--[produtos]-->
-                <tr>
-                    <td class="bold" style="text-align: center;">{$qtde}</td>
-                    <td>{$produto_descricao}</td>
-                    <td class="bold" style="text-align: right;">{$total}</td>
-                </tr>
-                <!--[/produtos]-->
-            </tbody>
-        </table>
 
         <p class="bold">PARÁGRAFO PRIMEIRO: As especificações dos sanitários são:</p>
         <ul class="lista">
@@ -261,9 +243,17 @@
         <p style="margin-top: 14px;">Maringá, Estado do Paraná, {$cadastro}.</p>
     </div>
 
-    <!-- ASSINATURAS -->
+     <!-- ASSINATURAS -->
     <div class="assinaturas">
         <table>
+            <!-- ASSINATURA DA CONTRATADA (imagem do CRM site, tipo corpo_01) -->
+            <tr>
+                <td style="width: 45%; text-align: center; vertical-align: bottom; padding: 0;">
+                    <img src="{$site_corpo_01}" style="max-width: 100%; max-height: 2.00cm;" alt="">
+                </td>
+                <td style="width: 10%;">&nbsp;</td>
+                <td style="width: 45%;">&nbsp;</td>
+            </tr>
             <tr>
                 <td style="width: 45%; border-top: 1px solid #111111;">
                     <span class="bold">{$pessoa_unidade_descricao}</span><br>
